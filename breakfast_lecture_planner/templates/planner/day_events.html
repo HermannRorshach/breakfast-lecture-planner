@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Расписание завтраков и лекций{% endblock title %}
+{% block content %}
+
+<!-- Боковое меню -->
+<div class="side-menu grad" id="sideMenu">
+  <button
+    type="button"
+    class="btn-close close-btn"
+    aria-label="Close"
+    id="closeMenu"
+  ></button>
+  <ul class="list-group">
+    {% for item in menu_items %}
+    {% include 'planner/includes/menu_item.html' %}
+    {% endfor %}
+  </ul>
+</div>
+
+<button class="btn show-menu-btn" id="showMenu">
+  <i class="bi bi-chevron-double-right"></i>
+</button>
+
+<!-- Основное содержимое -->
+<div class="content">
+  <br /><br />
+  <p>Здесь будет основное содержимое страницы.</p>
+  {% for item in objects %}
+  {% include 'planner/includes/day.html' %}
+  {% endfor %}
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+{% endblock %}

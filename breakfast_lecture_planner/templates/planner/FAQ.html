@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}FAQ{% endblock %}
+{% block content %}
+  <div class="faq-wrapper">
+    <nav class="top-menu">
+      <ul>
+        <li>
+          <a href="{% url 'CreatePresentation:upload_files' %}">Главная</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="faq-container">
+      <h1>Часто задаваемые вопросы (FAQ)</h1>
+      <div class="faq-item">
+        <h3 class="faq-question">Сколько файлов нужно отправить для создания одной презентации?</h3>
+        <div class="faq-answer" style="display: none;">
+          <p>Для создания презентации вам потребуется:</p>
+          <ul>
+            <li>Excel-файл с данными - одна штука</li>
+            <li>Два скриншота в формате PNG или JPG</li>
+          </ul>
+        </div>
+      </div>
+      <div class="faq-item">
+        <h3 class="faq-question">Какой должна быть структура Excel-файла?</h3>
+        <div class="faq-answer" style="display: none;">
+          <p>
+            <strong>Структура Excel-файла должна быть следующей:</strong>
+          </p>
+          <ol>
+            <li>Содержит лист с названием "Для разработчика".</li>
+            <li>Данный лист содержит таблицу следующей структуры:</li>
+            <br>
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    В столбце А находятся следующие
+                    <br>
+                    имена переменных
+                  </th>
+                  <th>
+                    В столбце B находятся
+                    <br>
+                    значения переменных
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Просмотры в поисковой выдаче</td>
+                  <td>9000000</td>
+                </tr>
+                <tr>
+                  <td>Просмотры в рекомендациях</td>
+                  <td>50000000</td>
+                </tr>
+                <tr>
+                  <td>Цена просмотра в поисковой выдаче</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>Цена просмотра в рекомендациях</td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td>Конверсия в контакт в поисковой выдаче</td>
+                  <td>2,00%</td>
+                </tr>
+                <tr>
+                  <td>Конверсия в контакт в рекомендациях</td>
+                  <td>15,00%</td>
+                </tr>
+                <tr>
+                  <td>Цена контакта в поисковой выдаче</td>
+                  <td>598</td>
+                </tr>
+                <tr>
+                  <td>Цена контакта в рекомендациях</td>
+                  <td>311</td>
+                </tr>
+                <tr>
+                  <td>Оптимальный рекламный бюджет</td>
+                  <td>112559</td>
+                </tr>
+                <tr>
+                  <td>Количество контактов</td>
+                  <td>480</td>
+                </tr>
+                <tr>
+                  <td>Средняя стоимость контакта</td>
+                  <td>230</td>
+                </tr>
+                <tr>
+                  <td>Публикация объявлений</td>
+                  <td>≈ 5000</td>
+                </tr>
+                <tr>
+                  <td>Продвижение объявлений</td>
+                  <td>1 - 3</td>
+                </tr>
+                <tr>
+                  <td>Бюджет на просмотры/объявления</td>
+                  <td>36853</td>
+                </tr>
+                <tr>
+                  <td>Бюджет на услуги продвижения</td>
+                  <td>73 706</td>
+                </tr>
+                <tr>
+                  <td>Бюджет на тариф авито</td>
+                  <td>2000</td>
+                </tr>
+                <tr>
+                  <td>Стоимость услуг агентства</td>
+                  <td>30000</td>
+                </tr>
+                <tr>
+                  <td>Название тарифа</td>
+                  <td>Старт</td>
+                </tr>
+                <tr>
+                  <td>Суммарный рекламный бюджет</td>
+                  <td>35894</td>
+                </tr>
+                <tr>
+                  <td>Ниша</td>
+                  <td>Каркасные дома</td>
+                </tr>
+              </tbody>
+            </table>
+          </ol>
+        </div>
+      </div>
+      <div class="faq-item">
+        <h3 class="faq-question">Могу ли я посмотреть образец валидного Excel-файла?</h3>
+        <div class="faq-answer" style="display: none;">
+          <p>
+            Конечно! Скачать пример валидного Excel-файла можно по
+            <strong><a href="{% static 'files/Образец.xlsx' %}" download>ссылке</a></strong>.
+          </p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <h3 class="faq-question">Какой размер изображений оптимален?</h3>
+        <div class="faq-answer" style="display: none;">
+          <p>
+            Программа тестировалась на изображениях с такими размерами:
+            <ul>
+              <li>Для 8 страницы: 1808 x 717</li>
+              <li>Для 10 страницы: 1960 x 628</li>
+            </ul>
+            Если вы будете загружать изображения таких размеров, это будет идеально.
+          </p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <h3 class="faq-question">Как программа решает, какое изображение будет на 8 странице, а какое - на 10?</h3>
+        <div class="faq-answer" style="display: none;">
+          <p>
+            Для ускорения работы оба изображения загружаются с помощью одной кнопки. Порядок изображений
+            определяется сортировкой файлов на вашем компьютере во время загрузки. Рассмотрим примеры.
+          </p>
+          <ul>
+            <li>
+              <div class="image-example">
+                <h4>Пример 1</h4>
+                <img src="{% static 'img/Обычный порядок.png' %}"
+                     alt="Обычный порядок"
+                     class="example-image" />
+                <p>
+                  <b><i>На этом примере "Картинка 1.png" загрузится на страницу 8, а "Картинка 2.png" - на страницу 10</i></b>
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h4>Пример 2</h4>
+                <img src="{% static 'img/Обратный порядок.png' %}"
+                     alt="Обратный порядок"
+                     class="example-image" />
+                <p>
+                  <b><i>На этом примере "Картинка 2.png" загрузится на страницу 8, а "Картинка 1.png" - на страницу 10</i></b>
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="faq-item">
+        <h3 class="faq-question">Могу ли я скачать примеры изображения идеального размера для этой презентации?</h3>
+        <div class="faq-answer" style="display: none;">
+          <p>
+            Конечно! Примеры скриншотов доступны по
+            <strong><a href="{% static 'img/Скриншот для 8 страницы.png' %}" download>первой</a></strong>
+            и
+            <strong><a href="{% static 'img/Скриншот для 10 страницы.png' %}" download>второй</a></strong>
+            ссылкам.
+          </p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <h3 class="faq-question">Как формируется название презентации?</h3>
+        <div class="faq-answer" style="display: none;">
+          <p>
+            Название PDF-презентации включает в себя название ниши, дату и время
+            формирования. Если, например, файл называется "Презентация_Каркасные дома_02102024_0824.pdf", это значит, что он был сгенерирован 2 октября 2024 года в 8:24 по Московскому времени.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+      document.querySelectorAll('.faq-question').forEach(question => {
+          question.addEventListener('click', () => {
+              const answer = question.nextElementSibling;
+              if (answer.style.display === "none" || answer.style.display === "") {
+                  answer.style.display = "block";
+                  answer.style.transition = "all 0.5s ease"; // Плавный переход
+              } else {
+                  answer.style.display = "none";
+              }
+          });
+      });
+  </script>
+{% endblock %}

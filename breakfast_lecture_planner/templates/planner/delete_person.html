@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Удалить {{ role }}
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Удалить {{ role }}</h1>
+    <p>Вы уверены, что хотите удалить {{ role }} "{{ object }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a href="{% url 'planner:lecturers_list' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock content %}
