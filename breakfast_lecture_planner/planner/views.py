@@ -127,4 +127,9 @@ class WeekEventsCreateView(CreateView):
         return context
 
     def get_day_events_formset(self, data=None, files=None):
-        return modelformset_factory(DayEvents, form=DayEventsForm, extra=2, can_delete=False)(data, files)
+        if data or files:
+            # Если есть данные (POST-запрос), используем переданные данные
+            return modelformset_factory(DayEvents, form=DayEventsForm, extra=2, can_delete=False)(data, files)
+        else:
+            # При GET-запросе возвращаем пустой queryset
+            return modelformset_factory(DayEvents, form=DayEventsForm, extra=2, can_delete=False)(queryset=DayEvents.objects.none())
