@@ -97,31 +97,34 @@ class Planner(ListView):
         self.extra_context = {'menu_items': ['item1', 'item2', 'item3']}  # Пример списка
         return super().get(request, *args, **kwargs)
 
+from django.forms import modelformset_factory
 
-class WeekEventsCreateView(View):
-    def get(self, request, *args, **kwargs):
-        form = WeekEventsForm()
-        day_events_formset = form.day_events_formset(queryset=DayEvents.objects.none())
-        return render(request, 'planner/create_week_events.html', {'form': form, 'day_events_formset': day_events_formset})
+class WeekEventsCreateView(CreateView):
+    model = WeekEvents
+    form_class = WeekEventsForm
+    template_name = 'planner/create_week_events.html'
+    success_url = reverse_lazy('planner:planner')
 
-    def post(self, request, *args, **kwargs):
-        form = WeekEventsForm(request.POST, request.FILES)
-        day_events_formset = form.day_events_formset(request.POST, request.FILES)
+    def form_valid(self, form):
+        week_event = form.save()
 
-        if form.is_valid() and day_events_formset.is_valid():
-            week_event = form.save(commit=False)  # Создаем объект WeekEvents, но не сохраняем его
-            week_event.save()  # Сохраняем объект WeekEvents в базе данных
+        # Получаем day_events_formset из контекста
+        day_events_formset = self.get_day_events_formset()
+        for day_form in day_events_formset:
+            if day_form.is_valid():
+                day_event = day_form.save(commit=False)
+                day_event.week_events = week_event
+                day_event.save()
 
-            # Теперь сохраняем каждый объект DayEvents
-            for day_event_form in day_events_formset:
-                day_event = day_event_form.save(commit=False)
-                day_event.week_events = week_event  # Связываем с созданным объектом WeekEvents
-                day_event.save()  # Сохраняем объект DayEvents в базе данных
+        return super().form_valid(form)
 
-            return redirect('planner:planner')  # Замените на URL успешного редиректа
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['day_events_formset'] = self.get_day_events_formset(self.request.POST, self.request.FILES)
         else:
-            print('Формы невалидны')
-            print(form.errors)  # Выводим ошибки валидации
-            print(day_events_formset.errors)  # Выводим ошибки валидации форм
+            context['day_events_formset'] = self.get_day_events_formset()
+        return context
 
-        return render(request, 'planner/create_week_events.html', {'form': form, 'day_events_formset': day_events_formset})
+    def get_day_events_formset(self, data=None, files=None):
+        return modelformset_factory(DayEvents, form=DayEventsForm, extra=2, can_delete=False)(data, files)

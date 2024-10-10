@@ -12,6 +12,7 @@
         {{ form.as_p }}
 
         <h3>События на каждый день недели</h3>
+        {{ day_events_formset.management_form }}  {# Добавляем management form #}
         {% for form in day_events_formset %}
             <div class="border p-3 mb-3">
                 <h5>День {{ forloop.counter }}</h5>
