@@ -1,9 +1,14 @@
+from datetime import datetime
+
+from calendar_utils.utils import get_next_week_number, get_start_and_end_dates
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from .forms import ChefForm, DayEventsForm, LecturerForm
-from .models import Chef, DayEvents, Lecturer
+from .forms import ChefForm, DayEventsForm, LecturerForm, WeekEventsForm
+from .models import Chef, DayEvents, Lecturer, WeekEvents
+from django.views import View
+from django.shortcuts import render, redirect
 
 
 class LecturerCreateView(CreateView):
@@ -71,15 +76,12 @@ class ChefListView(ListView):
         'path_add_person': 'planner:add_chef',
         }
 
+
 class DayEventsCreateView(CreateView):
     model = DayEvents
     form_class = DayEventsForm
     template_name = 'planner/add_data.html'
     success_url = reverse_lazy('planner:planner')
-
-    def form_valid(self, form):
-        # Логика перед сохранением данных, если необходимо
-        return super().form_valid(form)
 
 
 class Planner(ListView):
@@ -94,3 +96,32 @@ class Planner(ListView):
     def get(self, request, *args, **kwargs):
         self.extra_context = {'menu_items': ['item1', 'item2', 'item3']}  # Пример списка
         return super().get(request, *args, **kwargs)
+
+
+class WeekEventsCreateView(View):
+    def get(self, request, *args, **kwargs):
+        form = WeekEventsForm()
+        day_events_formset = form.day_events_formset(queryset=DayEvents.objects.none())
+        return render(request, 'planner/create_week_events.html', {'form': form, 'day_events_formset': day_events_formset})
+
+    def post(self, request, *args, **kwargs):
+        form = WeekEventsForm(request.POST, request.FILES)
+        day_events_formset = form.day_events_formset(request.POST, request.FILES)
+
+        if form.is_valid() and day_events_formset.is_valid():
+            week_event = form.save(commit=False)  # Создаем объект WeekEvents, но не сохраняем его
+            week_event.save()  # Сохраняем объект WeekEvents в базе данных
+
+            # Теперь сохраняем каждый объект DayEvents
+            for day_event_form in day_events_formset:
+                day_event = day_event_form.save(commit=False)
+                day_event.week_events = week_event  # Связываем с созданным объектом WeekEvents
+                day_event.save()  # Сохраняем объект DayEvents в базе данных
+
+            return redirect('planner:planner')  # Замените на URL успешного редиректа
+        else:
+            print('Формы невалидны')
+            print(form.errors)  # Выводим ошибки валидации
+            print(day_events_formset.errors)  # Выводим ошибки валидации форм
+
+        return render(request, 'planner/create_week_events.html', {'form': form, 'day_events_formset': day_events_formset})

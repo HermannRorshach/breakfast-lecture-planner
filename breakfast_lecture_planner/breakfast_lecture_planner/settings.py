@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'planner.apps.PlannerConfig',
+    'calendar_utils.apps.CalendarUtilsConfig',
 ]
 
 MIDDLEWARE = [

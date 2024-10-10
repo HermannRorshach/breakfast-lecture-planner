@@ -1,0 +1,19 @@
+<h3>Выбор лектора и повара</h3>
+        <div class="mb-2">
+            <label class="form-label">Лектор</label>
+            <select name="lecturer" class="form-select">
+                <option value="">Выберите лектора</option>
+                {% for lecturer in lecturers %}
+                    <option value="{{ lecturer.id }}">{{ lecturer.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Повар</label>
+            <select name="chef" class="form-select">
+                <option value="">Выберите повара</option>
+                {% for chef in chefs %}
+                    <option value="{{ chef.id }}">{{ chef.name }}</option>
+                {% endfor %}
+            </select>
+        </div>

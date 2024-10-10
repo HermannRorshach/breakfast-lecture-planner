@@ -7,6 +7,7 @@ app_name = 'planner'
 urlpatterns = [
     path('', views.Planner.as_view(), name='planner'),
     path('add-data', views.DayEventsCreateView.as_view(), name='add_data'),
+    path('create_week_events', views.WeekEventsCreateView.as_view(), name='create_week_events'),
     path('lecturers/', views.LecturerListView.as_view(), name='lecturers_list'),
     path('lecturers/add/', views.LecturerCreateView.as_view(), name='add_lecturer'),
     path('lecturers/edit/<int:pk>/', views.LecturerUpdateView.as_view(), name='edit_lecturer'),

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Создание событий недели{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Создание событий недели</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}  {# Вывод ошибок для WeekEventsForm #}
+        {{ form.as_p }}
+
+        <h3>События на каждый день недели</h3>
+        {% for form in day_events_formset %}
+            <div class="border p-3 mb-3">
+                <h5>День {{ forloop.counter }}</h5>
+                {{ form.non_field_errors }}  {# Вывод ошибок для DayEventsForm #}
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
