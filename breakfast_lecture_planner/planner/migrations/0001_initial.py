@@ -15,36 +15,55 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Chef',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
             name='Lecturer',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
             name='WeekEvents',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(
+                    auto_created=True, primary_key=True,
+                    serialize=False, verbose_name='ID')),
                 ('week_number', models.IntegerField(editable=False)),
                 ('year', models.IntegerField()),
                 ('start_date', models.DateField(editable=False)),
                 ('end_date', models.DateField(editable=False)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='weekly_images/')),
+                ('image', models.ImageField(
+                    blank=True, null=True, upload_to='weekly_images/')),
             ],
         ),
         migrations.CreateModel(
             name='DayEvents',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(
+                    auto_created=True, primary_key=True,
+                    serialize=False, verbose_name='ID')),
                 ('date', models.DateField()),
-                ('chef', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='planner.chef')),
-                ('lecturer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='planner.lecturer')),
-                ('week_events', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events', to='planner.weekevents')),
+                ('chef', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='planner.chef')),
+                ('lecturer', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='planner.lecturer')),
+                ('week_events', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='events', to='planner.weekevents')),
             ],
         ),
     ]

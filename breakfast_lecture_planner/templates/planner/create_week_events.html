@@ -1,13 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Создание событий недели{% endblock title %}
+{% block title %}Расписание на неделю №{{ week_number }} {{ year }} года {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h1>Создание событий недели</h1>
+    <h1>Расписание на неделю №{{ week_number }} {{ year }} года</h1>
+    <p>Дата начала: {{ start_date }}</p>
+    <p>Дата окончания: {{ end_date }}</p>
+
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        <p><input type="hidden" name="week_number" value="{{ week_number }}"></p>
+        <p><input type="hidden" name="year" value="{{ year }}"></p>
+        <p><input type="hidden" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+        <input type="hidden" name="end_date" value="{{ end_date|date:'Y-m-d' }}"></p>
+
+
         {{ form.non_field_errors }}  {# Вывод ошибок для WeekEventsForm #}
         {{ form.as_p }}
 
