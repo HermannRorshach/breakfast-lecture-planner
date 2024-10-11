@@ -39,7 +39,6 @@ def get_start_and_end_dates(week_number, year):
     # Вычисляем смещение до начала первой недели
     if first_weekday <= 3:
         start_of_first_week = first_day_of_year - timedelta(days=first_weekday)
-        print("start_of_first_week =", start_of_first_week)
     else:
         start_of_first_week = first_day_of_year + timedelta(
             days=7 - first_weekday)
@@ -60,4 +59,4 @@ def get_next_week_number(year):
         if next_week_number > get_weeks_in_year(year):
             return 1
         return next_week_number
-    return 1  # Если нет записей, начинаем с 1
+    return (date.today() - date(date.today().year, 1, 1)).days // 7 + 1

@@ -26,8 +26,6 @@ class DayEventsForm(forms.ModelForm):
         model = DayEvents
         fields = ['lecturer', 'chef']
         widgets = {
-            'date': forms.DateInput(
-                attrs={'class': 'form-control', 'type': 'date'}),
             'lecturer': forms.Select(attrs={'class': 'form-control'}),
             'chef': forms.Select(attrs={'class': 'form-control'}),
         }

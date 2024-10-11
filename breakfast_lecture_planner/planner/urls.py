@@ -6,11 +6,23 @@ app_name = 'planner'
 
 urlpatterns = [
     path('', views.Planner.as_view(), name='planner'),
-    path('add-data', views.DayEventsCreateView.as_view(), name='add_data'),
+    path('cabinet', views.DayEventsCreateView.as_view(), name='cabinet'),
     path(
         'create_week_events',
         views.WeekEventsCreateView.as_view(),
         name='create_week_events'),
+    path(
+        'week/<int:pk>/edit/',
+        views.WeekEventsUpdateView.as_view(),
+        name='week_edit'),
+    path(
+        'weeks/',
+        views.WeekEventsListView.as_view(),
+        name='week_events_list'),
+    path(
+        'weeks/<int:pk>/',
+        views.WeekEventsDetailView.as_view(),
+        name='week_detail'),
     path(
         'lecturers/',
         views.LecturerListView.as_view(),

@@ -3,25 +3,6 @@
 {% block title %}Расписание завтраков и лекций{% endblock title %}
 {% block content %}
 
-<!-- Боковое меню -->
-<div class="side-menu grad" id="sideMenu">
-  <button
-    type="button"
-    class="btn-close close-btn"
-    aria-label="Close"
-    id="closeMenu"
-  ></button>
-  <ul class="list-group">
-    {% for item in menu_items %}
-    {% include 'planner/includes/menu_item.html' %}
-    {% endfor %}
-  </ul>
-</div>
-
-<button class="btn show-menu-btn" id="showMenu">
-  <i class="bi bi-chevron-double-right"></i>
-</button>
-
 <!-- Основное содержимое -->
 <div class="content">
   <br /><br />

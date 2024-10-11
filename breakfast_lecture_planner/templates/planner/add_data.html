@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Добавить событие
+    Кабинет администратора
 {% endblock title %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1>Добавить событие</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Добавить</button>
-    </form>
+
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="w-100" style="max-width: 50%;">
+        <h1>Кабинет администратора</h1>
+        <div class="list-group mt-4">
+            <a href="{% url 'planner:create_week_events' %}" class="list-group-item list-group-item-action">Создать расписание на следующую неделю</a>
+            <a href="{% url 'planner:week_events_list' %}" class="list-group-item list-group-item-action">Существующие расписания</a>
+            <a href="{% url 'planner:lecturers_list' %}" class="list-group-item list-group-item-action">Список лекторов</a>
+            <a href="{% url 'planner:chefs_list' %}" class="list-group-item list-group-item-action">Список поваров</a>
+        </div>
+    </div>
 </div>
 {% endblock content %}

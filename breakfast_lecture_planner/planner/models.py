@@ -18,7 +18,7 @@ class Chef(models.Model):
 class WeekEvents(models.Model):
     week_number = models.IntegerField()
     year = models.IntegerField()
-    start_date = models.DateField()
+    start_date = models.DateField(unique=True)
     end_date = models.DateField()
     image = models.ImageField(
         upload_to='weekly_images/', blank=True, null=True)
@@ -26,8 +26,8 @@ class WeekEvents(models.Model):
 
 class DayEvents(models.Model):
     date = models.DateField()
-    lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE)
-    chef = models.ForeignKey(Chef, on_delete=models.CASCADE)
+    lecturer = models.ForeignKey(Lecturer, blank=True, null=True, on_delete=models.CASCADE)
+    chef = models.ForeignKey(Chef, blank=True, null=True, on_delete=models.CASCADE)
     week_events = models.ForeignKey(
         WeekEvents, related_name='events', on_delete=models.CASCADE)
 

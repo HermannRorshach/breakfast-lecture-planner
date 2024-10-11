@@ -1,3 +1,3 @@
 <h3>{{ item.date }}</h3>
-<p>Лекции - {{ item.lecturer }}</p>
-<p>Завтрак - {{ item.chef }}</p>
+<p>Лекции - {% if item.lecturer %}{{ item.lecturer }}{% endif %}</p>
+<p>Завтрак - {% if item.lecturer %}{{ item.chef }}{% endif %}</p>

@@ -78,6 +78,14 @@ a.edit:hover {
   color: white;
 }
 
+a.week_detail {
+  color: rgb(59, 77, 246);
+}
+
+a.week_detail:hover {
+  color: rgb(15, 25, 105);
+}
+
 .grad {
   background: linear-gradient(to bottom, #ffdbaf, #c97b42);
 }

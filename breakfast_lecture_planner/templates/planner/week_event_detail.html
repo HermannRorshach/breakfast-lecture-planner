@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Детали недели {{ week_event.week_number }}
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">Неделя {{ week_event.week_number }} ({{ week_event.start_date }} - {{ week_event.end_date }})</h1>
+
+    <h3 class="mt-4">События на каждый день:</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Дата</th>
+          <th scope="col">Лектор</th>
+          <th scope="col">Шеф-повар</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in day_events %}
+          <tr>
+            <td>{{ event.date }}</td>
+            <td>{% if event.lecturer %}{{ event.lecturer }}{% else %}&mdash;{% endif %}</td>
+            <td>{% if event.chef %}{{ event.chef }}{% else %}&mdash;{% endif %}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3">Нет событий на эту неделю.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <a href="{% url 'planner:week_edit' week_event.pk %}" class="btn btn-primary">
+            Редактировать неделю
+        </a>
+        <a href="{% url 'planner:week_events_list' %}" class="btn btn-secondary">
+            Назад к списку недель
+        </a>
+    </div>
+  </div>
+{% endblock content %}

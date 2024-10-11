@@ -6,7 +6,7 @@ from django.forms import modelformset_factory
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import ChefForm, DayEventsForm, LecturerForm, WeekEventsForm
@@ -111,7 +111,7 @@ class WeekEventsCreateView(CreateView):
     model = WeekEvents
     form_class = WeekEventsForm
     template_name = 'planner/create_week_events.html'
-    success_url = reverse_lazy('planner:planner')
+    success_url = reverse_lazy('planner:week_events_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -129,7 +129,10 @@ class WeekEventsCreateView(CreateView):
                 next_week_number = 1
         else:
             year = datetime.today().year
-            next_week_number = 1
+            current_date = datetime.today()
+            next_week_number = (
+                current_date - datetime(current_date.year, 1, 1)
+                ).days // 7 + 1
 
         # Вычисляем даты начала и конца недели
         start_date, end_date = get_start_and_end_dates(next_week_number, year)
@@ -139,23 +142,21 @@ class WeekEventsCreateView(CreateView):
             'year': year,
             'start_date': start_date,
             'end_date': end_date,
+            'days_of_week': (
+                'Понедельник', 'Вторник', 'Среда', 'Четверг',
+                'Пятница', 'Суббота', 'Воскресенье'),
             'day_events_formset': self.get_day_events_formset(),
         })
         return context
 
     def form_valid(self, form):
-        # Сохраняем week_event
         week_event = form.save(commit=False)
 
         # Получаем данные из контекста
-        week_event.week_number = self.request.POST.get(
-            'week_number') or self.kwargs.get('week_number')
-        week_event.year = self.request.POST.get(
-            'year') or self.kwargs.get('year')
-        week_event.start_date = datetime.strptime(
-            self.request.POST.get('start_date'), '%Y-%m-%d')
-        week_event.end_date = datetime.strptime(
-            self.request.POST.get('end_date'), '%Y-%m-%d')
+        week_event.week_number = self.request.POST.get('week_number') or self.kwargs.get('week_number')
+        week_event.year = self.request.POST.get('year') or self.kwargs.get('year')
+        week_event.start_date = datetime.strptime(self.request.POST.get('start_date'), '%Y-%m-%d')
+        week_event.end_date = datetime.strptime(self.request.POST.get('end_date'), '%Y-%m-%d')
 
         week_event.save()  # Сохраняем week_event в базе данных
 
@@ -163,18 +164,103 @@ class WeekEventsCreateView(CreateView):
         day_events_formset = self.get_day_events_formset(self.request.POST)
 
         if day_events_formset.is_valid():
-            for day_form in day_events_formset:
+            for index, day_form in enumerate(day_events_formset):
+                lecturer = day_form.cleaned_data.get('lecturer')
+                chef = day_form.cleaned_data.get('chef')
+                # Создаем или обновляем запись
                 day_event = day_form.save(commit=False)
                 day_event.week_events = week_event
-                day_event.date = week_event.start_date + timedelta(
-                    days=day_events_formset.forms.index(day_form))
+                day_event.date = week_event.start_date + timedelta(days=index)
                 day_event.save()
 
         return super().form_valid(form)
 
     def get_day_events_formset(self, data=None, files=None):
         return modelformset_factory(
-            DayEvents, form=DayEventsForm, extra=2, can_delete=False)(
+            DayEvents, form=DayEventsForm, extra=7, can_delete=False)(
             data, files, queryset=DayEvents.objects.none(
             ) if data is None else None
         )
+
+
+class WeekEventsListView(ListView):
+    model = WeekEvents
+    template_name = 'planner/week_events_list.html'
+    context_object_name = 'week_events'
+    paginate_by = 52
+
+    def get_queryset(self):
+        return WeekEvents.objects.order_by('-year', '-week_number')
+
+
+class WeekEventsDetailView(DetailView):
+    model = WeekEvents
+    template_name = 'planner/week_event_detail.html'
+    context_object_name = 'week_event'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Получаем связанные события на каждый день для отображения
+        context['day_events'] = DayEvents.objects.filter(week_events=self.object)
+        return context
+
+
+class WeekEventsUpdateView(UpdateView):
+    model = WeekEvents
+    form_class = WeekEventsForm
+    template_name = 'planner/create_week_events.html'
+    success_url = reverse_lazy('planner:week_events_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        week_event = self.object  # Текущая запись WeekEvents
+
+        context.update({
+            'week_number': week_event.week_number,
+            'year': week_event.year,
+            'start_date': week_event.start_date,
+            'end_date': week_event.end_date,
+            'days_of_week': (
+                'Понедельник', 'Вторник', 'Среда', 'Четверг',
+                'Пятница', 'Суббота', 'Воскресенье'),
+            'day_events_formset': self.get_day_events_formset(),
+        })
+        return context
+
+
+
+    def form_valid(self, form):
+        week_event = form.save(commit=False)
+
+        # Получаем данные из контекста для обновления week_event
+        week_event.start_date = datetime.strptime(self.request.POST.get('start_date'), '%Y-%m-%d')
+        week_event.end_date = datetime.strptime(self.request.POST.get('end_date'), '%Y-%m-%d')
+
+        week_event.save()  # Сохраняем изменения в базе данных
+
+        # Обрабатываем day_events_formset
+        day_events_formset = self.get_day_events_formset(self.request.POST)
+
+        if day_events_formset.is_valid():
+            for index, day_form in enumerate(day_events_formset):
+                lecturer = day_form.cleaned_data.get('lecturer')
+                chef = day_form.cleaned_data.get('chef')
+
+                # Обновляем или создаем запись
+                day_event = day_form.save(commit=False)
+                day_event.week_events = week_event
+                day_event.date = week_event.start_date + timedelta(days=index)
+
+                day_event.save()
+
+        return super().form_valid(form)
+
+    def get_day_events_formset(self, data=None, files=None):
+        queryset = DayEvents.objects.filter(week_events=self.object)
+
+        # Количество дополнительных пустых форм
+        extra_forms = max(7 - queryset.count(), 0)
+
+        return modelformset_factory(
+            DayEvents, form=DayEventsForm, extra=extra_forms, can_delete=False
+        )(data, files, queryset=queryset)
