@@ -48,15 +48,3 @@ def get_start_and_end_dates(week_number, year):
     end_of_week = start_of_week + timedelta(days=6)
 
     return start_of_week, end_of_week
-
-
-def get_next_week_number(year):
-    from planner.models import WeekEvents
-    last_week_event = WeekEvents.objects.order_by('week_number').last()
-    if last_week_event:
-        next_week_number = last_week_event.week_number + 1
-        # Проверка на количество недель в году
-        if next_week_number > get_weeks_in_year(year):
-            return 1
-        return next_week_number
-    return (date.today() - date(date.today().year, 1, 1)).days // 7 + 1

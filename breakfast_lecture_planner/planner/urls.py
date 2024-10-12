@@ -55,4 +55,12 @@ urlpatterns = [
         'chefs/delete/<int:pk>/',
         views.ChefDeleteView.as_view(),
         name='delete_chef'),
+    path(
+        'contacts/',
+        views.ContactsView.as_view(),
+        name='contacts'),
+    path(
+        'faq/',
+        views.FaqView.as_view(),
+        name='faq'),
 ]

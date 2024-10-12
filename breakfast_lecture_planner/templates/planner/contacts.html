@@ -1,16 +1,9 @@
-{% extends "base.html" %}
+{% extends "auth.html" %}
 {% load static %}
 {% block title %}Техподдержка{% endblock %}
 {% block content %}
-  <div class="container">
-    <nav class="top-menu contacts">
-      <ul>
-        <li>
-          <a href="{% url 'CreatePresentation:upload_files' %}">Главная</a>
-        </li>
-      </ul>
-    </nav>
-    <h1>Для связи с разработчиком</h1>
+  <div class="container contacts">
+    <h1 contacts>Для связи с разработчиком</h1>
     <h3>при возникновении вопросов, пожеланий, коммерческих предложений, используйте любой из этих способов</h3>
     <div class="icons">
       <div class="icons__item">

@@ -1,0 +1,45 @@
+{% load static %}
+<header>
+  <nav class="navbar navbar-light" style="background-color: lightskyblue">
+    <div class="container">
+      <ul class="nav nav-pills ms-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link {% if item.link_light %}link-light{% endif %}{% if request.resolver_match.view_name == 'planner:cabinet' %}active{% endif %}"
+            href="{% url 'planner:cabinet' %}">Кабинет</a>
+          </li>
+        {% endif %}
+        {% for item in common_items %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.view_name == item.path %}active{% endif %}"
+               href="{% url item.path %}">{{ item.text }}</a>
+          </li>
+        {% endfor %}
+        {% if user.is_authenticated %}
+          {% for item in authenticated_items %}
+            <li class="nav-item">
+              <a class="nav-link {% if item.link_light %}link-light{% endif %}{% if request.resolver_match.view_name == item.path %}active{% endif %}"
+                 href="{% url item.path %}">{{ item.text }}</a>
+            </li>
+          {% endfor %}
+          <li class="nav-item">
+            <a href="#" class="nav-link {% if request.resolver_match.view_name == 'users:logout' %}active{% endif %}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Выйти
+            </a>
+            <form id="logout-form" action="{% url 'users:logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+            </form>
+          </li>
+        {% else %}
+          {% for item in guest_items %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.view_name == item.path %}active{% endif %}"
+                 href="{% url item.path %}">{{ item.text }}</a>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+</header>

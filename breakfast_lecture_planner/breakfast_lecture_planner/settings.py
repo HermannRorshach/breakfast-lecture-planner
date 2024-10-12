@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+import sys
+
+from decouple import config
+
+EMAIL = config('EMAIL')
+EMAIL_PASSWORD = config('EMAIL_PASSWORD')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +33,13 @@ SECRET_KEY = 'django-insecure-@v1-))9^ob_7#dnq9i(bd+g-nlicpbz$el4aqgd2!*2k4o=)!r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+'localhost',
+    '127.0.0.1',
+    '[::1]',
+    'testserver',
+    'www.borisovpashok.pythonanywhere.com',
+    'borisovpashok.pythonanywhere.com',]
 
 
 # Application definition
@@ -40,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'planner.apps.PlannerConfig',
     'calendar_utils.apps.CalendarUtilsConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'planner.context_processors.menu.menu',
             ],
         },
     },
@@ -132,3 +147,21 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'  # URL для доступа к файлам
 MEDIA_ROOT = BASE_DIR / 'media'  # Путь к директории для сохранения файлов
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'planner:cabinet'
+# LOGOUT_REDIRECT_URL = 'users:login'
+
+# Настройка почты
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if 'test' in sys.argv:
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = EMAIL
+EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
+EMAIL_USE_TLS = True
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -1,119 +1,102 @@
-.navbar {
-  margin-bottom: 0;
+html {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
 }
 
-.side-menu {
-  position: fixed;
-  top: 10vh;
-  bottom: 8vh;
-  left: 0;
-  width: 250px;
-  /* height: calc(100 - 20vh); */
-  background-color: linear-gradient(to bottom, #c97b42, #813919);
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  z-index: 1040;
-  padding-top: 20px;
-  border-radius: 0 8px 8px 0;
+.container {
+  max-width: 800px; /* Ширина контейнера */
+  margin: 50px auto; /* Центрирование */
+  margin-bottom: 50px;
+  padding: 30px; /* Внутренние отступы */
+  background: #fff; /* Цвет фона контейнера */
+  border-radius: 8px; /* Закругленные углы */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Тень для эффекта глубины */
+  text-align: center; /* Центрирование текста */
 }
 
-.side-menu.open {
-  transform: translateX(0);
+h1 {
+  font-size: 36px; /* Размер заголовка */
+  color: #333; /* Цвет текста */
+  margin: 20px 0; /* Отступы сверху и снизу */
+  font-weight: bold; /* Жирный текст */
 }
 
-.side-menu .list-group-item {
-  border: none;
-  padding: 10px 20px;
+h3 {
+  font-size: 18px; /* Размер подзаголовка */
+  color: #555; /* Цвет текста */
+  margin-bottom: 30px; /* Отступ снизу */
 }
 
-.li-gr-item {
-  border: none;
-  padding: 10px 20px;
+.icons {
+  display: inline-flex;
+  margin-bottom: 50px;
 }
 
-.side-menu .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border: none;
-  z-index: 1050;
+.icons__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  border: solid var(--color-blue); /* Замените $color-blue на реальное значение цвета */
+  border-radius: 40px;
+  margin-right: 50px;
 }
 
-.show-menu-btn {
-  position: fixed;
-  top: 20px;
-  left: 10px;
-  z-index: 1050;
-  transition: opacity 0.3s ease;
-  opacity: 1;
+.icons__item:last-child {
+  margin-right: 0;
 }
 
-.side-menu.open ~ .show-menu-btn {
-  opacity: 0;
+.icons__item i {
+  font-size: 25px;
+  color: black;
 }
 
-.content {
-  margin-left: 0;
-  padding: 20px;
-  transition: margin-left 0.3s ease;
+.icon-svg {
+  /* width: 21px; Подгоните размер под другие иконки */
+  height: 25px; /* Подгоните размер под другие иконки */
+  color: black; /* Цвет иконки, если необходимо */
+  display: block; /* Чтобы избежать отступов */
 }
 
+/* Стили для ссылок */
 a {
-  text-decoration: none;
-  color: white;
+  color: #E5322D; /* Цвет ссылки */
+  text-decoration: none; /* Убираем подчеркивание */
 }
 
 a:hover {
-  color: #521808;
+  color: #BD060A; /* Цвет ссылки при наведении */
 }
 
-a.edit {
-  background-color: rgb(17, 33, 173);
-  color: white;
+/* Дополнительные стили для отзыва и ошибок, если нужны */
+.alert {
+  background-color: #f8d7da; /* Цвет фона для ошибки */
+  color: #721c24; /* Цвет текста для ошибки */
+  padding: 15px; /* Внутренние отступы */
+  margin-bottom: 20px; /* Отступ снизу */
+  border: 1px solid #f5c6cb; /* Цвет рамки */
+  border-radius: 5px; /* Закругленные углы */
 }
 
-a.edit:hover {
-  background-color: rgb(15, 25, 105);
-  color: white;
+.faq-container h1 {
+  text-align: center; /* Центрирование заголовка */
+  color: #333; /* Цвет заголовка */
+  margin-bottom: 50px; /* Отступ снизу */
 }
 
-a.week_detail {
-  color: rgb(59, 77, 246);
+.nav {
+  display: flex; /* Flexbox для выравнивания */
+  justify-content: flex-end; /* Выравнивание элементов вправо */
+  align-items: center; /* Выравнивание по центру по вертикали */
+  width: 100%; /* Занимаем всю ширину */
 }
 
-a.week_detail:hover {
-  color: rgb(15, 25, 105);
+.nav-item {
+  margin-left: 20px; /* Отступы между элементами */
 }
 
-.grad {
-  background: linear-gradient(to bottom, #ffdbaf, #c97b42);
-}
 
-.braun {
-  background: linear-gradient(to bottom, #ffdbaf, #c97b42);
+.nav-link {
+  padding: 10px 15px; /* Увеличиваем отступы для лучшего клика */
 }
-.braun a {
-  color: #521808;
-}
-.braun a:hover {
-  color: white;
-}
-
-.side-menu.open ~ .content {
-  margin-left: 250px;
-}
-
-@media (max-width: 991px) {
-  .responsive-container {
-    display: block;
-  }
-  .navbar-collapse {
-    text-align: right;
-  }
-}
-@media (min-width: 992px) {
-  .responsive-container {
-    display: none;
-  }
-}/*# sourceMappingURL=style.css.map */

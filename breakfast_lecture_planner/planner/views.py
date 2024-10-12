@@ -1,18 +1,44 @@
 from datetime import datetime, timedelta
 
-from calendar_utils.utils import (get_next_week_number,
-                                  get_start_and_end_dates, get_weeks_in_year)
+from calendar_utils.utils import (get_start_and_end_dates, get_weeks_in_year)
+from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import ChefForm, DayEventsForm, LecturerForm, WeekEventsForm
 from .models import Chef, DayEvents, Lecturer, WeekEvents
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
+
+def superuser_required(function):
+    return user_passes_test(lambda u: u.is_superuser)(function)
+
+# Декоратор, который ограничивает классы суперюзером
+# @method_decorator(superuser_required, name='dispatch')
 
 
+@method_decorator(login_required, name='dispatch')
+class ContactsView(View):
+    template_name = 'planner/contacts.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+@method_decorator(login_required, name='dispatch')
+class FaqView(View):
+    template_name = 'planner/FAQ.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+@method_decorator(login_required, name='dispatch')
 class LecturerCreateView(CreateView):
     model = Lecturer
     form_class = LecturerForm
@@ -21,6 +47,7 @@ class LecturerCreateView(CreateView):
     extra_context = {'role': 'Лектора'}
 
 
+@method_decorator(login_required, name='dispatch')
 class LecturerDeleteView(DeleteView):
     model = Lecturer
     template_name = 'planner/delete_person.html'
@@ -28,6 +55,7 @@ class LecturerDeleteView(DeleteView):
     extra_context = {'role': 'Лектора'}
 
 
+@method_decorator(login_required, name='dispatch')
 class LecturerUpdateView(UpdateView):
     model = Lecturer
     form_class = LecturerForm
@@ -36,6 +64,7 @@ class LecturerUpdateView(UpdateView):
     extra_context = {'role': 'Лектора'}
 
 
+@method_decorator(login_required, name='dispatch')
 class LecturerListView(ListView):
     model = Lecturer
     template_name = 'planner/persons_list.html'
@@ -49,6 +78,7 @@ class LecturerListView(ListView):
         }
 
 
+@method_decorator(login_required, name='dispatch')
 class ChefCreateView(CreateView):
     model = Chef
     form_class = ChefForm
@@ -57,6 +87,7 @@ class ChefCreateView(CreateView):
     extra_context = {'role': 'Повара'}
 
 
+@method_decorator(login_required, name='dispatch')
 class ChefDeleteView(DeleteView):
     model = Chef
     template_name = 'planner/delete_person.html'
@@ -64,6 +95,7 @@ class ChefDeleteView(DeleteView):
     extra_context = {'role': 'Повара'}
 
 
+@method_decorator(login_required, name='dispatch')
 class ChefUpdateView(UpdateView):
     model = Chef
     form_class = ChefForm
@@ -72,6 +104,7 @@ class ChefUpdateView(UpdateView):
     extra_context = {'role': 'Повара'}
 
 
+@method_decorator(login_required, name='dispatch')
 class ChefListView(ListView):
     model = Chef
     template_name = 'planner/persons_list.html'
@@ -85,10 +118,11 @@ class ChefListView(ListView):
         }
 
 
+@method_decorator(login_required, name='dispatch')
 class DayEventsCreateView(CreateView):
     model = DayEvents
     form_class = DayEventsForm
-    template_name = 'planner/add_data.html'
+    template_name = 'planner/cabinet.html'
     success_url = reverse_lazy('planner:planner')
 
 
@@ -107,6 +141,7 @@ class Planner(ListView):
         return super().get(request, *args, **kwargs)
 
 
+@method_decorator(login_required, name='dispatch')
 class WeekEventsCreateView(CreateView):
     model = WeekEvents
     form_class = WeekEventsForm
@@ -127,6 +162,7 @@ class WeekEventsCreateView(CreateView):
             # Проверка на превышение количества недель в году
             if next_week_number > get_weeks_in_year(year):
                 next_week_number = 1
+                year += 1  # Увеличиваем год на 1
         else:
             year = datetime.today().year
             current_date = datetime.today()
@@ -183,6 +219,7 @@ class WeekEventsCreateView(CreateView):
         )
 
 
+@method_decorator(login_required, name='dispatch')
 class WeekEventsListView(ListView):
     model = WeekEvents
     template_name = 'planner/week_events_list.html'
@@ -193,6 +230,7 @@ class WeekEventsListView(ListView):
         return WeekEvents.objects.order_by('-year', '-week_number')
 
 
+@method_decorator(login_required, name='dispatch')
 class WeekEventsDetailView(DetailView):
     model = WeekEvents
     template_name = 'planner/week_event_detail.html'
@@ -205,6 +243,7 @@ class WeekEventsDetailView(DetailView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class WeekEventsUpdateView(UpdateView):
     model = WeekEvents
     form_class = WeekEventsForm
