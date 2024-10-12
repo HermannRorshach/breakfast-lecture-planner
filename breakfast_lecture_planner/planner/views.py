@@ -12,14 +12,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import ChefForm, DayEventsForm, LecturerForm, WeekEventsForm
 from .models import Chef, DayEvents, Lecturer, WeekEvents
-from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
-
-def superuser_required(function):
-    return user_passes_test(lambda u: u.is_superuser)(function)
-
-# Декоратор, который ограничивает классы суперюзером
-# @method_decorator(superuser_required, name='dispatch')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -52,7 +45,7 @@ class LecturerDeleteView(DeleteView):
     model = Lecturer
     template_name = 'planner/delete_person.html'
     success_url = reverse_lazy('planner:lecturers_list')
-    extra_context = {'role': 'Лектора'}
+    extra_context = {'role': 'Лектора', 'path': 'planner:lecturers_list'}
 
 
 @method_decorator(login_required, name='dispatch')
@@ -92,7 +85,7 @@ class ChefDeleteView(DeleteView):
     model = Chef
     template_name = 'planner/delete_person.html'
     success_url = reverse_lazy('planner:chefs_list')
-    extra_context = {'role': 'Повара'}
+    extra_context = {'role': 'Повара', 'path': 'planner:chefs_list'}
 
 
 @method_decorator(login_required, name='dispatch')

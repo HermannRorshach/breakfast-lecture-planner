@@ -100,3 +100,21 @@ a:hover {
 .nav-link {
   padding: 10px 15px; /* Увеличиваем отступы для лучшего клика */
 }
+
+a.edit {
+  background-color: rgb(17, 33, 173);
+  color: white;
+}
+a.edit:hover {
+  background-color: rgb(15, 25, 105);
+  color: white;
+}
+
+a.edit:active {
+  background-color: rgb(10, 20, 150);
+  color: white;
+}
+
+.index {
+  margin: 50px;
+}

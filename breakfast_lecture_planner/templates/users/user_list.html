@@ -1,23 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Список {{ role_plural }}
+    Список пользователей
 {% endblock title %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1>Список {{ role_plural }}</h1>
+    <h1>Список пользователей</h1>
     <ul class="list-group">
-        {% for person in persons %}
+        {% for user in users %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ person.name }}{{ person.username }} {{ person.email }}
+            {{ user.username }}
             <div>
-                {% if path_edit %}
-                <a href="{% url path_edit person.pk %}" class="btn edit btn-sm">
-                    Изменить
-                </a>
-                {% endif %}
-                <a href="{% url path_delete person.pk %}" class="btn btn-danger btn-sm">
+                <a href="{% url 'user_delete' user.pk %}" class="btn btn-danger btn-sm">
                     Удалить
                 </a>
             </div>
@@ -25,7 +20,7 @@
         {% endfor %}
     </ul>
     <div class="d-flex justify-content-between align-items-center my-3">
-        <a href="{% url path_add_person %}" class="btn btn-primary mt-3">Добавить {{ role_singular }}</a>
+        <a href="{% url 'user_add' %}" class="btn btn-primary mt-3">Добавить пользователя</a>
         <a href="{% url 'planner:cabinet' %}" class="btn btn-secondary">
             Назад
         </a>
