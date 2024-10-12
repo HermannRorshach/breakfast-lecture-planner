@@ -33,3 +33,11 @@ class DayEvents(models.Model):
 
     def __str__(self):
         return f"{self.date} - Lecturer: {self.lecturer}, Chef: {self.chef}"
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title

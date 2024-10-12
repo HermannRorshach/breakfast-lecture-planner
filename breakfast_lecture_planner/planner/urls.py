@@ -63,4 +63,7 @@ urlpatterns = [
         'faq/',
         views.FaqView.as_view(),
         name='faq'),
+    path('post/new/', views.PostCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
+    path('post/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post-edit'),
 ]

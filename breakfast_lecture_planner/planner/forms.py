@@ -43,3 +43,11 @@ class WeekEventsForm(forms.ModelForm):
         if commit:
             week_event.save()
         return week_event
+
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content']

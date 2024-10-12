@@ -1,0 +1,120 @@
+html {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+}
+
+.container {
+  max-width: 800px; /* Ширина контейнера */
+  margin: 50px auto; /* Центрирование */
+  margin-bottom: 50px;
+  padding: 30px; /* Внутренние отступы */
+  background: #fff; /* Цвет фона контейнера */
+  border-radius: 8px; /* Закругленные углы */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Тень для эффекта глубины */
+  text-align: center; /* Центрирование текста */
+}
+
+h1 {
+  font-size: 36px; /* Размер заголовка */
+  color: #333; /* Цвет текста */
+  margin: 20px 0; /* Отступы сверху и снизу */
+  font-weight: bold; /* Жирный текст */
+}
+
+h3 {
+  font-size: 18px; /* Размер подзаголовка */
+  color: #555; /* Цвет текста */
+  margin-bottom: 30px; /* Отступ снизу */
+}
+
+.icons {
+  display: inline-flex;
+  margin-bottom: 50px;
+}
+
+.icons__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  border: solid var(--color-blue); /* Замените $color-blue на реальное значение цвета */
+  border-radius: 40px;
+  margin-right: 50px;
+}
+
+.icons__item:last-child {
+  margin-right: 0;
+}
+
+.icons__item i {
+  font-size: 25px;
+  color: black;
+}
+
+.icon-svg {
+  /* width: 21px; Подгоните размер под другие иконки */
+  height: 25px; /* Подгоните размер под другие иконки */
+  color: black; /* Цвет иконки, если необходимо */
+  display: block; /* Чтобы избежать отступов */
+}
+
+/* Стили для ссылок */
+a {
+  color: #E5322D; /* Цвет ссылки */
+  text-decoration: none; /* Убираем подчеркивание */
+}
+
+a:hover {
+  color: #BD060A; /* Цвет ссылки при наведении */
+}
+
+/* Дополнительные стили для отзыва и ошибок, если нужны */
+.alert {
+  background-color: #f8d7da; /* Цвет фона для ошибки */
+  color: #721c24; /* Цвет текста для ошибки */
+  padding: 15px; /* Внутренние отступы */
+  margin-bottom: 20px; /* Отступ снизу */
+  border: 1px solid #f5c6cb; /* Цвет рамки */
+  border-radius: 5px; /* Закругленные углы */
+}
+
+.faq-container h1 {
+  text-align: center; /* Центрирование заголовка */
+  color: #333; /* Цвет заголовка */
+  margin-bottom: 50px; /* Отступ снизу */
+}
+
+.nav {
+  display: flex; /* Flexbox для выравнивания */
+  justify-content: flex-end; /* Выравнивание элементов вправо */
+  align-items: center; /* Выравнивание по центру по вертикали */
+  width: 100%; /* Занимаем всю ширину */
+}
+
+.nav-item {
+  margin-left: 20px; /* Отступы между элементами */
+}
+
+
+.nav-link {
+  padding: 10px 15px; /* Увеличиваем отступы для лучшего клика */
+}
+
+a.edit {
+  background-color: rgb(17, 33, 173);
+  color: white;
+}
+a.edit:hover {
+  background-color: rgb(15, 25, 105);
+  color: white;
+}
+
+a.edit:active {
+  background-color: rgb(10, 20, 150);
+  color: white;
+}
+
+.index {
+  margin: 50px;
+}

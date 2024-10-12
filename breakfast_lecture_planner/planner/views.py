@@ -296,3 +296,38 @@ class WeekEventsUpdateView(UpdateView):
         return modelformset_factory(
             DayEvents, form=DayEventsForm, extra=extra_forms, can_delete=False
         )(data, files, queryset=queryset)
+
+
+from django.views.generic import DetailView
+from .models import Post
+from markdown import markdown
+from .forms import PostForm
+
+
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'planner/post_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('planner:post-detail', kwargs={'pk': self.object.pk})
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'planner/post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.get_object()
+        context['content'] = markdown(post.content)
+        return context
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'planner/post_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('planner:post-detail', kwargs={'pk': self.object.pk})

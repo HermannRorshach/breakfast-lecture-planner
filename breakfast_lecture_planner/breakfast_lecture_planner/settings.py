@@ -38,8 +38,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '[::1]',
     'testserver',
-    'www.borisovpashok.pythonanywhere.com',
-    'borisovpashok.pythonanywhere.com',]
+    'www.malone.pythonanywhere.com',
+    'malone.pythonanywhere.com',]
 
 
 # Application definition
