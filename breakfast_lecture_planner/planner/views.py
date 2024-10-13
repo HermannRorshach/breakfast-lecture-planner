@@ -119,19 +119,19 @@ class DayEventsCreateView(CreateView):
     success_url = reverse_lazy('planner:planner')
 
 
-class Planner(ListView):
-    model = DayEvents
-    template_name = 'planner/day_events.html'
-    context_object_name = 'objects'
+# class Planner(ListView):
+    # model = DayEvents
+    # template_name = 'planner/day_events.html'
+    # context_object_name = 'objects'
 
-    def get_queryset(self):
-        # Ваш код для получения списка
-        return DayEvents.objects.all()
+    # def get_queryset(self):
+    #     # Ваш код для получения списка
+    #     return DayEvents.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        self.extra_context = {
-            'menu_items': ['item1', 'item2', 'item3']}
-        return super().get(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     self.extra_context = {
+    #         'menu_items': ['item1', 'item2', 'item3']}
+    #     return super().get(request, *args, **kwargs)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -303,6 +303,17 @@ from .models import Post
 from markdown import markdown
 from .forms import PostForm
 
+from django.shortcuts import get_object_or_404
+
+
+class Planner(DetailView):
+    model = Post
+    template_name = 'planner/post.html'  # Убедитесь, что это правильный шаблон
+    context_object_name = 'object'  # По умолчанию это 'object'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post, pk=12)
+
 
 class PostCreateView(CreateView):
     model = Post
@@ -324,10 +335,19 @@ class PostDetailView(DetailView):
         return context
 
 
+from django.http import JsonResponse
+
 class PostUpdateView(UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'planner/post_form.html'
 
-    def get_success_url(self):
-        return reverse_lazy('planner:post-detail', kwargs={'pk': self.object.pk})
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+
+        if form.is_valid():
+            self.object = form.save()
+            return JsonResponse({'content': markdown(self.object.content)})
+
+        return JsonResponse({'error': 'Invalid form'}, status=400)

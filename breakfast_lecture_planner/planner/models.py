@@ -36,7 +36,7 @@ class DayEvents(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(null=True, blank=True, max_length=200)
     content = models.TextField()
 
     def __str__(self):

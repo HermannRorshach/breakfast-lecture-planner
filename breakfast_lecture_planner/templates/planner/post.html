@@ -1,14 +1,63 @@
 {% extends 'base.html' %}
 
-
 {% block title %}
 {{ object.title }}
 {% endblock title %}
 
 {% block content %}
-<div class="container">
-<div>
-    {{ content|safe }}
+<div class="post">
+    <div class="post-content">
+        {{ content|safe }}
+    </div>
+    <button id="edit-post-btn">Редактировать</button>
+
+    <div id="edit-form-container" style="display: none;">
+        <form id="edit-post-form" class="full-height">  <!-- Добавлен класс full-height -->
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ object.id }}">
+            <textarea name="content" id="content" class="form-control full-height">{{ object.content }}</textarea>
+            <button type="submit" id="save-changes-btn" class="fixed-btn">Сохранить</button>
+        </form>
+    </div>
 </div>
-</div>
+
+<script>
+    document.getElementById('edit-post-btn').addEventListener('click', function() {
+        document.getElementById('edit-form-container').style.display = 'block';
+    });
+
+    document.getElementById('edit-post-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвратить перезагрузку страницы
+        const formData = new FormData(this);
+
+        fetch("{% url 'planner:post-edit' object.id %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Указывает, что запрос отправлен через AJAX
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Предполагаем, что сервер возвращает JSON
+            }
+            throw new Error('Ошибка при сохранении изменений');
+        })
+        .then(data => {
+            // Обновляем содержимое поста
+            document.querySelector('.post-content').innerHTML = data.content;
+            document.getElementById('edit-form-container').style.display = 'none'; // Скрыть форму
+        })
+        .then(data => {
+            // Обновляем содержимое поста
+            document.querySelector('.post-content').innerHTML = data.content;
+
+            // Дополнительно: можно обновить посты на главной странице, если нужно
+            // Это может потребовать запроса к вашему API или повторного запроса к странице
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    });
+</script>
 {% endblock content %}
