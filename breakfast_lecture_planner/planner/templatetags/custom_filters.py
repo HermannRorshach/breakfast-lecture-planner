@@ -1,18 +1,5 @@
-from django import template
-
-
-register = template.Library()
-
-
-@register.filter
-def get_item_by_index(sequence, index):
-    try:
-        return sequence[int(index)]
-    except (IndexError, ValueError):
-        return None
-
-
 import re
+
 import requests
 from django import template
 from django.utils.safestring import mark_safe
@@ -61,3 +48,11 @@ def render_oembed(value):
 
     # Возвращаем результат как безопасный HTML
     return mark_safe(rendered_content)
+
+
+@register.filter
+def get_item_by_index(sequence, index):
+    try:
+        return sequence[int(index)]
+    except (IndexError, ValueError):
+        return None
