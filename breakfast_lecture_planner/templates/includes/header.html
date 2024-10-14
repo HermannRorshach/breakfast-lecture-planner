@@ -3,10 +3,14 @@
   <nav class="navbar navbar-light" style="background-color: lightskyblue">
     <div class="container">
       <ul class="nav nav-pills ms-auto">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.view_name == 'planner:planner' %}active{% endif %}"
+             href="{% url 'planner:planner' %}">Главная</a>
+        </li>
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link {% if item.link_light %}link-light{% endif %}{% if request.resolver_match.view_name == 'planner:cabinet' %}active{% endif %}"
-            href="{% url 'planner:cabinet' %}">Кабинет</a>
+            <a class="nav-link {% if request.resolver_match.view_name == 'planner:cabinet' %}active{% endif %}"
+               href="{% url 'planner:cabinet' %}">Кабинет</a>
           </li>
         {% endif %}
         {% for item in common_items %}
@@ -18,12 +22,12 @@
         {% if user.is_authenticated %}
           {% for item in authenticated_items %}
             <li class="nav-item">
-              <a class="nav-link {% if item.link_light %}link-light{% endif %}{% if request.resolver_match.view_name == item.path %}active{% endif %}"
+              <a class="nav-link {% if request.resolver_match.view_name == item.path %}active{% endif %}"
                  href="{% url item.path %}">{{ item.text }}</a>
             </li>
           {% endfor %}
           <li class="nav-item">
-            <a href="#" class="nav-link {% if request.resolver_match.view_name == 'users:logout' %}active{% endif %}"
+            <a href="#" class="nav-link"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Выйти
             </a>

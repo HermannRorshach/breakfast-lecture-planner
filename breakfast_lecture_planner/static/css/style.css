@@ -190,3 +190,15 @@ html, body {
   right: 10px; /* Отступ от правой стороны */
   z-index: 1000; /* На переднем плане */
 }
+
+
+.user-registration-form .form-group {
+  display: flex;
+  flex-direction: column; /* Вертикальное расположение */
+  margin-bottom: 1rem; /* Отступ между полями */
+}
+
+.user-registration-form .form-control {
+  height: calc(1.5em + .75rem + 2px); /* Высота одного ряда */
+  width: 100%; /* Полная ширина */
+}

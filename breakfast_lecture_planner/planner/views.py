@@ -12,7 +12,7 @@ from .forms import PostForm
 from .models import Post
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ContactsView(View):
     template_name = 'planner/contacts.html'
 
@@ -49,6 +49,8 @@ class Planner(DetailView):
         context['content'] = markdown(post.content)
         return context
 
+
+@method_decorator(login_required, name='dispatch')
 class PostCreateView(CreateView):
     model = Post
     form_class = PostForm
@@ -69,6 +71,7 @@ class PostDetailView(DetailView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class PostUpdateView(UpdateView):
     model = Post
     form_class = PostForm

@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
 {% load user_filters %}
 
-
 {% block title %}
     Добавить {{ role }}
 {% endblock title %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4 user-registration-form"> <!-- Добавлен класс -->
     <h1 class="mb-4">Добавить {{ role }}</h1>
     <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="mb-3 d-flex flex-column align-items-center">
             {% for field in form %}
-            <div class="form-group" style="max-width: 50%;">
+            <div class="form-group">
                 <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
                 {{ field|addclass:"form-control" }}  <!-- Используем ваш фильтр для добавления класса -->
                 {% if field.help_text %}

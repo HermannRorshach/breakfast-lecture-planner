@@ -57,4 +57,4 @@ class UserDeleteView(DeleteView):
     model = get_user_model()
     template_name = 'planner/delete_person.html'
     success_url = reverse_lazy('users:user_list')
-    extra_context = {'role': 'администратора', 'path': 'planner:persons_list'}
+    extra_context = {'role': 'администратора', 'path': 'users:user_list'}

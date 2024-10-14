@@ -82,6 +82,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'planner.context_processors.menu.menu',
+                'planner.context_processors.year.year',
             ],
         },
     },

@@ -9,17 +9,23 @@
     <div class="post-content">
         {{ content|safe }}
     </div>
-    <button id="edit-post-btn">Редактировать</button>
+    {% if user.is_authenticated %}
+        <button id="edit-post-btn" class="btn btn-info btn-sm">Редактировать</button>
 
     <div id="edit-form-container" style="display: none;">
         <form id="edit-post-form" class="full-height">  <!-- Добавлен класс full-height -->
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ object.id }}">
             <textarea name="content" id="content" class="form-control full-height">{{ object.content }}</textarea>
-            <button type="submit" id="save-changes-btn" class="fixed-btn">Сохранить</button>
+            <button type="submit" id="save-changes-btn" class="btn btn-success fixed-btn">Сохранить</button>
         </form>
     </div>
+    {% endif %}
 </div>
+<footer class="text-center mt-4">
+    <p><a href="{% url 'users:login' %}">&copy;</a> {{ year }} Все права защищены. </p>
+</footer>
+
 
 <script>
     document.getElementById('edit-post-btn').addEventListener('click', function() {
