@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from markdown import markdown
 
-from .forms import ImageUploadForm, PostForm
+from .forms import ImageUploadForm, LunchParticipantForm, PostForm
 from .models import Image, Post
 
 
@@ -35,6 +35,11 @@ class CabinetView(View):
         return render(request, self.template_name)
 
 
+from datetime import datetime
+
+from django.utils.html import format_html
+
+
 class Planner(DetailView):
     model = Post
     template_name = 'planner/post.html'
@@ -45,10 +50,63 @@ class Planner(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
-        context['content'] = markdown(post.content)
+
+        # Получаем текущий день недели на литовском
+        days_of_week = [
+            "Pirmadienis",  # Понедельник
+            "Antradienis",  # Вторник
+            "Trečiadienis", # Среда
+            "Ketvirtadienis", # Четверг
+            "Penktadienis", # Пятница
+            "Šeštadienis",  # Суббота
+            "Sekmadienis"   # Воскресенье
+        ]
+        current_day = days_of_week[datetime.now().weekday()]
+
+        # Разделяем контент на строки
+        lines = post.content.splitlines()
+
+        # Обрамляем строку с текущим днем и добавляем ссылку только для первой недели
+        highlighted_lines = []
+        current_day_found = False
+        saturday_found = False
+
+        # Получаем URL для регистрации
+        registration_url = reverse("planner:lunch_register")
+
+        for line in lines:
+            if "Šeštadienis" in line and not saturday_found:
+                path = '{% url "planner:lunch_register" %}'
+                registration_link = (
+                    '<span style="color: red; font-weight: bold;">'
+                    f'<a href="{registration_url}">Registracija</a>'
+                    '</span>'
+                )
+                line = line.replace(line, f"{line} {registration_link}")
+                saturday_found = True
+            # Обрабатываем строку с текущим днем
+            if current_day in line and not current_day_found:
+                highlighted_line = (
+                    f'<div style="border-top: 2px solid red; border-bottom: 2px solid red; margin: 10px 0; padding: 10px; width: 430px;">'
+                    f'{line.replace("-", "").strip()}'
+                    f'</div>'
+                )
+                highlighted_lines.append(highlighted_line)
+                current_day_found = True
+            else:
+                highlighted_lines.append(line)
+
+            # Обрабатываем строку с "Šeštadienis"
+
+
+        # Соединяем строки обратно в один текст
+        highlighted_content = "\n".join(highlighted_lines)
+
+        context['content'] = markdown(highlighted_content)
         context['title'] = "Tvarkaraštis"
         context['image'] = post.image
         return context
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -125,3 +183,25 @@ class AddToHomeView(View):
         post.image = image  # Устанавливаем изображение
         post.save()  # Сохраняем изменения
         return JsonResponse({'success': True, 'message': 'Изображение добавлено на главную!'})
+
+
+class LunchRegistrationView(View):
+    template_name = 'planner/lunch_registration.html'
+
+    def get(self, request):
+        form = LunchParticipantForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = LunchParticipantForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('planner:lunch_success')
+        return render(request, self.template_name, {'form': form})
+
+
+class LunchSuccessView(View):
+    template_name = 'planner/success.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

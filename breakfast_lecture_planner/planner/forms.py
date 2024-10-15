@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Image, Post
+from .models import Image, LunchParticipant, Post
 
 
 class PostForm(forms.ModelForm):
@@ -24,3 +24,12 @@ class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['image']
+
+
+class LunchParticipantForm(forms.ModelForm):
+    class Meta:
+        model = LunchParticipant
+        fields = ['name', 'email', 'portions', 'comment', 'date']
+        widgets = {
+            'date': forms.SelectDateWidget(),
+        }

@@ -17,3 +17,16 @@ class Image(models.Model):
 
     def __str__(self):
         return f"Image uploaded at {self.uploaded_at}"
+
+
+from django.db import models
+
+class LunchParticipant(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    portions = models.PositiveIntegerField(choices=[(i, str(i)) for i in range(1, 16)], default=1)
+    comment = models.TextField(blank=True, null=True)
+    date = models.DateField()  # Поле для даты обеда
+
+    def __str__(self):
+        return self.name
