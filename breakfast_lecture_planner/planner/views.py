@@ -1,16 +1,15 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from markdown import markdown
-from django.http import JsonResponse
 
-from .forms import PostForm
-from .models import Post
-
+from .forms import ImageUploadForm, PostForm
+from .models import Image, Post
 
 
 class ContactsView(View):
@@ -48,6 +47,7 @@ class Planner(DetailView):
         post = self.get_object()
         context['content'] = markdown(post.content)
         context['title'] = "Tvarkaraštis"
+        context['image'] = post.image
         return context
 
 
@@ -87,3 +87,41 @@ class PostUpdateView(UpdateView):
             return JsonResponse({'content': markdown(self.object.content)})
 
         return JsonResponse({'error': 'Invalid form'}, status=400)
+
+
+class ImageListView(View):
+    def get(self, request):
+        images = Image.objects.all()  # Получаем все изображения
+        context = {
+            'images': images
+        }
+        return render(request, 'planner/image_list.html', context)
+
+
+class ImageUploadView(View):
+    def get(self, request):
+        form = ImageUploadForm()
+        return render(request, 'planner/image_upload.html', {'form': form})
+
+    def post(self, request):
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('planner:image_list')  # Перенаправление на страницу со списком изображений
+        return render(request, 'planner/image_upload.html', {'form': form})
+
+
+class DeleteImageView(View):
+    def get(self, request, image_id):
+        image = get_object_or_404(Image, id=image_id)
+        image.delete()
+        return redirect('planner:image_list')
+
+
+class AddToHomeView(View):
+    def get(self, request, image_id):
+        image = get_object_or_404(Image, id=image_id)
+        post = get_object_or_404(Post, pk=12)  # Получаем пост с pk=12
+        post.image = image  # Устанавливаем изображение
+        post.save()  # Сохраняем изменения
+        return JsonResponse({'success': True, 'message': 'Изображение добавлено на главную!'})

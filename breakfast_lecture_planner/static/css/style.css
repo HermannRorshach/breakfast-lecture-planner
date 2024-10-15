@@ -115,9 +115,6 @@ a.edit:active {
   color: white;
 }
 
-.index {
-  margin: 50px;
-}
 
 html, body {
   height: 100%; /* Убедитесь, что body занимает всю высоту экрана */
@@ -209,4 +206,8 @@ body {
 .user-registration-form .form-control {
   height: calc(1.5em + .75rem + 2px); /* Высота одного ряда */
   width: 100%; /* Полная ширина */
+}
+
+.index {
+  margin-top: 50px;
 }

@@ -1,5 +1,7 @@
 from django import forms
-from .models import Post
+
+from .models import Image, Post
+
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -16,3 +18,9 @@ class PostForm(forms.ModelForm):
             'rows': 50,  # Задайте нужное количество строк
             'cols': 80   # (необязательно) Задайте нужное количество столбцов
         })
+
+
+class ImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = ['image']

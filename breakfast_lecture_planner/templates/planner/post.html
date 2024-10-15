@@ -12,7 +12,7 @@
         }
 </style>
 
-<div class="post">
+<div class="post index">
     <div class="row">
         <div class="col-md-7 order-md-1 order-2">
             <div class="post-content">
@@ -32,14 +32,17 @@
             {% endif %}
         </div>
         <div class="col-md-5 order-md-2 order-1">
-            <img src="{% static 'img/ак-2.png' %}" class="img-fluid" alt="Post Image">
+            {% if image %}
+                <img src="{{ image.image.url }}" class="img-fluid" alt="Post Image">
+            {% endif %}
         </div>
     </div>
+    <footer class="text-center mt-4 footer">
+        <p><a href="{% url 'users:login' %}">&copy;</a> {{ year }} Все права защищены. </p><br>
+    </footer>
 </div>
 
-<footer class="text-center mt-4">
-    <p><a href="{% url 'users:login' %}">&copy;</a> {{ year }} Все права защищены. </p>
-</footer>
+
 
 <script>
     document.getElementById('edit-post-btn').addEventListener('click', function() {

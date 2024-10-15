@@ -1,0 +1,64 @@
+{% extends 'auth.html' %}
+{% load static %}
+
+{% block title %}Загруженные изображения{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Загруженные изображения</h1>
+    <a href="{% url 'planner:image_upload' %}" class="btn btn-primary mb-3">Загрузить новое изображение</a>
+    <div class="row">
+        {% for image in images %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="{{ image.image.url }}" class="card-img-top" alt="Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Изображение загружено: {{ image.uploaded_at }}</h5>
+                        <button class="btn btn-success add-to-home" data-image-id="{{ image.id }}">Добавить на Главную</button>
+                        <a href="{% url 'planner:delete_image' image.id %}" class="btn btn-danger">Удалить</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-warning" role="alert">
+                Изображения не найдены.
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <a href="{% url 'planner:cabinet' %}" class="btn btn-secondary ms-auto">
+            Назад
+        </a>
+    </div>
+</div>
+
+
+<script>
+    document.querySelectorAll('.add-to-home').forEach(button => {
+        button.addEventListener('click', function() {
+            const imageId = this.getAttribute('data-image-id');
+            fetch(`{% url 'planner:add_to_home' '0' %}`.replace('0', imageId), {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Ошибка при добавлении изображения');
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // Показываем сообщение об успешном добавлении
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Произошла ошибка при добавлении изображения');
+            });
+        });
+    });
+</script>
+{% endblock content %}
