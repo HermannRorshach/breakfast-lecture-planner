@@ -1,31 +1,45 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
-{{ object.title }}
+{{ title }}
 {% endblock title %}
 
 {% block content %}
-<div class="post">
-    <div class="post-content">
-        {{ content|safe }}
-    </div>
-    {% if user.is_authenticated %}
-        <button id="edit-post-btn" class="btn btn-info btn-sm">Редактировать</button>
+<style>
+    body {
+        background-image: url("{% static 'img/345469.png' %}");
+        }
+</style>
 
-    <div id="edit-form-container" style="display: none;">
-        <form id="edit-post-form" class="full-height">  <!-- Добавлен класс full-height -->
-            {% csrf_token %}
-            <input type="hidden" name="id" value="{{ object.id }}">
-            <textarea name="content" id="content" class="form-control full-height">{{ object.content }}</textarea>
-            <button type="submit" id="save-changes-btn" class="btn btn-success fixed-btn">Сохранить</button>
-        </form>
+<div class="post">
+    <div class="row">
+        <div class="col-md-7 order-md-1 order-2">
+            <div class="post-content">
+                {{ content|safe }}
+            </div>
+            {% if user.is_authenticated %}
+                <button id="edit-post-btn" class="btn btn-info btn-sm">Редактировать</button>
+
+                <div id="edit-form-container" style="display: none;">
+                    <form id="edit-post-form" class="full-height">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ object.id }}">
+                        <textarea name="content" id="content" class="form-control full-height">{{ object.content }}</textarea>
+                        <button type="submit" id="save-changes-btn" class="btn btn-success fixed-btn">Сохранить</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-5 order-md-2 order-1">
+            <img src="{% static 'img/ак-2.png' %}" class="img-fluid" alt="Post Image">
+        </div>
     </div>
-    {% endif %}
 </div>
+
 <footer class="text-center mt-4">
     <p><a href="{% url 'users:login' %}">&copy;</a> {{ year }} Все права защищены. </p>
 </footer>
-
 
 <script>
     document.getElementById('edit-post-btn').addEventListener('click', function() {

@@ -47,6 +47,7 @@ class Planner(DetailView):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
         context['content'] = markdown(post.content)
+        context['title'] = "Tvarkaraštis"
         return context
 
 

@@ -124,6 +124,14 @@ html, body {
   margin: 0; /* Убираем отступы */
 }
 
+body {
+  background-size: cover; /* Занимает всё пространство */
+  background-position: center;
+  background-repeat: repeat;
+  height: 100vh; /* Занимает всю высоту окна браузера */
+  margin: 0; /* Убирает отступы */
+}
+
 .full-width {
   width: 100%;
   box-sizing: border-box;
