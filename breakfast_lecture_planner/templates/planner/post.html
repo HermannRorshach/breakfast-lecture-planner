@@ -6,17 +6,32 @@
 {% endblock title %}
 
 {% block content %}
-<!-- <style>
+<style>
     body {
-        background-image: url("{% static 'img/345469.png' %}");
+        /* background-image: url("{% static 'img/345469.png' %}"); */
+        background-color: #FDEED9;
         }
-</style> -->
+</style>
 
 <div class="post index">
     <div class="row">
         <div class="col-md-7 order-md-1 order-2">
             <div class="post-content">
-                {{ content|safe }}
+                <!-- {{ content|safe }} -->
+                {% if data.not_schedule_text %}
+                <div>{{ data.not_schedule_text|safe }}</div>
+            {% endif %}
+
+            {% for key, value in data.items %}
+                {% if key != 'not_schedule_text' %}
+                    {% if user.is_authenticated %}
+                        {{ key|safe }}
+                    {% endif %}
+                    <div>{{ value|safe }}</div>
+                {% endif %}
+            {% endfor %}
+
+
             </div>
             {% if user.is_authenticated %}
                 <button id="edit-post-btn" class="btn btn-info btn-sm">Редактировать</button>
@@ -38,7 +53,7 @@
         </div>
     </div>
     <footer class="text-center mt-4 footer">
-        <p><a href="{% url 'users:login' %}">&copy;</a> {{ year }} Все права защищены. </p><br>
+        <p><a href="{% url 'users:login' %}">&copy;</a> {{ year }} Visos teisės saugomos </p><br>
     </footer>
 </div>
 

@@ -1,7 +1,10 @@
+from datetime import datetime, timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DetailView
@@ -9,7 +12,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from markdown import markdown
 
 from .forms import ImageUploadForm, LunchParticipantForm, PostForm
-from .models import Image, Post
+from .models import Image, LunchParticipant, Post
 
 
 class ContactsView(View):
@@ -35,9 +38,8 @@ class CabinetView(View):
         return render(request, self.template_name)
 
 
-from datetime import datetime
 
-from django.utils.html import format_html
+
 
 
 class Planner(DetailView):
@@ -68,43 +70,71 @@ class Planner(DetailView):
 
         # Обрамляем строку с текущим днем и добавляем ссылку только для первой недели
         highlighted_lines = []
+        user_content_lines = []
         current_day_found = False
         saturday_found = False
+        data = {'not_schedule_text': []}
+        key = None
 
         # Получаем URL для регистрации
         registration_url = reverse("planner:lunch_register")
 
         for line in lines:
-            if "Šeštadienis" in line and not saturday_found:
-                path = '{% url "planner:lunch_register" %}'
-                registration_link = (
-                    '<span style="color: red; font-weight: bold;">'
-                    f'<a href="{registration_url}">Registracija</a>'
-                    '</span>'
-                )
-                line = line.replace(line, f"{line} {registration_link}")
-                saturday_found = True
-            # Обрабатываем строку с текущим днем
-            if current_day in line and not current_day_found:
-                highlighted_line = (
-                    f'<div style="border-top: 2px solid red; border-bottom: 2px solid red; margin: 10px 0; padding: 10px; width: 430px;">'
-                    f'{line.replace("-", "").strip()}'
-                    f'</div>'
-                )
-                highlighted_lines.append(highlighted_line)
-                current_day_found = True
+            if "savaitė" in line:
+                if key:
+                    data[key].extend(highlighted_lines)
+                    user_content_lines.extend(highlighted_lines)
+                    highlighted_lines = []
+                key = line
+                data[key] = []
+            if key in data:
+                if line == key:
+                    continue
+                if "Šeštadienis" in line and not saturday_found:
+                    path = '{% url "planner:lunch_register" %}'
+                    registration_link = (
+                        '<span style="color: red; font-weight: bold;">'
+                        f'<a href="{registration_url}">Registracija</a>'
+                        '</span>'
+                    )
+                    line = line.replace(line, f"{line} {registration_link}")
+                    saturday_found = True
+                # Обрабатываем строку с текущим днем
+                if current_day in line and not current_day_found:
+                    highlighted_line = (
+                        f'<div style="border-top: 2px solid red; border-bottom: 2px solid red; margin: 10px 0; padding: 10px; width: 430px;">'
+                        f'<h6>{line.replace("#", "").strip()}</h6>'
+                        f'</div>'
+                    )
+                    highlighted_lines.append(highlighted_line)
+                    current_day_found = True
+                else:
+                    highlighted_lines.append(line)
             else:
-                highlighted_lines.append(line)
-
-            # Обрабатываем строку с "Šeštadienis"
-
+                data["not_schedule_text"].append(line)
+        data[key].extend(highlighted_lines)
+        user_content_lines.extend(highlighted_lines)
 
         # Соединяем строки обратно в один текст
-        highlighted_content = "\n".join(highlighted_lines)
+        highlighted_content = "\n".join(user_content_lines)
 
         context['content'] = markdown(highlighted_content)
         context['title'] = "Tvarkaraštis"
         context['image'] = post.image
+
+        not_schedule_text = data['not_schedule_text']
+        del data['not_schedule_text']
+
+
+        data = {
+            markdown(key): markdown("\n".join(value)) if isinstance(value, list) else markdown(value)
+            for key, value in data.items()
+        }
+
+        if not_schedule_text:  # Проверяем, что значение не пустое
+            data['not_schedule_text'] = markdown("\n".join(not_schedule_text))
+
+        context['data'] = data
         return context
 
 
@@ -185,11 +215,20 @@ class AddToHomeView(View):
         return JsonResponse({'success': True, 'message': 'Изображение добавлено на главную!'})
 
 
+
 class LunchRegistrationView(View):
     template_name = 'planner/lunch_registration.html'
 
     def get(self, request):
-        form = LunchParticipantForm()
+        # Получаем сегодняшнюю дату
+        today = datetime.now()
+        # Находим ближайшую субботу
+        days_ahead = 5 - today.weekday()  # Суббота - 5-й день недели
+        if days_ahead < 0:  # Если сегодня уже суббота или позже
+            days_ahead += 7
+        nearest_saturday = today + timedelta(days=days_ahead)
+
+        form = LunchParticipantForm(initial={'date': nearest_saturday.date()})  # Устанавливаем начальное значение
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
@@ -200,8 +239,22 @@ class LunchRegistrationView(View):
         return render(request, self.template_name, {'form': form})
 
 
+
 class LunchSuccessView(View):
     template_name = 'planner/success.html'
 
     def get(self, request):
         return render(request, self.template_name)
+
+
+class LunchParticipantListView(View):
+    template_name = 'planner/lunch_participants.html'
+
+    def get(self, request):
+        one_day_ago = timezone.now() - timedelta(days=1)
+        participants = LunchParticipant.objects.filter(date__gte=one_day_ago)
+        context = {
+            'participants': participants,
+        }
+
+        return render(request, self.template_name, context)

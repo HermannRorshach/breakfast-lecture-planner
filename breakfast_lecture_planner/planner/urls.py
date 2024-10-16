@@ -26,4 +26,5 @@ urlpatterns = [
     path('images/delete/<int:image_id>/', views.DeleteImageView.as_view(), name='delete_image'),
     path('lunch/register/', views.LunchRegistrationView.as_view(), name='lunch_register'),
     path('lunch/success/', views.LunchSuccessView.as_view(), name='lunch_success'),
+    path('lunch/participants/', views.LunchParticipantListView.as_view(), name='lunch_participants'),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

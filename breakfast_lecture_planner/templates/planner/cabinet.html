@@ -11,6 +11,7 @@
         <h1>Кабинет администратора</h1>
         <div class="list-group mt-4">
             <a href="{% url 'planner:image_list' %}" class="list-group-item list-group-item-action">Изображения на Главной</a>
+            <a href="{% url 'planner:lunch_participants' %}" class="list-group-item list-group-item-action">Списки записавшихся на субботний обед</a>
             {% if user.is_superuser %}
                 <a href="{% url 'users:user_list' %}" class="list-group-item list-group-item-action">Список администраторов</a>
             {% endif %}

@@ -31,5 +31,5 @@ class LunchParticipantForm(forms.ModelForm):
         model = LunchParticipant
         fields = ['name', 'email', 'portions', 'comment', 'date']
         widgets = {
-            'date': forms.SelectDateWidget(),
+            'date': forms.DateInput(attrs={'type': 'date'}),  # Используем DateInput с типом 'date'
         }

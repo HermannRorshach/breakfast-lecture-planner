@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Регистрация на обед</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация на субботний обед{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
     <h1>Регистрация на обед</h1>
     <form method="post">
         {% csrf_token %}
@@ -20,5 +20,6 @@
         {% endfor %}
         </ul>
     {% endif %}
-</body>
-</html>
+</div>
+
+{% endblock content %}

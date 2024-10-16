@@ -127,7 +127,6 @@ body {
   background-repeat: repeat;
   height: 100vh; /* Занимает всю высоту окна браузера */
   margin: 0; /* Убирает отступы */
-  background-color: #FDEED9;
 }
 
 .full-width {
