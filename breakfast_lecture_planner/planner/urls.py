@@ -27,4 +27,6 @@ urlpatterns = [
     path('lunch/register/', views.LunchRegistrationView.as_view(), name='lunch_register'),
     path('lunch/success/', views.LunchSuccessView.as_view(), name='lunch_success'),
     path('lunch/participants/', views.LunchParticipantListView.as_view(), name='lunch_participants'),
+    path('feedback', views.FeedbackView.as_view(), name='feedback'),
+    path('feedback/success/', views.FeedbackSuccessView.as_view(), name='feedback_success'),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

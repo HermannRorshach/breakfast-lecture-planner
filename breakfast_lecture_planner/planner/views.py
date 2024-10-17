@@ -38,10 +38,6 @@ class CabinetView(View):
         return render(request, self.template_name)
 
 
-
-
-
-
 class Planner(DetailView):
     model = Post
     template_name = 'planner/post.html'
@@ -217,7 +213,7 @@ class AddToHomeView(View):
 
 
 class LunchRegistrationView(View):
-    template_name = 'planner/lunch_registration.html'
+    template_name = 'planner/registration_or_feedback.html'
 
     def get(self, request):
         # Получаем сегодняшнюю дату
@@ -229,22 +225,28 @@ class LunchRegistrationView(View):
         nearest_saturday = today + timedelta(days=days_ahead)
 
         form = LunchParticipantForm(initial={'date': nearest_saturday.date()})  # Устанавливаем начальное значение
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'title': 'Регистрация на обед'})
 
     def post(self, request):
         form = LunchParticipantForm(request.POST)
         if form.is_valid():
-            form.save()
+            lunch_participant = form.save(commit=False)  # Не сохраняем пока
+            lunch_participant.date = form.cleaned_data['date'] or request.POST.get('date')  # Получаем дату
+            lunch_participant.save()  # Теперь сохраняем
             return redirect('planner:lunch_success')
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'title': 'Регистрация на обед'})
 
 
 
 class LunchSuccessView(View):
     template_name = 'planner/success.html'
+    context = {
+        'title': 'Вы зарегистрированы!',
+        'action': 'регистрацию',
+        'message': 'Вы успешно зарегистрировались на субботний обед!'}
 
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, self.template_name, context=self.context)
 
 
 class LunchParticipantListView(View):
@@ -258,3 +260,56 @@ class LunchParticipantListView(View):
         }
 
         return render(request, self.template_name, context)
+
+
+from django.views import View
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
+from .forms import FeedbackForm  # Предположим, у вас есть форма FeedbackForm
+
+class FeedbackView(View):
+    template_name = 'planner/registration_or_feedback.html'  # Универсальное название
+
+    def get_context_data(self):
+        return {'title': 'Обратная связь'}
+
+    def get(self, request):
+        context = self.get_context_data()
+        form = FeedbackForm()
+        context['form'] = form
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.save()
+
+            # Получаем всех зарегистрированных пользователей
+            User = get_user_model()
+            users = User.objects.values_list('email', flat=True)
+            print(users)
+
+            # Отправляем письмо всем пользователям
+            subject = f"Обратная связь от {feedback.name}"
+            message = f"Пользователь по имени {feedback.name} с email {feedback.email}, оставил обратную связь:\n{feedback.text}"
+            from_email = feedback.email
+            send_mail(subject, message, from_email, users)
+
+            return redirect('planner:feedback_success')  # Перенаправление на страницу успеха
+
+        context = self.get_context_data()
+        context['form'] = form
+        return render(request, self.template_name, context)
+
+class FeedbackSuccessView(View):
+    template_name = 'planner/success.html'
+    context = {
+        'title': 'Сообщение отправлено',
+        'action': 'обратную связь',
+        'message': 'Ваше сообщение успешно отправлено!\nПожалуйста, ожидайте ответа на email'
+        }
+
+    def get(self, request):
+        return render(request, self.template_name, context=self.context)

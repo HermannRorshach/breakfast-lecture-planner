@@ -31,5 +31,29 @@ class LunchParticipantForm(forms.ModelForm):
         model = LunchParticipant
         fields = ['name', 'email', 'portions', 'comment', 'date']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),  # Используем DateInput с типом 'date'
+            'date': forms.HiddenInput(),  # Используйте скрытое поле
         }
+
+from django import forms
+from .models import Feedback  # Убедитесь, что у вас есть модель Feedback
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['name', 'email', 'text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Ваше сообщение'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Ваш email'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Ваше имя'}),
+        }
+        labels = {
+            'name': 'Имя',
+            'email': 'Email',
+            'text': 'Сообщение',
+        }
+
+    def clean_text(self):
+        text = self.cleaned_data.get('text')
+        if not text:
+            raise forms.ValidationError('Поле не может быть пустым.')
+        return text

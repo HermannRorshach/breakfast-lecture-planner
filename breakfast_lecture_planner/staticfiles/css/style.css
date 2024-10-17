@@ -1,7 +1,44 @@
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa.eot');
+	src: local('Comfortaa'),
+		url('../fonts/Comfortaa.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa.woff') format('woff'),
+		url('../fonts/Comfortaa.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa-Bold.eot');
+	src: local('Comfortaa Bold'), local('Comfortaa-Bold'),
+		url('../fonts/Comfortaa-Bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa-Bold.woff') format('woff'),
+		url('../fonts/Comfortaa-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa-Light.eot');
+	src: local('Comfortaa Light'), local('Comfortaa-Light'),
+		url('../fonts/Comfortaa-Light.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa-Light.woff') format('woff'),
+		url('../fonts/Comfortaa-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
 html {
-  font-family: 'Arial', sans-serif;
   margin: 0;
 }
+
+body {
+  font-family: 'Comfortaa', 'Arial', sans-serif;
+}
+
 
 .container {
   max-width: 800px; /* Ширина контейнера */
@@ -210,4 +247,47 @@ body {
 
 .index {
   margin-top: 50px;
+}
+
+.top-menu {
+  text-align: center;
+}
+
+.menu-link {
+  color: #FF5600;
+  text-decoration: none;
+  font-size: 18px;
+  transition: color 0.3s; /* Плавный переход цвета */
+}
+
+.menu-link:hover {
+  color: #cc4500; /* Темный оттенок при наведении */
+}
+
+@media (max-width: 768px) {
+  .collapse {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh; /* Занять всю высоту экрана */
+      background-color: #FDEED9; /* Цвет фона меню */
+      display: flex;
+      align-items: center; /* Вертикальное выравнивание по центру */
+      justify-content: center; /* Горизонтальное выравнивание по центру */
+      z-index: 9999; /* Убедитесь, что меню сверху */
+  }
+  .navbar-nav {
+      flex-direction: column; /* Элементы списка располагаем вертикально */
+      text-align: center; /* Центрирование текста */
+  }
+  .nav-item {
+      margin: 10px 0; /* Отступы между элементами меню */
+  }
+  .navbar-toggler {
+      position: fixed; /* Фиксированная позиция */
+      /* top: 20px; Расстояние от верхнего края */
+      left: 20px; /* Расстояние от левого края */
+      z-index: 10000; /* Убедитесь, что кнопка сверху меню */
+  }
 }

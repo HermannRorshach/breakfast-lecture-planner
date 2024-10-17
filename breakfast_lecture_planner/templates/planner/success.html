@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Вы зарегистрированы!{% endblock title %}
+{% block title %}{{ title }}{% endblock title %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1>Спасибо за регистрацию!</h1>
-    <p>Вы успешно зарегистрировались на обед.</p>
+    <h1>Спасибо за {{ action }}!</h1>
+    <p>{{ message }}.</p>
     <a href="{% url 'planner:planner' %}">Главная</a>
 </div>
 {% endblock %}
