@@ -1,7 +1,44 @@
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa.eot');
+	src: local('Comfortaa'),
+		url('../fonts/Comfortaa.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa.woff') format('woff'),
+		url('../fonts/Comfortaa.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa-Bold.eot');
+	src: local('Comfortaa Bold'), local('Comfortaa-Bold'),
+		url('../fonts/Comfortaa-Bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa-Bold.woff') format('woff'),
+		url('../fonts/Comfortaa-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa-Light.eot');
+	src: local('Comfortaa Light'), local('Comfortaa-Light'),
+		url('../fonts/Comfortaa-Light.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa-Light.woff') format('woff'),
+		url('../fonts/Comfortaa-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
 html {
-  font-family: 'Arial', sans-serif;
   margin: 0;
 }
+
+body {
+  font-family: 'Comfortaa', 'Arial', sans-serif;
+}
+
 
 .container {
   max-width: 800px; /* Ширина контейнера */
