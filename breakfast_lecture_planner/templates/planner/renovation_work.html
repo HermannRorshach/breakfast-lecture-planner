@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}isd{% endblock %}
+{% block content %}
+  <style>
+    body {
+        /* background-image: url("{% static 'img/345469.png' %}"); */
+        background-color: #f0efef;
+        }
+    .grey {
+        background-color: #f0efef;
+    }
+    #up-icon {
+        position: fixed;
+        bottom: 60px; /* Отступ сверху */
+        right: 50px; /* Отступ справа */
+        z-index: 1000; /* Чтобы иконка была выше других элементов */
+        display: inline-block; /* Ограничивает ширину элемента */
+        width: 30px; /* Автоматическая ширина для элемента */
+        height: auto;
+    }
+    li {
+    margin-left: 25px;
+    }
+
+    li:last-child {
+    margin-bottom: 30px;
+    }
+
+    .container {
+        background-color: #f0efef;
+        box-shadow: none;
+        margin-top: 0px;
+    }
+
+  </style>
+  <div class="grey">{% include "planner/includes/menu.html" %}</div>
+  {% include "includes/decorative-header.html" %}
+  <h1 class="red px22 text-center">remonto darbai</h1>
+  <div class="container">
+    <a class="blue" href= "https://www.malone.guru/feedback">parašykite</a> prašau žinutė, ką reikia pataisyti Šventykloje
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
+{% endblock %}

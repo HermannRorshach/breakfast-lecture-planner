@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Список участников обеда
+{% endblock title %}
+{% block content %}
+  <div class="container container-list">
+    <h1 class="mb-4">Участники обеда</h1>
+    <div class="d-flex justify-content-between align-items-center my-3">
+      <a href="{% url 'planner:cabinet' %}" class="btn btn-secondary ms-auto">Назад</a>
+    </div>
+    <div class="table-responsive w-auto">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Порции</th>
+            <th>Комментарий</th>
+            <th>Дата обеда</th>
+            <th>Дата регистрации</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for participant in participants %}
+            <tr>
+              <td>{{ participant.name }}</td>
+              <td class="comment-cell">{{ participant.email }}</td>
+              <td>{{ participant.portions }}</td>
+              <td class="comment-cell">{{ participant.comment }}</td>
+              <td>{{ participant.date }}</td>
+              <td>{{ participant.registration_date }}</td>
+              <td>
+                <a href="{% url 'planner:delete_lunch_participant' participant.pk %}"
+                   class="btn btn-danger btn-sm">Удалить</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6">Нет записавшихся на обед.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center my-3">
+      <a href="{% url 'planner:cabinet' %}" class="btn btn-secondary ms-auto">Назад</a>
+    </div>
+  </div>
+  <style>
+    .comment-cell {
+        max-width: 200px; /* Задайте фиксированную ширину для ячейки комментария */
+        word-wrap: break-word; /* Перенос слов при необходимости */
+        white-space: normal; /* Перенос строк */
+    }
+  </style>
+{% endblock content %}

@@ -1,0 +1,116 @@
+{% extends 'new_base.html' %}
+{% load static %}
+{% block title %}
+  pagrindinis
+{% endblock title %}
+{% block content %}
+  <header class="container">
+    {% include "includes/new_header.html" %}
+    <div class="main-content">
+      <div class="text-section">
+        <h1 class="title">
+          Šri Šri Nitai
+          <br>
+          Gaurasundaros Šventykla
+        </h1>
+        <p class="dedication">
+          Šis puslapis yra skiriamas
+          <br>
+          <span class="strong">Jo Dieviškajai Kilnybei A.Č. Bhaktivedanta
+            <br>
+          Svami Prabhupadai</span>
+          <br>
+          Tarptautinės Krišnos Sąmonės Bendrijos
+          <br>
+          (ISKCON) Įkūrėjui-Ačarjai
+        </p>
+        <div class="cta-buttons">
+          <a href="#" class="button orange">Registracija šeštadienio pietums</a>
+          <a href="#" class="button outline">susiekite su mumis</a>
+        </div>
+      </div>
+      <div class="right-block">
+        <div class="image-section">
+          <img src="{% static 'img/гуру-без-фона.png' %}"
+               alt="Bhaktivedanta Swami Prabhupada"
+               class="man-image">
+        </div>
+        <div class="countdown">
+          <p>iki registracijos pabaigos liko</p>
+          <div class="countdown-timer">
+            {% for unit in countdown %}
+              <div class="time-unit" style="position: relative; display: inline-block;">
+                <svg width="82" height="82" viewBox="0 0 100 100" class="progress-circle">
+                  <circle cx="50" cy="50" r="41" class="bg-circle" style="stroke-width: 6;"></circle>
+                  <circle cx="50" cy="50" r="41" class="fg-circle" style="stroke-dasharray: {{ unit.stroke_dasharray }} {{ circumference }}; stroke-width: 6;"></circle>
+                </svg>
+                <span class="number"
+                      style="position: absolute;
+                             top: 42%;
+                             left: 50%;
+                             transform: translate(-50%, -55%)">{{ unit.value }}</span>
+                <span class="label"
+                      style="position: absolute;
+                             bottom: 9px;
+                             left: 50%;
+                             transform: translate(-50%, -3px);
+                             font-size: 0.6em">{{ unit.label }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-content">
+      <h1 class="title">
+        Šri Šri Nitai
+        <br>
+        Gaurasundaros Šventykla
+      </h1>
+      <div class="image-section">
+        <img src="{% static 'img/гуру-без-фона.png' %}"
+             alt="Bhaktivedanta Swami Prabhupada"
+             class="man-image">
+      </div>
+      <p class="dedication">
+        Šis puslapis yra skiriamas
+        <br>
+        <span class="strong">Jo Dieviškajai Kilnybei A.Č. Bhaktivedanta Svami
+          <br>
+        Prabhupadai</span>
+        <br>
+        Tarptautinės Krišnos Sąmonės Bendrijos
+        <br>
+        (ISKCON) Įkūrėjui-Ačarjai
+      </p>
+      <div class="countdown">
+        <p>iki registracijos pabaigos liko</p>
+        <div class="countdown-timer">
+          {% for unit in countdown %}
+            <div class="time-unit" style="position: relative; display: inline-block;">
+              <svg width="82" height="82" viewBox="0 0 100 100" class="progress-circle">
+                <circle cx="50" cy="50" r="41" class="bg-circle" style="stroke-width: 6;"></circle>
+                <circle cx="50" cy="50" r="41" class="fg-circle" style="stroke-dasharray: {{ unit.stroke_dasharray }} {{ circumference }}; stroke-width: 6;"></circle>
+              </svg>
+              <span class="number"
+                    style="position: absolute;
+                           top: 42%;
+                           left: 50%;
+                           transform: translate(-50%, -55%)">{{ unit.value }}</span>
+              <span class="label"
+                    style="position: absolute;
+                           bottom: 9px;
+                           left: 50%;
+                           transform: translate(-50%, -3px);
+                           font-size: 0.6em">{{ unit.label }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="cta-buttons">
+        <a href="#" class="button outline">susiekite su mumis</a>
+        <a href="#" class="button orange">Registracija šeštadienio pietums</a>
+      </div>
+    </div>
+  </header>
+{% endblock content %}

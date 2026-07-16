@@ -1,0 +1,29 @@
+{% extends 'new_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    figure {
+        margin: 0;
+    }
+    .image_resized img {
+        max-width: 100%;
+        height: auto;
+    }
+    .small-contaniner {
+        width: 800px;
+        height: 800px;
+        margin: 50px 0 0 50px;
+    }
+    ul, ol {
+        padding-left: 20px;
+    }
+</style>
+<div class="small-contaniner">
+    <h1>{{ text.title }}</h1>
+    {{ text.text|safe }}  <!-- Здесь будет отображаться содержимое текста -->
+    <br><br>
+    <a href="{% url 'planner:text_update' object.pk %}">Редактировать</a>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  {{ title }}
+{% endblock title %}
+{% block content %}
+  <div class="post index">
+    {% include "planner/includes/menu.html" %}
+    <div class="container mt-4 registration-and-feedback-forms">
+      <div class="header-title">
+        <h1 class="lunch-registration">{{ header_title|safe }}</h1>
+        {% if register_lunch %}<h2 class="lunch-registration">vyksta iki penktadienio 17:00</h2>{% endif %}
+      </div>
+      <p class="lunch-registration">{{ text|safe }}</p>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button id="id_submit" type="submit">patvirtinti</button>
+      </form>
+      {% if form.errors %}
+        <ul>
+          {% for field in form %}
+            {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+  {% endblock content %}

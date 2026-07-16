@@ -1,0 +1,9 @@
+<h3>{{ item.date }}</h3>
+<p>
+  Лекции &mdash;
+  {% if item.lecturer %}{{ item.lecturer }}{% endif %}
+</p>
+<p>
+  Завтрак &mdash;
+  {% if item.chef %}{{ item.chef }}{% endif %}
+</p>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Puslapis nerastas{% endblock %}
+{% block content %}
+  <main>
+    <div class="container">
+      <br>
+      <h1>Puslapis nerastas</h1>
+      <br>
+      <p>puslapis su adresu "{{ path }}" neegzistuoja</p>
+      <br>
+      <a href="{% url 'planner:planner' %}">Eikite į pagrindinį puslapį</a>
+      <br>
+    </div>
+  </main>
+{% endblock %}

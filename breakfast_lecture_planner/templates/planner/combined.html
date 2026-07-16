@@ -1,0 +1,271 @@
+{% extends 'new_base.html' %}
+{% load static %}
+{% block title %}
+  {{ title }}
+{% endblock title %}
+{% block content %}
+<style>
+    /* body {
+        background-image: url("{% static 'img/345469.png' %}");
+        background-color: #f0efef;
+        } */
+    .grey {
+        background-color: #f0efef;
+    }
+    #up-icon {
+        position: fixed;
+        bottom: 60px; /* Отступ сверху */
+        right: 50px; /* Отступ справа */
+        z-index: 1000; /* Чтобы иконка была выше других элементов */
+        display: inline-block; /* Ограничивает ширину элемента */
+        width: 30px; /* Автоматическая ширина для элемента */
+        height: auto;
+    }
+    li {
+    margin-left: 25px;
+    }
+
+    li:last-child {
+    margin-bottom: 30px;
+    }
+    .submenu_wrapper {
+        backdrop-filter: blur(8px);
+    }
+  </style>
+  <header class="container">
+    {% include "includes/new_header.html" %}
+    <div class="main-content">
+      <div class="text-section">
+        <h1 class="title">
+          Šri Šri Nitai
+          <br>
+          Gaurasundaros Šventykla
+        </h1>
+        <p class="dedication">
+          Šis puslapis yra skiriamas
+          <br>
+          <span class="strong">Jo Dieviškajai Kilnybei A.Č. Bhaktivedanta
+            <br>
+          Svami Prabhupadai</span>
+          <br>
+          Tarptautinės Krišnos Sąmonės Bendrijos
+          <br>
+          (ISKCON) Įkūrėjui-Ačarjai
+        </p>
+        <div class="cta-buttons">
+          <a href="{% url 'planner:lunch_register' %}" class="button orange">Registracija šeštadienio pietums</a>
+          <a href="{% url 'planner:feedback' %}" class="button outline">Susisiekite su mumis</a>
+        </div>
+      </div>
+      <div class="right-block">
+        <div class="image-section">
+          <img src="{% static 'img/гуру-без-фона.png' %}"
+               alt="Bhaktivedanta Swami Prabhupada"
+               class="man-image">
+        </div>
+        <div class="countdown">
+          <p>iki registracijos pabaigos liko</p>
+          <div class="countdown-timer">
+            {% for unit in countdown %}
+              <div class="time-unit" style="position: relative; display: inline-block;">
+                <svg width="82" height="82" viewBox="0 0 100 100" class="progress-circle">
+                  <circle cx="50" cy="50" r="41" class="bg-circle" style="stroke-width: 6;"></circle>
+                  <circle cx="50" cy="50" r="41" class="fg-circle" style="stroke-dasharray: {{ unit.stroke_dasharray }} {{ circumference }}; stroke-width: 6;"></circle>
+                </svg>
+                <span class="number"
+                      style="position: absolute;
+                             top: 42%;
+                             left: 50%;
+                             transform: translate(-50%, -55%)">{{ unit.value }}</span>
+                <span class="label"
+                      style="position: absolute;
+                             bottom: 9px;
+                             left: 50%;
+                             transform: translate(-50%, -3px);
+                             font-size: 0.6em">{{ unit.label }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-content">
+      <h1 class="title">
+        Šri Šri Nitai
+        <br>
+        Gaurasundaros Šventykla
+      </h1>
+      <div class="image-section">
+        <img src="{% static 'img/гуру-без-фона.png' %}"
+             alt="Bhaktivedanta Swami Prabhupada"
+             class="man-image">
+      </div>
+      <p class="dedication">
+        Šis puslapis yra skiriamas
+        <br>
+        <span class="strong">Jo Dieviškajai Kilnybei A.Č. Bhaktivedanta Svami
+          <br>
+        Prabhupadai</span>
+        <br>
+        Tarptautinės Krišnos Sąmonės Bendrijos
+        <br>
+        (ISKCON) Įkūrėjui-Ačarjai
+      </p>
+      <div class="countdown">
+        <p>iki registracijos pabaigos liko</p>
+        <div class="countdown-timer">
+          {% for unit in countdown %}
+            <div class="time-unit" style="position: relative; display: inline-block;">
+              <svg width="82" height="82" viewBox="0 0 100 100" class="progress-circle">
+                <circle cx="50" cy="50" r="41" class="bg-circle" style="stroke-width: 6;"></circle>
+                <circle cx="50" cy="50" r="41" class="fg-circle" style="stroke-dasharray: {{ unit.stroke_dasharray }} {{ circumference }}; stroke-width: 6;"></circle>
+              </svg>
+              <span class="number"
+                    style="position: absolute;
+                           top: 42%;
+                           left: 50%;
+                           transform: translate(-50%, -55%)">{{ unit.value }}</span>
+              <span class="label"
+                    style="position: absolute;
+                           bottom: 9px;
+                           left: 50%;
+                           transform: translate(-50%, -3px);
+                           font-size: 0.6em">{{ unit.label }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="cta-buttons">
+        <a href="{% url 'planner:feedback' %}" class="button outline">Susisiekite su mumis</a>
+        <a href="{% url 'planner:lunch_register' %}" class="button orange">Registracija šeštadienio pietums</a>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+  <div class="post index">
+    {% if object.pk == 12 %}
+      <a href="#today" id="up-icon">
+        <img src="{% static 'icons/angles-up-solid.png' %}" alt="Стрелка вверх">
+      </a>
+    {% endif %}
+  <div class="row">
+    <div class="col-md-7 order-md-1 order-2">
+      {% include "planner/includes/button-edit-up.html" %}
+      <div class="post-content">
+        <!-- {{ content|safe }} -->
+        {% if data.not_schedule_text %}<div>{{ data.not_schedule_text|safe }}</div>{% endif %}
+        {% for key, value in data.items %}
+          {% if key != 'not_schedule_text' %}
+            {% if user.is_authenticated %}{{ key|safe }}{% endif %}
+            <div>{{ value|safe }}</div>
+          {% endif %}
+        {% endfor %}
+        {% if not data %}{{ content|safe }}{% endif %}
+      </div>
+      {% include "planner/includes/button-edit-down.html" %}
+    </div>
+    <div class="col-md-5 order-md-2 order-1">
+      {% if image %}<img src="{{ image.image.url }}" class="img-fluid" alt="Post Image">{% endif %}
+    </div>
+  </div>
+  </div>
+  <footer class="text-center mt-4 footer">
+    <a href="{% url 'users:login' %}">
+      <img src="{% static 'img/logo-orange.png' %}"
+           alt="logo"
+           class="img-fluid"
+           style="max-height: 50px;
+                  margin-left: 5px">
+    </a>
+    <p class="bottom">
+      Harė Krišna, Harė Krišna, Krišna Krišna, Harė Harė
+      <br>
+      Harė Rama, Harė Rama, Rama Rama, Harė Harė
+    </p>
+  </footer>
+</div>
+<br>
+<div id="elem1" class="hidden-element">{{ next_friday_17 }}</div>
+<div id="elem2" class="hidden-element">{{ now_tuple }}</div>
+
+<script src="{% static 'js/timer.js' %}"></script>
+
+<script>
+  document.getElementById('edit-post-btn-up').addEventListener('click', function() {
+      document.getElementById('edit-form-container-up').style.display = 'block';
+  });
+
+  document.getElementById('edit-post-form-up').addEventListener('submit', function(event) {
+      event.preventDefault(); // Предотвратить перезагрузку страницы
+      const formData = new FormData(this);
+
+      fetch("{% url 'planner:post-edit' object.id %}", {
+          method: 'POST',
+          body: formData,
+          headers: {
+              'X-Requested-With': 'XMLHttpRequest' // Указывает, что запрос отправлен через AJAX
+          }
+      })
+      .then(response => {
+          if (response.ok) {
+              return response.json(); // Предполагаем, что сервер возвращает JSON
+          }
+          throw new Error('Ошибка при сохранении изменений');
+      })
+      .then(data => {
+          // Обновляем содержимое поста
+          document.querySelector('.post-content').innerHTML = data.content;
+          document.getElementById('edit-form-container-up').style.display = 'none'; // Скрыть форму
+      })
+      .then(data => {
+          // Обновляем содержимое поста
+          document.querySelector('.post-content').innerHTML = data.content;
+
+          // Дополнительно: можно обновить посты на главной странице, если нужно
+          // Это может потребовать запроса к вашему API или повторного запроса к странице
+      })
+      .catch(error => {
+          console.error(error);
+      });
+  });
+</script>
+<script>
+  document.getElementById('edit-post-btn-down').addEventListener('click', function() {
+      document.getElementById('edit-form-container-down').style.display = 'block';
+  });
+
+  document.getElementById('edit-post-form-down').addEventListener('submit', function(event) {
+      event.preventDefault(); // Предотвратить перезагрузку страницы
+      const formData = new FormData(this);
+
+      fetch("{% url 'planner:post-edit' object.id %}", {
+          method: 'POST',
+          body: formData,
+          headers: {
+              'X-Requested-With': 'XMLHttpRequest' // Указывает, что запрос отправлен через AJAX
+          }
+      })
+      .then(response => {
+          if (response.ok) {
+              return response.json(); // Предполагаем, что сервер возвращает JSON
+          }
+          throw new Error('Ошибка при сохранении изменений');
+      })
+      .then(data => {
+          // Обновляем содержимое поста
+          document.querySelector('.post-content').innerHTML = data.content;
+          document.getElementById('edit-form-container-down').style.display = 'none'; // Скрыть форму
+      })
+      .then(data => {
+          // Обновляем содержимое поста
+          document.querySelector('.post-content').innerHTML = data.content;
+
+          // Дополнительно: можно обновить посты на главной странице, если нужно
+          // Это может потребовать запроса к вашему API или повторного запроса к странице
+      })
+      .catch(error => {
+          console.error(error);
+      });
+  });
+</script>
+{% endblock content %}

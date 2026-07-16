@@ -1,0 +1,57 @@
+{% load static %}
+<div class="wrapper">
+  <!-- Menu 1 - Логотип -->
+  <a href="{% url 'planner:new' %}">
+    <img src="{% static 'img/new_logo.png' %}"
+       alt="ISKCON Vilnius Logo"
+       class="logo">
+  </a>
+  <!-- Menu 2 - Кнопка регистрации -->
+  <div class="menuitem">
+    <a href="{% url 'planner:lunch_register' %}" class="button orange small">Registracija šeštadienio pietums</a>
+  </div>
+  <div class="empty-1"></div>
+  <!-- Menu 3 - Features -->
+  <div class="menuitem">
+    <div class="features-title">
+      meniu
+      <img src="{% static 'img/Vector 1.png' %}">
+      <div class="submenu_wrapper">
+        <div class="submenu">{% include "includes/dropdown.html" %}</div>
+      </div>
+    </div>
+  </div>
+  <div class="empty-2"></div>
+  <!-- Menu 4 - Language Switcher -->
+  <div class="menuitem">
+    <nav class="language-switcher">
+      <ul>
+        <li>
+          <a href="#" class="active">LT /</a>
+        </li>
+        <li>
+          <a href="#">EN /</a>
+        </li>
+        <li>
+          <a href="#">RU</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<hr class="full-width-line">
+<button class="navbar-toggler d-md-none menu-button"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mobileMenu"
+        aria-expanded="false"
+        data-open="{% static 'icons/Close_Button.png' %}"
+        data-close="{% static 'icons/mobile-menu.png' %}">
+  <img id="menuIcon" src="{% static 'icons/mobile-menu.png' %}" alt="Меню">
+</button>
+<div class="collapse" id="mobileMenu">{% include "includes/dropdown.html" %}</div>
+<a href="{% url 'planner:new' %}">
+  <img src="{% static 'img/new_logo.png' %}"
+     alt="ISKCON Vilnius Logo"
+     class="mobile-logo">
+</a>

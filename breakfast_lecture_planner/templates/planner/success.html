@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  {{ title }}
+{% endblock title %}
+{% block content %}
+  <div class="post index">{% include "planner/includes/menu.html" %}</div>
+  <div class="container mt-4 registration-and-feedback-forms">
+    <div class="header-title">
+      {% if form == 'обед' %}
+        <h1 class="lunch-registration">Ačiū Jums už tai, kad skiriate laiko registracijai.</h1>
+        <h2 class="lunch-registration">
+          Laukiame Jūsų artimiausią šeštadienį.
+          Pietų pradžia 13:30.
+        </h2>
+      {% elif form == 'Регистрация не удалась' %}
+        <h1 class="lunch-registration">
+          Registracija artimiausio šeštadienio pietums baigėsi.
+          <h2 class="lunch-registration">
+            Iškilus klausimams, prašome kreiptis <a href="https://www.malone.guru/feedback"><u>čia</u></a>
+          </h2>
+        {% else %}
+          <h1 class="lunch-registration">Ačiū už atsiliepimą!</h1>
+        {% endif %}
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+              crossorigin="anonymous"></script>
+    </div>
+  {% endblock %}

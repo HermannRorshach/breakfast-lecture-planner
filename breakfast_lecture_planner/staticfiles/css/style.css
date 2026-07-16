@@ -1,0 +1,574 @@
+@import url('minireset.css');
+@import url('normalize.css');
+
+
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa.eot');
+	src: local('Comfortaa'),
+		url('../fonts/Comfortaa.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa.woff') format('woff'),
+		url('../fonts/Comfortaa.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa-Bold.eot');
+	src: local('Comfortaa Bold'), local('Comfortaa-Bold'),
+		url('../fonts/Comfortaa-Bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa-Bold.woff') format('woff'),
+		url('../fonts/Comfortaa-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('../fonts/Comfortaa-Light.eot');
+	src: local('Comfortaa Light'), local('Comfortaa-Light'),
+		url('../fonts/Comfortaa-Light.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Comfortaa-Light.woff') format('woff'),
+		url('../fonts/Comfortaa-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+html {
+  margin: 0;
+}
+
+body {
+  font-family: 'Comfortaa', 'Arial', sans-serif;
+}
+
+
+.container {
+  max-width: 800px; /* Ширина контейнера */
+  margin: 50px auto; /* Центрирование */
+  margin-bottom: 50px;
+  padding: 30px; /* Внутренние отступы */
+  background: #fff; /* Цвет фона контейнера */
+  border-radius: 8px; /* Закругленные углы */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Тень для эффекта глубины */
+  text-align: center; /* Центрирование текста */
+}
+
+.container-list {
+  max-width: 1000px; /* Ширина контейнера */
+}
+
+h1 {
+  font-size: 36px; /* Размер заголовка */
+  color: #333; /* Цвет текста */
+  margin: 20px 0 25px 0; /* Отступы сверху и снизу */
+  font-weight: bold; /* Жирный текст */
+}
+
+h2 {
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 28px;
+  margin-top: 30px; /*Отступ перед заголовком о начале недели*/
+}
+
+h4 {
+  font-size: 24px;
+}
+
+h5 {
+  font-size: 22px;
+}
+
+h6 {
+  font-size: 20px;
+}
+
+h1, h2, h3, h4 {
+  color: #333; /* Цвет текста */
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+
+h5, h6 {
+  color: #333; /* Цвет текста */
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.contacts h3 {
+  font-size: 18px; /* Размер подзаголовка */
+  color: #555; /* Цвет текста */
+  margin-bottom: 30px; /* Отступ снизу */
+}
+
+.icons {
+  display: inline-flex;
+  margin-bottom: 50px;
+}
+
+.icons__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  border: solid var(--color-blue); /* Замените $color-blue на реальное значение цвета */
+  border-radius: 40px;
+  margin-right: 50px;
+}
+
+.icons__item:last-child {
+  margin-right: 0;
+}
+
+.icons__item i {
+  font-size: 25px;
+  color: black;
+}
+
+.icon-svg {
+  /* width: 21px; Подгоните размер под другие иконки */
+  height: 25px; /* Подгоните размер под другие иконки */
+  color: black; /* Цвет иконки, если необходимо */
+  display: block; /* Чтобы избежать отступов */
+}
+
+/* Стили для ссылок */
+a {
+  color: #E5322D; /* Цвет ссылки */
+  text-decoration: none; /* Убираем подчеркивание */
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+a:hover {
+  color: #BD060A; /* Цвет ссылки при наведении */
+  transform: scale(1.05);
+}
+
+/* Дополнительные стили для отзыва и ошибок, если нужны */
+.alert {
+  background-color: #f8d7da; /* Цвет фона для ошибки */
+  color: #721c24; /* Цвет текста для ошибки */
+  padding: 15px; /* Внутренние отступы */
+  margin-bottom: 20px; /* Отступ снизу */
+  border: 1px solid #f5c6cb; /* Цвет рамки */
+  border-radius: 5px; /* Закругленные углы */
+}
+
+.faq-container h1 {
+  text-align: center; /* Центрирование заголовка */
+  color: #333; /* Цвет заголовка */
+  margin-bottom: 50px; /* Отступ снизу */
+}
+
+.nav {
+  display: flex; /* Flexbox для выравнивания */
+  justify-content: flex-end; /* Выравнивание элементов вправо */
+  align-items: center; /* Выравнивание по центру по вертикали */
+  width: 100%; /* Занимаем всю ширину */
+}
+
+.nav-item {
+  margin-left: 20px; /* Отступы между элементами */
+}
+
+
+.nav-link {
+  padding: 10px 15px; /* Увеличиваем отступы для лучшего клика */
+}
+
+a.edit {
+  background-color: rgb(17, 33, 173);
+  color: white;
+}
+a.edit:hover {
+  background-color: rgb(15, 25, 105);
+  color: white;
+}
+
+a.edit:active {
+  background-color: rgb(10, 20, 150);
+  color: white;
+}
+
+
+html, body {
+  height: 100%; /* Убедитесь, что body занимает всю высоту экрана */
+  margin: 0; /* Убираем отступы */
+}
+
+body {
+  background-size: cover; /* Занимает всё пространство */
+  background-position: center;
+  background-repeat: repeat;
+  height: 100vh; /* Занимает всю высоту окна браузера */
+  margin: 0; /* Убирает отступы */
+}
+
+.full-width {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.full-height {
+  height: 95%; /* Устанавливаем высоту на 100% */
+}
+
+.post {
+  padding: 0 5%; /* Отступы по 5% с каждой стороны */
+}
+
+.post-content {
+  text-align: left; /* Выровнять текст по левому краю */
+}
+
+.index {
+  padding: 0 20px 0 20px;
+}
+
+#edit-form-container-up, #edit-form-container-down {
+  position: fixed; /* Фиксированное положение для заполнения экрана */
+  top: 0; /* Привязывает к верхней части */
+  left: 0; /* Привязывает к левой части */
+  width: 100%; /* Полная ширина */
+  height: 100%; /* Полная высота */
+  background-color: rgba(255, 255, 255); /* Фон с прозрачностью */
+  z-index: 9999; /* На переднем плане */
+}
+
+.form-group {
+  height: calc(100%); /* Высота, исключая заголовок */
+  display: flex; /* Использует flexbox */
+}
+
+
+#edit-form-container {
+  position: fixed; /* Фиксированное положение для заполнения экрана */
+  top: 0; /* Привязывает к верхней части */
+  left: 0; /* Привязывает к левой части */
+  width: 100%; /* Полная ширина */
+  height: 100%; /* Полная высота */
+  background-color: rgba(255, 255, 255); /* Фон с прозрачностью */
+  z-index: 9999; /* На переднем плане */
+  display: flex; /* Для вертикального выравнивания */
+}
+
+
+#content {
+  flex-grow: 1; /* Позволяет textarea занимать оставшееся пространство */
+  width: 100%; /* Полная ширина */
+  resize: none; /* Отключает возможность изменения размера */
+  box-sizing: border-box; /* Включает отступы в общую ширину */
+  padding: 10px; /* Отступы внутри textarea */
+}
+
+.fixed-btn {
+  position: fixed; /* Фиксированное положение */
+  top: 10px; /* Отступ от верхней части */
+  right: 10px; /* Отступ от правой стороны */
+  z-index: 1000; /* На переднем плане */
+}
+
+
+.user-registration-form .form-group {
+  display: flex;
+  flex-direction: column; /* Вертикальное расположение */
+  margin-bottom: 1rem; /* Отступ между полями */
+}
+
+.user-registration-form .form-control {
+  height: calc(1.5em + .75rem + 2px); /* Высота одного ряда */
+  width: 100%; /* Полная ширина */
+}
+
+.index {
+  margin-top: 50px;
+  padding-left: 50px;
+}
+
+.top-menu {
+  text-align: center;
+}
+
+.menu-link {
+  color: #FF5600;
+  text-decoration: none;
+  font-size: 21.5px;
+  transition: color 0.7s ease, transform 0.3s ease;
+}
+
+.menu-link:hover {
+  color: #cc4500; /* Темный оттенок при наведении */
+}
+
+.navbar-nav {
+  text-align: center;
+}
+
+.nav-item {
+  margin-bottom: 20px
+}
+
+@media (max-width: 991px) {
+  .nav-item a {
+    font-size: x-large;
+  }
+}
+
+@media (max-width: 768px) {
+  .collapse {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh; /* Занять всю высоту экрана */
+      background-color: #f0efef; /* Цвет фона меню */
+      display: flex;
+      align-items: center; /* Вертикальное выравнивание по центру */
+      justify-content: center; /* Горизонтальное выравнивание по центру */
+      z-index: 9999; /* Убедитесь, что меню сверху */
+  }
+  .navbar-nav {
+      flex-direction: column; /* Элементы списка располагаем вертикально */
+      text-align: center; /* Центрирование текста */
+  }
+
+  .navbar-toggler {
+      position: fixed; /* Фиксированная позиция */
+      top: 20px;
+      left: 20px; /* Расстояние от левого края */
+      z-index: 10000; /* Убедитесь, что кнопка сверху меню */
+  }
+}
+
+body, .registration-and-feedback-forms {
+  background-color: #f0efef;
+}
+
+.for-admin {
+  background-color: white;
+}
+
+.registration-and-feedback-forms {
+  background-color: #f0efef;
+  padding: 20px;
+  border-radius: 5px; /* Закругление углов, если нужно */
+}
+
+.registration-and-feedback-forms input,
+.registration-and-feedback-forms textarea,
+.registration-and-feedback-forms select {
+  background-color: #f0efef; /* Такой же цвет фона для полей */
+  border: 1px solid #FDEED9; /* Цвет рамки для полей */
+  border-radius: 4px; /* Закругление углов полей */
+  padding: 10px; /* Отступ внутри полей */
+  box-sizing: border-box; /* Учет отступов и рамок в ширину */
+  width: 60%;
+}
+
+.registration-and-feedback-forms button {
+  background-color: #ca7043; /* Цвет кнопки */
+  color: white; /* Цвет текста кнопки */
+  border: none; /* Удаление рамки */
+  padding: 10px 15px; /* Отступ внутри кнопки */
+  border-radius: 4px; /* Закругление углов кнопки */
+  cursor: pointer; /* Указатель при наведении */
+}
+
+.registration-and-feedback-forms button:hover {
+  background-color: #bc3f00;
+}
+
+p.lunch-registration {
+  color: rgb(110, 110, 110);
+}
+
+h1.lunch-registration {
+  color: #FF5600;
+  font-size: 1.7rem;
+  margin-bottom: 0.3rem;
+}
+
+h2.lunch-registration {
+  color: #FF5600;
+  font-size: 1.5rem;
+}
+
+h2.lunch-registration a {
+  font-size: 1.7rem;
+  color: #0066FF;
+}
+
+.header-title {
+  margin-bottom: 1.5rem;
+}
+
+.decorative-header {
+  margin: 0;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.decorative-header .col-lg-6 {
+  height: 100vh; /* Задает высоту на весь экран */
+}
+
+.decorative-header p {
+  line-height: 1.5; /* Регулирует межстрочный интервал */
+  margin: 0; /* Убирает отступы */
+  font-size: x-large;
+  color: #403D4E;
+}
+
+p.bottom {
+  margin-bottom: 20px;
+  color: #FF5600;
+}
+
+#up-icon {
+        position: fixed;
+        bottom: 60px; /* Отступ сверху */
+        right: 50px; /* Отступ справа */
+        z-index: 1000; /* Чтобы иконка была выше других элементов */
+        display: inline-block; /* Ограничивает ширину элемента */
+        width: 30px; /* Автоматическая ширина для элемента */
+        height: auto;
+}
+
+#today {
+  border-top: 2px solid red;
+  border-bottom: 2px solid red;
+  margin: 10px 0;
+  padding: 10px;
+  width: 430px;
+  scroll-margin-top: 20px; /* Отступ сверху при прокрутке */
+}
+
+.day {
+  margin-left: 25px;
+  margin-bottom: 30px;
+}
+
+li {
+  margin-left: 25px;
+}
+
+li:last-child {
+  margin-bottom: 30px;
+}
+
+
+.red {
+  color: #FF5600;
+}
+
+.blue {
+  color:rgb(11, 22, 181)
+}
+
+a.blue:hover {
+  color:rgb(32, 15, 80)
+}
+
+.px14 {
+  font-size: 14px;
+}
+
+.px15 {
+  font-size: 15px;
+}
+
+.px16 {
+  font-size: 16px;
+}
+
+.px17 {
+  font-size: 17px;
+}
+
+.px18 {
+  font-size: 18px;
+}
+
+.px19 {
+  font-size: 19px;
+}
+
+.px20 {
+  font-size: 20px;
+}
+
+.px22 {
+  font-size: 20px;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb25 {
+  margin-bottom: 25px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+.mb35 {
+  margin-bottom: 35px;
+}
+
+.mb40 {
+  margin-bottom: 40px;
+}
+
+.mb45 {
+  margin-bottom: 45px;
+}
+
+.mb50 {
+  margin-bottom: 50px;
+}
+
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .registration-and-feedback-forms input,
+  .registration-and-feedback-forms textarea,
+  .registration-and-feedback-forms select {
+    width: 70%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .registration-and-feedback-forms input,
+  .registration-and-feedback-forms textarea,
+  .registration-and-feedback-forms select {
+    width: 80%;
+  }
+}
+
+@media (max-width: 420px) {
+  .registration-and-feedback-forms input,
+  .registration-and-feedback-forms textarea,
+  .registration-and-feedback-forms select {
+    width: 90%;
+  }
+}
+
+@media (max-width: 365px) {
+  .registration-and-feedback-forms input,
+  .registration-and-feedback-forms textarea,
+  .registration-and-feedback-forms select {
+    width: 100%;
+  }
+}

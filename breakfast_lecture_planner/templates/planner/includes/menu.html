@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-light braun">
+  <div class="container-fluid">
+    <button class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center"
+         id="navbarNav">
+      <ul class="navbar-nav">
+        <li>
+          <div class="responsive-container">
+            <br>
+            <br>
+          </div>
+        </li>
+        {% if object.pk != 12 %}
+          <li class="nav-item">
+            <a href="{% url 'planner:planner' %}" class="menu-link"><b>pagrindinis</b></a>
+          </li>
+        {% endif %}
+        {% if object.pk != 14 %}
+          <li class="nav-item">
+            <a href="{% url 'planner:post-detail' 14 %}" class="menu-link"><b>vaišnavų kalendorius</b></a>
+          </li>
+        {% endif %}
+        <li class="nav-item">
+          <a href="{% url 'planner:lunch_register' %}" class="menu-link"><b>registracija</b></a>
+        </li>
+        {% if object.pk != 15 %}
+          <li class="nav-item">
+            <a href="{% url 'planner:nuorodos' %}" class="menu-link"><b>nuorodos</b></a>
+          </li>
+        {% endif %}
+        {% if object.pk != 19 %}
+          <li class="nav-item">
+            <a href="{% url 'planner:renovation_work' %}" class="menu-link"><b>remonto darbai</b></a>
+          </li>
+        {% endif %}
+        {% if object.pk != 20 %}
+          <li class="nav-item">
+            <a href="{% url 'planner:isd' %}" class="menu-link"><b>isd</b></a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

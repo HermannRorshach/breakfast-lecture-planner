@@ -1,0 +1,15 @@
+{% load custom_filters %}
+
+{% if user|in_groups:allowed_groups %}
+  <button id="edit-post-btn-up" class="btn btn-info btn-sm">Редактировать</button>
+  <div id="edit-form-container-up" style="display: none;">
+    <form id="edit-post-form-up" class="full-height">
+      {% csrf_token %}
+      <input type="hidden" name="id" value="{{ object.id }}">
+      <textarea name="content" id="content-up" class="form-control full-height">{{ object.content }}</textarea>
+      <button type="submit"
+              id="save-changes-btn-up"
+              class="btn btn-success fixed-btn">Сохранить</button>
+    </form>
+  </div>
+{% endif %}

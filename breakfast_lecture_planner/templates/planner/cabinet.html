@@ -1,0 +1,25 @@
+{% extends 'auth.html' %}
+{% block title %}
+  Кабинет администратора
+{% endblock title %}
+{% block content %}
+  <div class="container mt-4 d-flex justify-content-center">
+    <div class="w-100" style="max-width: 50%;">
+      <h1>Кабинет администратора</h1>
+      <div class="list-group mt-4">
+        <a href="{% url 'planner:image_list' %}"
+           class="list-group-item list-group-item-action">Изображения на Главной</a>
+        <a href="{% url 'planner:lunch_participants' %}"
+           class="list-group-item list-group-item-action">Списки записавшихся на субботний обед</a>
+        <a href="{% url 'planner:all_lunch_participants' %}"
+           class="list-group-item list-group-item-action">Архивные списки записавшихся на субботний обед</a>
+        <a href="{% url 'planner:archive' %}"
+           class="list-group-item list-group-item-action">Архив</a>
+        {% if user.is_superuser %}
+          <a href="{% url 'users:user_list' %}"
+             class="list-group-item list-group-item-action">Список администраторов</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}

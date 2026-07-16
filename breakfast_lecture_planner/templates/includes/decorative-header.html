@@ -1,0 +1,25 @@
+{% load static %}
+<div class="container-fluid decorative-header justify-content-center">
+  <div class="row">
+    <!-- Первая колонка (скрыта на мобильных) -->
+    <div class="col-lg-2 col-md-3 d-none d-md-block">
+      <img src="{% static 'img/logo.png' %}" alt="logo" class="img-fluid">
+    </div>
+    <!-- Вторая колонка -->
+    <div class="col-lg-8 col-md-9 col-12 d-flex flex-column justify-content-center">
+      <p class="decorative-header text-center">
+        Šis puslapis yra skiriamas
+        <br>
+        Jo Dieviškajai Kilnybei A.Č. Bhaktivedanta Svami Prabhupadai
+        <br>
+        Tarptautinės Krišnos Sąmonės Bendrijos
+        <br>
+        (ISKCON) Įkūrėjui-Ačarjai
+      </p>
+    </div>
+    <!-- Третья колонка (скрыта на планшетах и мобильных) -->
+    <div class="col-lg-2 d-none d-lg-block">
+      <img src="{% static 'img/guru.png' %}" alt="Гуру" class="img-fluid">
+    </div>
+  </div>
+</div>

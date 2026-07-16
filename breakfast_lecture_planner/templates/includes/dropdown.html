@@ -1,0 +1,86 @@
+<ul class="dropdown">
+  <li class="dropdown-li-title">
+    <h2 class="dropdown-title">Menu</h2>
+  </li>
+  <li>
+    <h5>Pagrindai:</h5>
+    <ul>
+      <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:vaishnava_calendar' %}">Vaišnavų kalendorius</a>
+        </div>
+      </li>
+      <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:vaishnava_etiquette' %}">Vaišnavų etiketas</a>
+        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <h5>Veikla:</h5>
+    <ul>
+      <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:renovation_work' %}">Šventyklos remonto darbai</a>
+        </div>
+      </li>
+      <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:isd' %}">isd</a>
+        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <h5>Virtuvė:</h5>
+    <ul>
+      <li>
+        <div class="menu-item before-admin">
+          <a href="{% url 'planner:cleanliness_standards' %}">Švaros standartai</a>
+        </div>
+      </li>
+      {% if user.is_authenticated %}
+      <li>
+        <div id="admin-item">
+          <a href="{% url 'planner:cabinet' %}"><b>Кабинет админа</b></a>
+        </div>
+      </li>
+      {% endif %}
+    </ul>
+  </li>
+  <li>
+    <h5>Apie mus:</h5>
+    <ul>
+      <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:philosophy' %}">filosofija</a>
+        </div>
+      </li>
+      <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:practice' %}">praktika</a>
+        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul>
+      <li>
+        <div class="menu-item d">
+          <a href="{% url 'planner:nuorodos' %}">Nuorodos</a>
+        </div>
+      </li>
+      <li>
+        <div class="menu-item">
+          <a href="">Lietuva</a>
+        </div>
+      </li>
+      <li>
+        <div class="menu-item">
+          <a href="">kitos šalys</a>
+        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
