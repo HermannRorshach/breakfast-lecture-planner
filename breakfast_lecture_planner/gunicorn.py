@@ -10,6 +10,9 @@ bind = "0.0.0.0:" + environ.get("PORT", "8000")
 max_requests = 1000
 worker_class = "gevent"
 workers = max_workers()
+accesslog = "-"
+errorlog = "-"
+capture_output = True
 
 env = {"DJANGO_SETTINGS_MODULE": "breakfast_lecture_planner.settings"}
 

@@ -5,6 +5,7 @@ set -Eeuo pipefail
 PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 DEPLOY_BRANCH="${DEPLOY_BRANCH:-markdown-integration}"
 HEALTHCHECK_URL="${DEPLOY_HEALTHCHECK_URL:-https://malone.guru/}"
+HEALTHCHECK_RESOLVE="${DEPLOY_HEALTHCHECK_RESOLVE:-malone.guru:443:127.0.0.1}"
 BACKUP_DIR="${PROJECT_DIR}/backups"
 DEPLOY_STATE="${PROJECT_DIR}/.deploy-state"
 COMPOSE=(docker compose --project-directory "${PROJECT_DIR}")
@@ -69,6 +70,7 @@ for attempt in {1..30}; do
     if [[ "${container_status}" == "running" ]] && \
         curl --fail --silent --show-error --location \
             --header "Cache-Control: no-cache" \
+            --resolve "${HEALTHCHECK_RESOLVE}" \
             --max-time 10 "${check_url}" > /dev/null; then
         trap - ERR
         deployed_commit="$(git rev-parse HEAD)"

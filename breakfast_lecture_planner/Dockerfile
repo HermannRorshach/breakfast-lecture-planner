@@ -3,6 +3,7 @@ RUN groupadd -r pavelgroup && useradd -r -g pavelgroup pavel
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV HOME=/tmp
 
 RUN pip install --upgrade pip
 WORKDIR /app/www/breakfast_lecture_planner
