@@ -1,3 +1,5 @@
+name: pavel
+
 services:
   nginx:
     image: nginx:latest
