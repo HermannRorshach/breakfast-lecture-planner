@@ -19,6 +19,11 @@ from decouple import config
 EMAIL = config("EMAIL")
 EMAIL_PASSWORD = config("EMAIL_PASSWORD")
 
+RECAPTCHA_PUBLIC_KEY = config("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = config("RECAPTCHA_PRIVATE_KEY")
+RECAPTCHA_DEFAULT_ACTION = "generic"
+RECAPTCHA_SCORE_THRESHOLD = 0.5
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,10 +33,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@v1-))9^ob_7#dnq9i(bd+g-nlicpbz$el4aqgd2!*2k4o=)!r"
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=False, cast=bool)
 
 CSRF_TRUSTED_ORIGINS = [
     "https://malone.guru",
@@ -70,6 +75,7 @@ INSTALLED_APPS = [
     "calendar_utils.apps.CalendarUtilsConfig",
     "users.apps.UsersConfig",
     "django_ckeditor_5",
+    "django_recaptcha",
 ]
 
 MIDDLEWARE = [
@@ -110,20 +116,28 @@ WSGI_APPLICATION = "breakfast_lecture_planner.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DATABASE_NAME"),
-        "USER": config("DATABASE_USERNAME"),
-        "PASSWORD": config("DATABASE_PASSWORD"),
-        "HOST": config("DATABASE_HOST"),
-        "PORT": config("DATABASE_PORT"),
+DATABASE_ENGINE = config("DATABASE_ENGINE", default="sqlite").lower()
+
+if DATABASE_ENGINE == "postgresql":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DATABASE_NAME"),
+            "USER": config("DATABASE_USERNAME"),
+            "PASSWORD": config("DATABASE_PASSWORD"),
+            "HOST": config("DATABASE_HOST", default="postgres"),
+            "PORT": config("DATABASE_PORT", default="5432"),
+        }
     }
-    # "default": {
-    #     "ENGINE": "django.db.backends.sqlite3",
-    #     "NAME": BASE_DIR / "db.sqlite3",
-    # }
-}
+elif DATABASE_ENGINE == "sqlite":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    raise ValueError("DATABASE_ENGINE must be either 'sqlite' or 'postgresql'.")
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
@@ -202,7 +216,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 custom_color_palette = [
-    {"color": "hsl(4, 90%, 58%)", "label": "Red"},
+    {"color": "hsl(4, 90%, 58%)", "label": "Праздник"},
     {"color": "hsl(340, 82%, 52%)", "label": "Pink"},
     {"color": "hsl(291, 64%, 42%)", "label": "Purple"},
     {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"},
@@ -231,6 +245,16 @@ CKEDITOR_5_CONFIGS = {
             "|",
             "horizontalLine",
         ],
+        "colorPicker": {
+            "colors": custom_color_palette,
+        },
+        # Добавляем настройки для цвета текста и фона
+        "fontColor": {
+            "colors": custom_color_palette,
+        },
+        "fontBackgroundColor": {
+            "colors": custom_color_palette,
+        },
         "heading": {
             "options": [
                 {

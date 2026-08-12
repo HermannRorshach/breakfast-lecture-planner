@@ -1,9 +1,9 @@
-<ul class="dropdown">
+<ul class="dropdown{% if user.is_authenticated %} dropdown--authenticated{% endif %}">
   <li class="dropdown-li-title">
     <h2 class="dropdown-title">Menu</h2>
   </li>
   <li>
-    <h5>Pagrindai:</h5>
+    <h5> Įvykiai ir projektai:</h5>
     <ul>
       <li>
         <div class="menu-item">
@@ -12,65 +12,68 @@
       </li>
       <li>
         <div class="menu-item">
+          <a href="{% url 'planner:renovation_work' %}">Remonto darbai</a>
+        </div>
+      </li>
+      <!-- <li>
+        <div class="menu-item">
           <a href="{% url 'planner:vaishnava_etiquette' %}">Vaišnavų etiketas</a>
         </div>
-      </li>
+      </li> -->
     </ul>
   </li>
-  <li>
+  <!-- <li>
     <h5>Veikla:</h5>
     <ul>
-      <li>
-        <div class="menu-item">
-          <a href="{% url 'planner:renovation_work' %}">Šventyklos remonto darbai</a>
-        </div>
-      </li>
-      <li>
-        <div class="menu-item">
-          <a href="{% url 'planner:isd' %}">isd</a>
-        </div>
-      </li>
+    
     </ul>
-  </li>
+  </li> -->
+  {% if user.is_authenticated %}
   <li>
-    <h5>Virtuvė:</h5>
+    <h5></h5>
     <ul>
-      <li>
+      <!-- <li>
         <div class="menu-item before-admin">
           <a href="{% url 'planner:cleanliness_standards' %}">Švaros standartai</a>
         </div>
-      </li>
-      {% if user.is_authenticated %}
+      </li> -->
+     
       <li>
         <div id="admin-item">
           <a href="{% url 'planner:cabinet' %}"><b>Кабинет админа</b></a>
         </div>
       </li>
-      {% endif %}
     </ul>
   </li>
+  {% endif %}
   <li>
     <h5>Apie mus:</h5>
     <ul>
       <li>
         <div class="menu-item">
-          <a href="{% url 'planner:philosophy' %}">filosofija</a>
+          <a href="{% url 'planner:principai' %}">Mūsų vertybės ir principai</a>
         </div>
       </li>
-      <li>
-        <div class="menu-item">
-          <a href="{% url 'planner:practice' %}">praktika</a>
-        </div>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <ul>
       <li>
         <div class="menu-item d">
           <a href="{% url 'planner:nuorodos' %}">Nuorodos</a>
         </div>
       </li>
+      <!-- <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:philosophy' %}">filosofija</a>
+        </div>
+      </li> -->
+      <!-- <li>
+        <div class="menu-item">
+          <a href="{% url 'planner:practice' %}">praktika</a>
+        </div>
+      </li> -->
+    </ul>
+  </li>
+  <!-- <li>
+    <ul>
+      
       <li>
         <div class="menu-item">
           <a href="">Lietuva</a>
@@ -82,5 +85,5 @@
         </div>
       </li>
     </ul>
-  </li>
+  </li> -->
 </ul>

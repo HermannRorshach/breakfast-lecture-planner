@@ -75,4 +75,4 @@ context = {
     "now": now,
 }
 this_friday_17 = get_next_day_with_time(context)
-print("this_friday_17 =", this_friday_17)
+# print("this_friday_17 =", this_friday_17)

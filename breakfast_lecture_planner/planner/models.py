@@ -2,8 +2,9 @@ from datetime import date, datetime, timedelta
 
 from calendar_utils.utils import get_next_day_with_time
 from django.db import models
-from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
+from django_ckeditor_5.fields import CKEditor5Field
+
 
 class Post(models.Model):
     title = models.CharField(null=True, blank=True, max_length=200)
@@ -49,9 +50,9 @@ class LunchParticipant(models.Model):
             }
             # Получаем объект datetime ближайшей пятницы 17:00
             this_friday_17 = get_next_day_with_time(context)
-            print("метод save", "this_friday_17 =", this_friday_17)
+            # print("метод save", "this_friday_17 =", this_friday_17)
             self.date = (this_friday_17 + timedelta(days=1)).date()
-            print(self.date)
+            # print(self.date)
 
         super().save(*args, **kwargs)
 
@@ -77,11 +78,10 @@ class Text(models.Model):
     text = CKEditor5Field("Text", config_name="extends")
 
 
-
 class LastScheduleUpdate(models.Model):
     updated_at = models.DateTimeField(
         verbose_name="Дата и время последнего обновления расписания",
-        default=timezone.now
+        default=timezone.now,
     )
 
     def __str__(self):

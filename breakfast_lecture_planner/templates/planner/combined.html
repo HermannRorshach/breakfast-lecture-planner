@@ -53,7 +53,7 @@
           (ISKCON) Įkūrėjui-Ačarjai
         </p>
         <div class="cta-buttons">
-          <a href="{% url 'planner:lunch_register' %}" class="button orange">Registracija šeštadienio pietums</a>
+          <a href="{% url 'planner:lunch_register' %}" class="button orange">Ateisiu šeštadienio pietums</a>
           <a href="{% url 'planner:feedback' %}" class="button outline">Susisiekite su mumis</a>
         </div>
       </div>
@@ -64,7 +64,7 @@
                class="man-image">
         </div>
         <div class="countdown">
-          <p>iki registracijos pabaigos liko</p>
+          <p>iko laiko prisijungti:</p>
           <div class="countdown-timer">
             {% for unit in countdown %}
               <div class="time-unit" style="position: relative; display: inline-block;">
@@ -112,7 +112,7 @@
         (ISKCON) Įkūrėjui-Ačarjai
       </p>
       <div class="countdown">
-        <p>iki registracijos pabaigos liko</p>
+        <p>iko laiko prisijungti:</p>
         <div class="countdown-timer">
           {% for unit in countdown %}
             <div class="time-unit" style="position: relative; display: inline-block;">
@@ -137,7 +137,7 @@
       </div>
       <div class="cta-buttons">
         <a href="{% url 'planner:feedback' %}" class="button outline">Susisiekite su mumis</a>
-        <a href="{% url 'planner:lunch_register' %}" class="button orange">Registracija šeštadienio pietums</a>
+        <a href="{% url 'planner:lunch_register' %}" class="button orange">Ateisiu šeštadienio pietums</a>
       </div>
     </div>
   </header>

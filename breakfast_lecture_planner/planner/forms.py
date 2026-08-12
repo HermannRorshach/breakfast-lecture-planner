@@ -2,6 +2,8 @@ import locale
 from datetime import datetime, time
 
 from django import forms
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV3
 
 from .models import Feedback, Image, LunchParticipant, Post
 
@@ -39,6 +41,9 @@ class LunchParticipantForm(forms.ModelForm):
             attrs={"placeholder": "Jūsų telefono numeris", "style": "opacity:0;"}
         ),
     )
+
+    # Добавляем reCAPTCHA v3
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -93,6 +98,8 @@ class FeedbackForm(forms.ModelForm):
             attrs={"placeholder": "Jūsų telefono numeris", "style": "opacity:0;"}
         ),
     )
+
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

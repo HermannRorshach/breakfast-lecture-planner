@@ -14,6 +14,7 @@
       <p class="lunch-registration">{{ text|safe }}</p>
       <form method="post">
         {% csrf_token %}
+         {{ form.media }}
         {{ form.as_p }}
         <button id="id_submit" type="submit">patvirtinti</button>
       </form>

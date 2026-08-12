@@ -67,7 +67,7 @@ urlpatterns = [
     ),
     path("philosophy/", views.Philosophy.as_view(), name="philosophy"),
     path("practice/", views.Practice.as_view(), name="practice"),
-    path("isd/", views.IsdView.as_view(), name="isd"),
+    path("principai/", views.IsdView.as_view(), name="principai"),
     path(
         "feedback/success/",
         views.FeedbackSuccessView.as_view(),
