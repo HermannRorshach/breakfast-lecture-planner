@@ -75,11 +75,14 @@
   </div>
   <br>
   <script>
-    document.getElementById('edit-post-btn-up').addEventListener('click', function() {
+    const editPostButtonUp = document.getElementById('edit-post-btn-up');
+    const editPostFormUp = document.getElementById('edit-post-form-up');
+
+    editPostButtonUp?.addEventListener('click', function() {
         document.getElementById('edit-form-container-up').style.display = 'block';
     });
 
-    document.getElementById('edit-post-form-up').addEventListener('submit', function(event) {
+    editPostFormUp?.addEventListener('submit', function(event) {
         event.preventDefault(); // Предотвратить перезагрузку страницы
         const formData = new FormData(this);
 
@@ -101,24 +104,20 @@
             document.querySelector('.post-content').innerHTML = data.content;
             document.getElementById('edit-form-container-up').style.display = 'none'; // Скрыть форму
         })
-        .then(data => {
-            // Обновляем содержимое поста
-            document.querySelector('.post-content').innerHTML = data.content;
-
-            // Дополнительно: можно обновить посты на главной странице, если нужно
-            // Это может потребовать запроса к вашему API или повторного запроса к странице
-        })
         .catch(error => {
             console.error(error);
         });
     });
   </script>
   <script>
-    document.getElementById('edit-post-btn-down').addEventListener('click', function() {
+    const editPostButtonDown = document.getElementById('edit-post-btn-down');
+    const editPostFormDown = document.getElementById('edit-post-form-down');
+
+    editPostButtonDown?.addEventListener('click', function() {
         document.getElementById('edit-form-container-down').style.display = 'block';
     });
 
-    document.getElementById('edit-post-form-down').addEventListener('submit', function(event) {
+    editPostFormDown?.addEventListener('submit', function(event) {
         event.preventDefault(); // Предотвратить перезагрузку страницы
         const formData = new FormData(this);
 
@@ -139,13 +138,6 @@
             // Обновляем содержимое поста
             document.querySelector('.post-content').innerHTML = data.content;
             document.getElementById('edit-form-container-down').style.display = 'none'; // Скрыть форму
-        })
-        .then(data => {
-            // Обновляем содержимое поста
-            document.querySelector('.post-content').innerHTML = data.content;
-
-            // Дополнительно: можно обновить посты на главной странице, если нужно
-            // Это может потребовать запроса к вашему API или повторного запроса к странице
         })
         .catch(error => {
             console.error(error);

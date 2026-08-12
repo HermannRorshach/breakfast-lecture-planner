@@ -59,8 +59,9 @@ echo "Запуск контейнеров..."
 
 echo "Проверка сайта ${HEALTHCHECK_URL}..."
 for attempt in {1..30}; do
-    container_status="$("${COMPOSE[@]}" inspect \
-        --format '{{.State.Status}}' breakfast_lecture_planner 2>/dev/null || true)"
+    container_id="$("${COMPOSE[@]}" ps -q breakfast_lecture_planner)"
+    container_status="$(docker inspect --format '{{.State.Status}}' \
+        "${container_id}" 2>/dev/null || true)"
     separator="?"
     [[ "${HEALTHCHECK_URL}" == *\?* ]] && separator="&"
     check_url="${HEALTHCHECK_URL}${separator}deploy_check=$(date +%s)"
