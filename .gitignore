@@ -179,3 +179,10 @@ secrets/
 # Логи
 
 *.log
+
+staticfiles/
+media/
+logs/
+certbot/
+backups/
+.deploy-state

@@ -7,11 +7,14 @@ services:
       - dbnet
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./breakfast_lecture_planner/staticfiles:/app/www/breakfast_lecture_planner/staticfiles
       - ./breakfast_lecture_planner/media:/app/www/breakfast_lecture_planner/media
-      - ./breakfast_lecture_planner/logs:/var/log/nginx  # ← изменил путь логов
+      - ./breakfast_lecture_planner/logs:/var/log/nginx
       - ./nginx:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - breakfast_lecture_planner
   
@@ -20,21 +23,40 @@ services:
     image: breakfast_lecture_planner
     container_name: breakfast_lecture_planner_container
     restart: always
-    command: "gunicorn -c gunicorn.py breakfast_lecture_planner.wsgi"
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             exec gunicorn -c gunicorn.py breakfast_lecture_planner.wsgi"
     env_file:
       - .env
-    links:
-      - "postgres:dbps"
     networks:
       - dbnet
     volumes:
-      - ./breakfast_lecture_planner:/app/www/breakfast_lecture_planner
       - ./breakfast_lecture_planner/media:/app/www/breakfast_lecture_planner/media:rw
+      - ./breakfast_lecture_planner/staticfiles:/app/www/breakfast_lecture_planner/staticfiles:rw
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+
+  maloneguru_bot:
+    image: breakfast_lecture_planner
+    container_name: maloneguru-bot
+    restart: always
+    command: python /app/www/breakfast_lecture_planner/maloneguru_bot.py
+    env_file:
+      - .env
+    networks:
+      - dbnet
+    volumes:
+      - ./maloneguru_bot.py:/app/www/breakfast_lecture_planner/maloneguru_bot.py:ro
+    depends_on:
+      breakfast_lecture_planner:
+        condition: service_started
+
   adminer:
     image: adminer
     container_name: adminer
+    restart: always
     ports:
       - "8080:8080"
     links:
@@ -42,26 +64,35 @@ services:
     networks:
       - dbnet
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
   postgres:
     image: postgres:17-alpine
     container_name: psgr
+    restart: always
     volumes:
       - postgres_volume:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${DATABASE_NAME}
-      - POSTGRES_USER=${DATABASE_USERNAME}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     networks:
       - dbnet
-  # certbot:
-  #     image: certbot/certbot
-  #     volumes:
-  #     - ./certbot/conf:/etc/letsencrypt
-  #     - ./certbot/www:/var/www/certbot
-  #     command: certonly --webroot --webroot-path=/var/www/certbot/ --email five.realities@gmail.com --agree-tos --no-eff-email -d malone.guru
-  #     depends_on:
-  #     - nginx
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+  certbot:
+    image: certbot/certbot
+    restart: "no"
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: renew --webroot --webroot-path=/var/www/certbot --preferred-challenges http
+    depends_on:
+      - nginx
 
 networks:
   dbnet:
