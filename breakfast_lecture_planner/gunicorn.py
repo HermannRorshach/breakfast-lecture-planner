@@ -13,5 +13,5 @@ workers = max_workers()
 
 env = {"DJANGO_SETTINGS_MODULE": "breakfast_lecture_planner.settings"}
 
-reload = True
+reload = False
 name = "breakfast_lecture_planner"

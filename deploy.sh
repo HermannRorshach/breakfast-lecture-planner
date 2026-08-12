@@ -59,8 +59,16 @@ echo "Запуск контейнеров..."
 
 echo "Проверка сайта ${HEALTHCHECK_URL}..."
 for attempt in {1..30}; do
-    if curl --fail --silent --show-error --location \
-        --max-time 10 "${HEALTHCHECK_URL}" > /dev/null; then
+    container_status="$("${COMPOSE[@]}" inspect \
+        --format '{{.State.Status}}' breakfast_lecture_planner 2>/dev/null || true)"
+    separator="?"
+    [[ "${HEALTHCHECK_URL}" == *\?* ]] && separator="&"
+    check_url="${HEALTHCHECK_URL}${separator}deploy_check=$(date +%s)"
+
+    if [[ "${container_status}" == "running" ]] && \
+        curl --fail --silent --show-error --location \
+            --header "Cache-Control: no-cache" \
+            --max-time 10 "${check_url}" > /dev/null; then
         trap - ERR
         deployed_commit="$(git rev-parse HEAD)"
         cat >> "${DEPLOY_STATE}" <<EOF
