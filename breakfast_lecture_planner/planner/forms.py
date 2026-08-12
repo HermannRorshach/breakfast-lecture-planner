@@ -1,4 +1,3 @@
-import locale
 from datetime import datetime, time
 
 from django import forms
@@ -66,7 +65,6 @@ class LunchParticipantForm(forms.ModelForm):
         now = datetime.now()
         current_weekday = now.weekday()
 
-        locale.setlocale(locale.LC_TIME, "lt_LT.UTF-8")
         if current_weekday == 4 and now.time() > time(17, 0) or (current_weekday == 5):
             cleaned_data["error_message"] = "Registration is over"
         print(cleaned_data)

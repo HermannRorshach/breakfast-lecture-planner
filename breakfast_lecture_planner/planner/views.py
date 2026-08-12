@@ -1,4 +1,3 @@
-import locale
 import os
 from datetime import date, datetime, time, timedelta
 from math import pi
@@ -622,7 +621,6 @@ class LunchRegistrationView(View):
         now = datetime.now()
         current_weekday = now.weekday()
 
-        locale.setlocale(locale.LC_TIME, "lt_LT.UTF-8")
         if current_weekday == 4 and now.time() > time(17, 0) or (current_weekday == 5):
             error_message = "Registration is over"
             return redirect(
