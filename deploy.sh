@@ -58,6 +58,10 @@ echo "Сборка Docker-образа..."
 echo "Запуск контейнеров..."
 "${COMPOSE[@]}" up -d --remove-orphans
 
+echo "Проверка и перезагрузка Nginx..."
+"${COMPOSE[@]}" exec -T nginx nginx -t
+"${COMPOSE[@]}" exec -T nginx nginx -s reload
+
 echo "Проверка сайта ${HEALTHCHECK_URL}..."
 for attempt in {1..30}; do
     container_id="$("${COMPOSE[@]}" ps -q breakfast_lecture_planner)"
