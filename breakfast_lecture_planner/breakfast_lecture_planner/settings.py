@@ -255,6 +255,15 @@ CKEDITOR_5_CONFIGS = {
         "fontBackgroundColor": {
             "colors": custom_color_palette,
         },
+        "image": {
+            "toolbar": [
+                "imageTextAlternative",
+                "|",
+                "imageStyle:alignLeft",
+                "imageStyle:alignCenter",
+                "imageStyle:alignRight",
+            ],
+        },
         "heading": {
             "options": [
                 {

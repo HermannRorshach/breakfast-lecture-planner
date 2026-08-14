@@ -1,4 +1,6 @@
+import html
 import os
+import re
 from datetime import date, datetime, time, timedelta
 from math import pi
 
@@ -20,8 +22,13 @@ from django.views.generic.edit import CreateView, UpdateView
 from dotenv import load_dotenv
 from markdown import markdown
 
-from .forms import (FeedbackForm, ImageUploadForm, LunchParticipantForm,
-                    PostForm)
+from .forms import (
+    FeedbackForm,
+    ImageUploadForm,
+    LunchParticipantForm,
+    MainPostEditorForm,
+    PostForm,
+)
 from .models import Image, LunchParticipant, Post
 
 load_dotenv()
@@ -70,16 +77,21 @@ class CombinedView(DetailView):
             "Šeštadienis",  # Суббота
             "Sekmadienis",  # Воскресенье
         ]
-        current_day = days_of_week[datetime.now().weekday()]
+        local_today = timezone.localdate()
+        current_day = days_of_week[local_today.weekday()]
+        current_date_heading = f"{local_today.day} d. {current_day}"
+        current_week_friday = local_today + timedelta(days=4 - local_today.weekday())
+        current_friday_heading = f"{current_week_friday.day} d. Penktadienis"
 
         # Разделяем контент на строки
         lines = post.content.splitlines()
+        is_ckeditor_html = bool(
+            re.search(r"<h[1-6]\b", post.content, flags=re.IGNORECASE)
+        )
 
         # Обрамляем строку с текущим днем и добавляем ссылку только для первой недели
         highlighted_lines = []
         user_content_lines = []
-        current_day_found = False
-        saturday_found = False
         data = {"not_schedule_text": []}
         key = None
 
@@ -97,27 +109,7 @@ class CombinedView(DetailView):
             if key in data:
                 if line == key:
                     continue
-                if "Penktadienis" in line and not saturday_found:
-                    path = '{% url "planner:lunch_register" %}'
-                    registration_link = (
-                        '<span style="color: red; font-weight: bold;">'
-                        f'<a href="{registration_url}" style="color: red;"">Registracija</a>'
-                        "</span>"
-                    )
-                    line = line.replace(line, f"{line} {registration_link}")
-                    saturday_found = True
-                # Обрабатываем строку с текущим днем
-                if current_day in line and not current_day_found:
-                    print("current_day in line and not current_day_found")
-                    highlighted_line = (
-                        f'<div id="today"">'
-                        f'<h6>{line.replace("#", "").strip()}</h6>'
-                        f"</div>"
-                    )
-                    highlighted_lines.append(highlighted_line)
-                    current_day_found = True
-                else:
-                    highlighted_lines.append(line)
+                highlighted_lines.append(line)
             else:
                 data["not_schedule_text"].append(line)
         if key and key in data:
@@ -128,7 +120,9 @@ class CombinedView(DetailView):
         highlighted_content = "\n".join(user_content_lines)
 
         context["title"] = "pagrindinis"
-        context["content"] = markdown(highlighted_content)
+        context["content"] = markdown(
+            post.content if is_ckeditor_html else highlighted_content
+        )
         context["image"] = post.image
 
         not_schedule_text = data["not_schedule_text"]
@@ -142,6 +136,66 @@ class CombinedView(DetailView):
             )
             for key, value in data.items()
         }
+        if is_ckeditor_html:
+            # HTML CKEditor не нужно повторно делить на недели как Markdown.
+            # Иначе вся однострочная разметка становится ключом data, и шаблон
+            # выводит её до того, как добавлены today и Registracija.
+            data = {}
+
+        # CKEditor может добавлять атрибуты и вложенные теги в заголовок.
+        # Сравниваем только его текст, а сохранённое содержимое поста не меняем.
+        heading_pattern = re.compile(r"<h6\b[^>]*>.*?</h6>", re.IGNORECASE | re.DOTALL)
+        today_anchor_added = False
+        registration_link_added = False
+        registration_link = (
+            '<span style="color: red; font-weight: bold;">'
+            f'<a href="{registration_url}" style="color: red;">Registracija</a>'
+            "</span>"
+        )
+
+        def decorate_schedule_heading(match):
+            nonlocal today_anchor_added, registration_link_added
+
+            heading_html = match.group(0)
+            heading_text = re.sub(r"<[^>]+>", "", heading_html)
+            heading_text = " ".join(html.unescape(heading_text).split())
+            heading_without_registration = re.sub(
+                r"\s+Registracija\s*$", "", heading_text, flags=re.IGNORECASE
+            )
+
+            if (
+                not registration_link_added
+                and heading_without_registration.casefold()
+                == current_friday_heading.casefold()
+            ):
+                if heading_text == heading_without_registration:
+                    heading_html = re.sub(
+                        r"</h6>\s*$",
+                        f" {registration_link}</h6>",
+                        heading_html,
+                        count=1,
+                        flags=re.IGNORECASE,
+                    )
+                registration_link_added = True
+
+            if (
+                not today_anchor_added
+                and heading_without_registration.casefold()
+                == current_date_heading.casefold()
+            ):
+                heading_html = f'<div id="today">{heading_html}</div>'
+                today_anchor_added = True
+
+            return heading_html
+
+        # CKEditor обычно сохраняет весь HTML без переводов строк. В этом случае
+        # старый разбор по неделям оставляет data пустым, и шаблон выводит content.
+        context["content"] = heading_pattern.sub(
+            decorate_schedule_heading, context["content"]
+        )
+
+        for key, value in data.items():
+            data[key] = heading_pattern.sub(decorate_schedule_heading, value)
 
         if not_schedule_text:  # Проверяем, что значение не пустое
             data["not_schedule_text"] = markdown("\n".join(not_schedule_text))
@@ -176,7 +230,7 @@ class CombinedView(DetailView):
             )
 
             next_friday_17 = get_next_day_with_time(context)
-            print(next_friday_17, type(next_friday_17))
+            # print(next_friday_17, type(next_friday_17))
             context["next_friday_17"] = (
                 next_friday_17.year,
                 next_friday_17.month,
@@ -231,6 +285,9 @@ class CombinedView(DetailView):
         context["countdown"] = countdown
         # Добавляем список групп, которым будет разрешено редактирование страницы
         context["allowed_groups"] = ["Админ"]
+        if self.request.user.is_authenticated and is_admin(self.request.user):
+            context["editor_form"] = MainPostEditorForm(instance=post)
+            context["unified_editor"] = True
         print("/n---------------/n")
         # print(context["now_tuple"])
         print("/n------------/n")
@@ -490,9 +547,10 @@ class PostDetailView(DetailView):
 
 
 @method_decorator(login_required, name="dispatch")
+@method_decorator(user_passes_test(is_admin), name="dispatch")
 class PostUpdateView(UpdateView):
     model = Post
-    form_class = PostForm
+    form_class = MainPostEditorForm
     template_name = "planner/post_form.html"
 
     def post(self, request, *args, **kwargs):
@@ -822,19 +880,29 @@ from .forms import TextForm
 from .models import Text
 
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(user_passes_test(is_admin), name="dispatch")
 class TextView(View):
     template_name = "planner/text.html"
 
     def get(self, request, *args, **kwargs):
         form = TextForm()
-        return render(request, self.template_name, {"myform": form})
+        return render(
+            request,
+            self.template_name,
+            {"myform": form, "editor_open": True},
+        )
 
     def post(self, request, *args, **kwargs):
         form = TextForm(request.POST)
         if form.is_valid():
             text = form.save()
             return redirect("planner:text_detail", pk=text.pk)
-        return render(request, self.template_name, {"myform": form})
+        return render(
+            request,
+            self.template_name,
+            {"myform": form, "editor_open": True},
+        )
 
 
 class TextDetailView(DetailView):
@@ -849,6 +917,8 @@ class TextDetailView(DetailView):
         return get_object_or_404(Text, pk=self.kwargs["pk"])
 
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(user_passes_test(is_admin), name="dispatch")
 class TextUpdateView(UpdateView):
     model = Text
     form_class = TextForm

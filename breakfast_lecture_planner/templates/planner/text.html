@@ -2,24 +2,52 @@
 {% load static %}
 
 {% block content %}
+<main class="text-editor-page">
+  {% if object %}
+    <section id="text-preview" class="text-editor-preview">
+      <h1>{{ object.title }}</h1>
+      <div>{{ object.text|safe }}</div>
+    </section>
+  {% endif %}
 
-<style>
-    .small-contaniner {
-        width: 900px;
-        height: 500px;
-        margin: 50px 0 0 50px;
-    }
-    ul, ol {
-    padding-left: 20px; /* Пример, увеличьте отступ, если нужно */
-}
+  {% if object %}
+    <button type="button" id="open-text-editor" class="btn btn-info">Редактировать</button>
+  {% endif %}
 
-</style>
-<div class="small-contaniner">
-    <form method="post">
+  <section id="text-editor-container"
+           class="text-editor-container{% if not editor_open %} is-hidden{% endif %}">
+    <form method="post" class="text-editor-form">
         {% csrf_token %}
         {{ myform.media }}
         {{ myform.as_p }}
-        <button type="submit">Сохранить</button>
+        <div class="text-editor-actions">
+          <button type="submit" class="btn btn-success">Сохранить</button>
+          {% if object %}
+            <button type="button" id="close-text-editor" class="btn btn-secondary">Отмена</button>
+          {% endif %}
+        </div>
     </form>
-</div>
+  </section>
+</main>
+
+{% if object %}
+  <script>
+    const preview = document.getElementById("text-preview");
+    const editorContainer = document.getElementById("text-editor-container");
+    const openEditorButton = document.getElementById("open-text-editor");
+    const closeEditorButton = document.getElementById("close-text-editor");
+
+    openEditorButton.addEventListener("click", () => {
+      preview.hidden = true;
+      openEditorButton.hidden = true;
+      editorContainer.classList.remove("is-hidden");
+    });
+
+    closeEditorButton.addEventListener("click", () => {
+      editorContainer.classList.add("is-hidden");
+      preview.hidden = false;
+      openEditorButton.hidden = false;
+    });
+  </script>
+{% endif %}
 {% endblock content %}

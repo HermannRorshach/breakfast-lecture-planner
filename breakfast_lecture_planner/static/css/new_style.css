@@ -1205,3 +1205,26 @@ h5:not(.dropdown h5), h6:not(.dropdown h6) {
         --stroke-width: 8px;
     }
 }
+
+.main-post-editor[hidden] {
+    display: none;
+}
+
+.main-post-editor {
+    width: 100%;
+}
+
+.main-post-editor .ck-editor__editable_inline {
+    min-height: 100vh;
+}
+
+.main-post-editor-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.main-post-editor-actions-top {
+    margin-top: 0;
+    margin-bottom: 16px;
+}

@@ -162,6 +162,23 @@
         {% endfor %}
         {% if not data %}{{ content|safe }}{% endif %}
       </div>
+      {% if editor_form %}
+        <div id="main-post-editor" class="main-post-editor" hidden>
+          <form id="main-post-editor-form" class="main-post-editor-form">
+            {% csrf_token %}
+            <div class="main-post-editor-actions main-post-editor-actions-top">
+              <button type="submit" class="btn btn-success">Сохранить</button>
+              <button type="button" class="btn btn-secondary close-main-post-editor">Отмена</button>
+            </div>
+            {{ editor_form.media }}
+            {{ editor_form.content }}
+            <div class="main-post-editor-actions">
+              <button type="submit" class="btn btn-success">Сохранить</button>
+              <button type="button" class="btn btn-secondary close-main-post-editor">Отмена</button>
+            </div>
+          </form>
+        </div>
+      {% endif %}
       {% include "planner/includes/button-edit-down.html" %}
     </div>
     <div class="col-md-5 order-md-2 order-1">
@@ -192,48 +209,29 @@
 
 <script>
   const editPostButtonUp = document.getElementById('edit-post-btn-up');
-  const editPostFormUp = document.getElementById('edit-post-form-up');
-
-  editPostButtonUp?.addEventListener('click', function() {
-      document.getElementById('edit-form-container-up').style.display = 'block';
-  });
-
-  editPostFormUp?.addEventListener('submit', function(event) {
-      event.preventDefault(); // Предотвратить перезагрузку страницы
-      const formData = new FormData(this);
-
-      fetch("{% url 'planner:post-edit' object.id %}", {
-          method: 'POST',
-          body: formData,
-          headers: {
-              'X-Requested-With': 'XMLHttpRequest' // Указывает, что запрос отправлен через AJAX
-          }
-      })
-      .then(response => {
-          if (response.ok) {
-              return response.json(); // Предполагаем, что сервер возвращает JSON
-          }
-          throw new Error('Ошибка при сохранении изменений');
-      })
-      .then(data => {
-          // Обновляем содержимое поста
-          document.querySelector('.post-content').innerHTML = data.content;
-          document.getElementById('edit-form-container-up').style.display = 'none'; // Скрыть форму
-      })
-      .catch(error => {
-          console.error(error);
-      });
-  });
-</script>
-<script>
   const editPostButtonDown = document.getElementById('edit-post-btn-down');
-  const editPostFormDown = document.getElementById('edit-post-form-down');
+  const mainPostEditor = document.getElementById('main-post-editor');
+  const mainPostEditorForm = document.getElementById('main-post-editor-form');
+  const closeMainPostEditorButtons = document.querySelectorAll('.close-main-post-editor');
+  const postContent = document.querySelector('.post-content');
 
-  editPostButtonDown?.addEventListener('click', function() {
-      document.getElementById('edit-form-container-down').style.display = 'block';
+  const openMainPostEditor = () => {
+      postContent.hidden = true;
+      mainPostEditor.hidden = false;
+  };
+
+  const closeMainEditor = () => {
+      mainPostEditor.hidden = true;
+      postContent.hidden = false;
+  };
+
+  editPostButtonUp?.addEventListener('click', openMainPostEditor);
+  editPostButtonDown?.addEventListener('click', openMainPostEditor);
+  closeMainPostEditorButtons.forEach((button) => {
+      button.addEventListener('click', closeMainEditor);
   });
 
-  editPostFormDown?.addEventListener('submit', function(event) {
+  mainPostEditorForm?.addEventListener('submit', function(event) {
       event.preventDefault(); // Предотвратить перезагрузку страницы
       const formData = new FormData(this);
 
@@ -253,7 +251,7 @@
       .then(data => {
           // Обновляем содержимое поста
           document.querySelector('.post-content').innerHTML = data.content;
-          document.getElementById('edit-form-container-down').style.display = 'none'; // Скрыть форму
+          closeMainEditor();
       })
       .catch(error => {
           console.error(error);

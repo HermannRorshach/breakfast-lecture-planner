@@ -1,6 +1,7 @@
 from datetime import datetime, time
 
 from django import forms
+from django_ckeditor_5.widgets import CKEditor5Widget
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
@@ -13,7 +14,10 @@ class PostForm(forms.ModelForm):
         fields = ["title", "content"]
         widgets = {
             "title": forms.TextInput(attrs={"class": "full-width full-height"}),
-            "content": forms.Textarea(attrs={"class": "full-width full-height"}),
+            "content": CKEditor5Widget(
+                config_name="extends",
+                attrs={"class": "full-width full-height"},
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -24,6 +28,15 @@ class PostForm(forms.ModelForm):
                 "cols": 80,  # (необязательно) Задайте нужное количество столбцов
             }
         )
+
+
+class MainPostEditorForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ["content"]
+        widgets = {
+            "content": CKEditor5Widget(config_name="extends"),
+        }
 
 
 class ImageUploadForm(forms.ModelForm):

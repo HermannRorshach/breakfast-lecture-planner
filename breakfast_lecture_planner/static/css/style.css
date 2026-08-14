@@ -220,6 +220,75 @@ body {
   height: 95%; /* Устанавливаем высоту на 100% */
 }
 
+.text-editor-page {
+  width: min(1400px, calc(100% - 40px));
+  margin: 40px auto;
+}
+
+.text-editor-container.is-hidden {
+  display: none;
+}
+
+.text-editor-form > p {
+  margin-bottom: 16px;
+}
+
+.text-editor-form input[type="text"] {
+  width: 100%;
+}
+
+.text-editor-form .ck-editor__editable_inline {
+  min-height: 100vh;
+}
+
+.text-editor-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.text-editor-preview {
+  min-height: 50vh;
+  margin-bottom: 20px;
+}
+
+.text-editor-preview img {
+  max-width: 100%;
+  height: auto;
+}
+
+.main-post-editor[hidden] {
+  display: none;
+}
+
+.main-post-editor {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow-y: auto;
+  padding: 20px;
+  background: #fff;
+}
+
+.main-post-editor-open {
+  overflow: hidden;
+}
+
+.main-post-editor-form {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+}
+
+.main-post-editor-form .ck-editor__editable_inline {
+  min-height: 100vh;
+}
+
+.main-post-editor-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
 .post {
   padding: 0 5%; /* Отступы по 5% с каждой стороны */
 }

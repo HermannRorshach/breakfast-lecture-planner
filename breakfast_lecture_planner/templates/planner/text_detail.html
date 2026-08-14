@@ -23,7 +23,9 @@
     <h1>{{ text.title }}</h1>
     {{ text.text|safe }}  <!-- Здесь будет отображаться содержимое текста -->
     <br><br>
-    <a href="{% url 'planner:text_update' object.pk %}">Редактировать</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'planner:text_update' object.pk %}">Редактировать</a>
+    {% endif %}
 </div>
 
 {% endblock content %}
