@@ -5,7 +5,7 @@ from django_ckeditor_5.widgets import CKEditor5Widget
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
-from .models import Feedback, Image, LunchParticipant, Post
+from .models import DailySchedule, Feedback, Image, LunchParticipant, Post
 
 
 class PostForm(forms.ModelForm):
@@ -33,6 +33,15 @@ class PostForm(forms.ModelForm):
 class MainPostEditorForm(forms.ModelForm):
     class Meta:
         model = Post
+        fields = ["content"]
+        widgets = {
+            "content": CKEditor5Widget(config_name="extends"),
+        }
+
+
+class DailyScheduleForm(forms.ModelForm):
+    class Meta:
+        model = DailySchedule
         fields = ["content"]
         widgets = {
             "content": CKEditor5Widget(config_name="extends"),

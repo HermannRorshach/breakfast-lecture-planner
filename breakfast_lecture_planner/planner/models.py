@@ -86,3 +86,9 @@ class LastScheduleUpdate(models.Model):
 
     def __str__(self):
         return f"Последнее обновление: {self.updated_at}"
+
+
+class DailySchedule(models.Model):
+    date = models.DateField(unique=True)
+    content = CKEditor5Field()
+    updated_at = models.DateTimeField(auto_now=True)

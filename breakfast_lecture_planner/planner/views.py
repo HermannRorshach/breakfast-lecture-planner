@@ -27,9 +27,10 @@ from .forms import (
     ImageUploadForm,
     LunchParticipantForm,
     MainPostEditorForm,
+    DailyScheduleForm,
     PostForm,
 )
-from .models import Image, LunchParticipant, Post
+from .models import DailySchedule, Image, LunchParticipant, Post
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -287,6 +288,7 @@ class CombinedView(DetailView):
         context["allowed_groups"] = ["Админ"]
         if self.request.user.is_authenticated and is_admin(self.request.user):
             context["editor_form"] = MainPostEditorForm(instance=post)
+            context["daily_schedule_form"] = DailyScheduleForm(prefix="daily")
             context["unified_editor"] = True
         print("/n---------------/n")
         # print(context["now_tuple"])
@@ -295,6 +297,50 @@ class CombinedView(DetailView):
         print(context.keys())
         print("/n------------/n")
         return context
+
+
+class DailyScheduleView(View):
+    def get(self, request):
+        date_value = request.GET.get("date", "")
+        try:
+            schedule_date = date.fromisoformat(date_value)
+        except ValueError:
+            return JsonResponse({"error": "Некорректная дата"}, status=400)
+
+        schedule = DailySchedule.objects.filter(date=schedule_date).first()
+        return JsonResponse(
+            {
+                "date": schedule_date.isoformat(),
+                "content": schedule.content if schedule else "",
+                "exists": schedule is not None,
+            }
+        )
+
+    def post(self, request):
+        if not request.user.is_authenticated or not is_admin(request.user):
+            return JsonResponse({"error": "Недостаточно прав"}, status=403)
+
+        date_value = request.POST.get("date", "")
+        try:
+            schedule_date = date.fromisoformat(date_value)
+        except ValueError:
+            return JsonResponse({"error": "Некорректная дата"}, status=400)
+
+        schedule = DailySchedule.objects.filter(date=schedule_date).first()
+        form = DailyScheduleForm(request.POST, instance=schedule, prefix="daily")
+        if not form.is_valid():
+            return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+        schedule = form.save(commit=False)
+        schedule.date = schedule_date
+        schedule.save()
+        return JsonResponse(
+            {
+                "date": schedule.date.isoformat(),
+                "content": schedule.content,
+                "updated_at": schedule.updated_at.isoformat(),
+            }
+        )
 
 
 class Main(View):

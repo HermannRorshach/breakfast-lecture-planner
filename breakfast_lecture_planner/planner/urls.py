@@ -16,6 +16,11 @@ urlpatterns = [
     path("draft_text/", views.DraftTextView.as_view(), name="draft_text"),
     path("post/<int:pk>/", views.PostDetailView.as_view(), name="post-detail"),
     path("post/<int:pk>/edit/", views.PostUpdateView.as_view(), name="post-edit"),
+    path(
+        "daily-schedule/",
+        views.DailyScheduleView.as_view(),
+        name="daily_schedule",
+    ),
     path("contacts/", views.ContactsView.as_view(), name="contacts"),
     path("faq/", views.FaqView.as_view(), name="faq"),
     path("images/", views.ImageListView.as_view(), name="image_list"),

@@ -1,7 +1,13 @@
-{% load custom_filters %}
+{% load custom_filters static %}
 
 {% if user|in_groups:allowed_groups %}
-  <button id="edit-post-btn-down" class="btn btn-info btn-sm">Редактировать</button>
+  <button id="edit-post-btn-down"
+          class="edit-icon-button"
+          type="button"
+          aria-label="Редактировать"
+          title="Редактировать">
+    <img src="{% static 'icons/pen-to-square-regular-full.svg' %}" alt="">
+  </button>
   {% if not unified_editor %}
   <div id="edit-form-container-down" style="display: none;">
     <form id="edit-post-form-down" class="full-height">

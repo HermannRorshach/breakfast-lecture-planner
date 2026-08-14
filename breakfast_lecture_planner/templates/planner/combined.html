@@ -141,6 +141,9 @@
       </div>
     </div>
   </header>
+  {% if user.is_authenticated %}
+    {% include "planner/includes/calendar.html" %}
+  {% endif %}
   <div class="container">
   <div class="post index">
     {% if object.pk == 12 %}

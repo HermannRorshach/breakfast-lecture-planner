@@ -11,7 +11,13 @@
   {% endif %}
 
   {% if object %}
-    <button type="button" id="open-text-editor" class="btn btn-info">Редактировать</button>
+    <button type="button"
+            id="open-text-editor"
+            class="edit-icon-button"
+            aria-label="Редактировать"
+            title="Редактировать">
+      <img src="{% static 'icons/pen-to-square-regular-full.svg' %}" alt="">
+    </button>
   {% endif %}
 
   <section id="text-editor-container"

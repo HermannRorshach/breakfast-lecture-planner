@@ -24,7 +24,12 @@
     {{ text.text|safe }}  <!-- Здесь будет отображаться содержимое текста -->
     <br><br>
     {% if user.is_authenticated %}
-      <a href="{% url 'planner:text_update' object.pk %}">Редактировать</a>
+      <a href="{% url 'planner:text_update' object.pk %}"
+         class="edit-icon-button"
+         aria-label="Редактировать"
+         title="Редактировать">
+        <img src="{% static 'icons/pen-to-square-regular-full.svg' %}" alt="">
+      </a>
     {% endif %}
 </div>
 
