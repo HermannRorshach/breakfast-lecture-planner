@@ -1,0 +1,349 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-15 14:18+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: breakfast_lecture_planner/settings.py:178
+msgid "English"
+msgstr "Английский"
+
+#: breakfast_lecture_planner/settings.py:179
+msgid "Lithuanian"
+msgstr "Литовский"
+
+#: breakfast_lecture_planner/settings.py:180
+msgid "Russian"
+msgstr "Русский"
+
+#: planner/forms.py:62 planner/forms.py:116
+msgid "Your phone number"
+msgstr "Ваш номер телефона"
+
+#: planner/forms.py:73
+msgid "Select the number of portions"
+msgstr "Выберите количество порций"
+
+#: planner/forms.py:104
+msgid "Comment"
+msgstr "Комментарий"
+
+#: planner/forms.py:106 planner/forms.py:132
+msgid "Your email address. Required field"
+msgstr "Ваш адрес электронной почты. Обязательное поле"
+
+#: planner/forms.py:108 planner/forms.py:134
+msgid "Your name"
+msgstr "Ваше имя"
+
+#: planner/forms.py:130 planner/forms.py:140
+msgid "Message"
+msgstr "Сообщение"
+
+#: planner/forms.py:137
+msgid "Phone number"
+msgstr "Номер телефона"
+
+#: planner/forms.py:138
+msgid "Name"
+msgstr "Имя"
+
+#: planner/forms.py:156
+msgid "This field cannot be empty."
+msgstr "Это поле не может быть пустым."
+
+#: planner/views.py:124
+msgid "Home"
+msgstr "Главная"
+
+#: planner/views.py:208
+msgid "days"
+msgstr "дни"
+
+#: planner/views.py:209
+msgid "hours"
+msgstr "часы"
+
+#: planner/views.py:210
+msgid "min"
+msgstr "мин."
+
+#: planner/views.py:211
+msgid "sec"
+msgstr "сек."
+
+#: planner/views.py:741 planner/views.py:743
+msgid "Saturday lunch registration"
+msgstr "Регистрация на субботний обед"
+
+#: planner/views.py:744
+msgid ""
+"Dear guests of Sri Sri Nitai Gaurasundara Temple! To make sure there is "
+"enough prasadam for everyone, please tell us in advance how many lunch "
+"portions you would like."
+msgstr ""
+"Дорогие гости храма Шри Шри Нитай Гаурасундары! Чтобы прасада хватило "
+"всем, пожалуйста, заранее сообщите, сколько порций обеда вам потребуется."
+
+#: planner/views.py:802
+msgid "Lunch registration"
+msgstr "Регистрация на обед"
+
+#: planner/views.py:815
+msgid "You are registered!"
+msgstr "Вы зарегистрированы!"
+
+#: planner/views.py:825
+msgid "Registration failed"
+msgstr "Регистрация не удалась"
+
+#: planner/views.py:855
+msgid "Feedback"
+msgstr "Обратная связь"
+
+#: planner/views.py:906
+msgid "Message sent!"
+msgstr "Сообщение отправлено!"
+
+#: templates/includes/dropdown.html:4 templates/includes/new_header.html:18
+#: templates/includes/new_header.html:56
+msgid "Menu"
+msgstr "Меню"
+
+#: templates/includes/dropdown.html:7
+msgid "Events and projects"
+msgstr "События и проекты"
+
+#: templates/includes/dropdown.html:11
+msgid "Vaishnava calendar"
+msgstr "Вайшнавский календарь"
+
+#: templates/includes/dropdown.html:16
+msgid "Renovation work"
+msgstr "Ремонтные работы"
+
+#: templates/includes/dropdown.html:51
+msgid "About us"
+msgstr "О нас"
+
+#: templates/includes/dropdown.html:55
+msgid "Our values and principles"
+msgstr "Наши ценности и принципы"
+
+#: templates/includes/dropdown.html:60
+msgid "Links"
+msgstr "Ссылки"
+
+#: templates/includes/new_header.html:12 templates/planner/combined.html:51
+#: templates/planner/combined.html:130
+msgid "Register for Saturday lunch"
+msgstr "Записаться на субботний обед"
+
+#: templates/planner/combined.html:40 templates/planner/combined.html:89
+msgid "Sri Sri Nitai<br>Gaurasundara Temple"
+msgstr "Храм Шри Шри Нитай<br>Гаурасундары"
+
+#: templates/planner/combined.html:43 templates/planner/combined.html:97
+msgid ""
+"This page is dedicated to<br> <span class=\"strong\">His Divine Grace A.C. "
+"Bhaktivedanta<br>Swami Prabhupada</span><br> Founder-Acharya of the "
+"International Society<br> for Krishna Consciousness (ISKCON)"
+msgstr ""
+"Эта страница посвящается<br> <span class=\"strong\">Его Божественной "
+"Милости А.Ч. Бхактиведанте<br>Свами Прабхупаде</span><br> Основателю-ачарье "
+"Международного общества<br> сознания Кришны (ИСККОН)"
+
+#: templates/planner/combined.html:52 templates/planner/combined.html:129
+msgid "Contact us"
+msgstr "Связаться с нами"
+
+#: templates/planner/combined.html:62 templates/planner/combined.html:105
+msgid "Time left to register"
+msgstr "До окончания регистрации"
+
+#: templates/planner/includes/calendar.html:12
+msgid "Mon|Tue|Wed|Thu|Fri|Sat|Sun"
+msgstr "Пн|Вт|Ср|Чт|Пт|Сб|Вс"
+
+#: templates/planner/includes/calendar.html:13
+msgid "Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday"
+msgstr "Воскресенье|Понедельник|Вторник|Среда|Четверг|Пятница|Суббота"
+
+#: templates/planner/includes/calendar.html:16
+msgid "Kartika month"
+msgstr "Месяц Картика"
+
+#: templates/planner/includes/calendar.html:18
+msgid "Select a date"
+msgstr "Выберите дату"
+
+#: templates/planner/includes/calendar.html:20
+msgid "Month"
+msgstr "Месяц"
+
+#: templates/planner/includes/calendar.html:22
+msgid "January"
+msgstr "Январь"
+
+#: templates/planner/includes/calendar.html:23
+msgid "February"
+msgstr "Февраль"
+
+#: templates/planner/includes/calendar.html:24
+msgid "March"
+msgstr "Март"
+
+#: templates/planner/includes/calendar.html:25
+msgid "April"
+msgstr "Апрель"
+
+#: templates/planner/includes/calendar.html:26
+msgid "May"
+msgstr "Май"
+
+#: templates/planner/includes/calendar.html:27
+msgid "June"
+msgstr "Июнь"
+
+#: templates/planner/includes/calendar.html:28
+msgid "July"
+msgstr "Июль"
+
+#: templates/planner/includes/calendar.html:29
+msgid "August"
+msgstr "Август"
+
+#: templates/planner/includes/calendar.html:30
+msgid "September"
+msgstr "Сентябрь"
+
+#: templates/planner/includes/calendar.html:31
+msgid "October"
+msgstr "Октябрь"
+
+#: templates/planner/includes/calendar.html:32
+msgid "November"
+msgstr "Ноябрь"
+
+#: templates/planner/includes/calendar.html:33
+msgid "December"
+msgstr "Декабрь"
+
+#: templates/planner/includes/calendar.html:38
+msgid "Year"
+msgstr "Год"
+
+#: templates/planner/includes/calendar.html:56
+msgid "Previous week"
+msgstr "Предыдущая неделя"
+
+#: templates/planner/includes/calendar.html:62
+msgid "Days of the week"
+msgstr "Дни недели"
+
+#: templates/planner/includes/calendar.html:69
+msgid "Next week"
+msgstr "Следующая неделя"
+
+#: templates/planner/includes/calendar.html:74
+msgid "Date categories"
+msgstr "Категории даты"
+
+#: templates/planner/includes/calendar.html:76
+msgid "Ekadashi"
+msgstr "Экадаши"
+
+#: templates/planner/includes/calendar.html:78
+msgid "Holidays"
+msgstr "Праздники"
+
+#: templates/planner/includes/calendar.html:80
+msgid "Festivals"
+msgstr "Фестивали"
+
+#: templates/planner/includes/calendar.html:82
+msgid "Appearance and disappearance days of saints"
+msgstr "Дни прихода и ухода святых личностей"
+
+#: templates/planner/includes/calendar.html:104
+msgid "Day navigation"
+msgstr "Навигация по дням"
+
+#: templates/planner/includes/calendar.html:105
+msgid "Previous day"
+msgstr "Предыдущий день"
+
+#: templates/planner/includes/calendar.html:106
+msgid "Next day"
+msgstr "Следующий день"
+
+#: templates/planner/registration_or_feedback.html:12
+msgid "Open until Friday at 17:00"
+msgstr "Открыта до пятницы, 17:00"
+
+#: templates/planner/registration_or_feedback.html:19
+msgid "Submit"
+msgstr "Отправить"
+
+#: templates/planner/success.html:11
+msgid "Thank you for taking the time to register."
+msgstr "Спасибо, что уделили время регистрации."
+
+#: templates/planner/success.html:13
+msgid "We look forward to seeing you next Saturday. Lunch starts at 13:30."
+msgstr "Ждём вас в ближайшую субботу. Обед начинается в 13:30."
+
+#: templates/planner/success.html:17
+msgid "Registration for next Saturday's lunch is closed."
+msgstr "Регистрация на обед в ближайшую субботу завершена."
+
+#: templates/planner/success.html:19
+msgid ""
+"If you have any questions, please contact us <a href=\"/feedback/\"><u>here</"
+"u></a>."
+msgstr ""
+"Если у вас есть вопросы, свяжитесь с нами <a href=\"/feedback/\"><u>здесь</u></a>."
+
+#: templates/planner/success.html:22
+msgid "Thank you for your feedback!"
+msgstr "Спасибо за обратную связь!"
+
+#: templates/users/password_reset_email.html:3
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+"Вы получили это письмо, потому что запросили сброс пароля своей учётной "
+"записи на сайте %(site_name)s."
+
+#: templates/users/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr "Перейдите на следующую страницу и выберите новый пароль:"
+
+#: templates/users/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr "Ваше имя пользователя, если вы его забыли:"
+
+#: templates/users/password_reset_email.html:9
+msgid "Thanks for using our site!"
+msgstr "Спасибо, что пользуетесь нашим сайтом!"
+
+#: templates/users/password_reset_email.html:10
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Команда сайта %(site_name)s"

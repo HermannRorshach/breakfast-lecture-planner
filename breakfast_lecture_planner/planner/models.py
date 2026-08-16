@@ -92,3 +92,16 @@ class DailySchedule(models.Model):
     date = models.DateField(unique=True)
     content = CKEditor5Field()
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class ScheduleEditLock(models.Model):
+    user = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="schedule_edit_locks"
+    )
+    token = models.CharField(max_length=64, unique=True)
+    acquired_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    class Meta:
+        verbose_name = "Блокировка редактирования расписания"
+        verbose_name_plural = "Блокировки редактирования расписания"

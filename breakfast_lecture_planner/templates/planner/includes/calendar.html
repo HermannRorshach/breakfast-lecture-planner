@@ -1,4 +1,5 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
 
@@ -7,31 +8,34 @@
          data-schedule-url="{% url 'planner:daily_schedule' %}"
          data-edit-icon="{% static 'icons/pen-to-square-regular-full.svg' %}"
          data-can-edit="{% if daily_schedule_form %}true{% else %}false{% endif %}"
+         data-locale="{{ LANGUAGE_CODE }}"
+         data-weekdays-short="{% translate 'Mon|Tue|Wed|Thu|Fri|Sat|Sun' %}"
+         data-weekdays-long="{% translate 'Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday' %}"
          aria-labelledby="calendar-title">
   <div class="schedule-calendar__heading">
-    <h2 id="calendar-title" class="schedule-calendar__title">Kartikos mėnuo</h2>
+    <h2 id="calendar-title" class="schedule-calendar__title">{% translate "Kartika month" %}</h2>
 
-    <div class="schedule-calendar__selectors" aria-label="Pasirinkite datą">
+    <div class="schedule-calendar__selectors" aria-label="{% translate 'Select a date' %}">
       <label>
-        <span class="visually-hidden">Mėnuo</span>
+        <span class="visually-hidden">{% translate "Month" %}</span>
         <select class="schedule-calendar__select" data-calendar-month>
-          <option value="0">Sausis</option>
-          <option value="1">Vasaris</option>
-          <option value="2">Kovas</option>
-          <option value="3">Balandis</option>
-          <option value="4">Gegužė</option>
-          <option value="5">Birželis</option>
-          <option value="6">Liepa</option>
-          <option value="7">Rugpjūtis</option>
-          <option value="8">Rugsėjis</option>
-          <option value="9">Spalis</option>
-          <option value="10">Lapkritis</option>
-          <option value="11">Gruodis</option>
+          <option value="0">{% translate "January" %}</option>
+          <option value="1">{% translate "February" %}</option>
+          <option value="2">{% translate "March" %}</option>
+          <option value="3">{% translate "April" %}</option>
+          <option value="4">{% translate "May" %}</option>
+          <option value="5">{% translate "June" %}</option>
+          <option value="6">{% translate "July" %}</option>
+          <option value="7">{% translate "August" %}</option>
+          <option value="8">{% translate "September" %}</option>
+          <option value="9">{% translate "October" %}</option>
+          <option value="10">{% translate "November" %}</option>
+          <option value="11">{% translate "December" %}</option>
         </select>
       </label>
 
       <label>
-        <span class="visually-hidden">Metai</span>
+        <span class="visually-hidden">{% translate "Year" %}</span>
         <select class="schedule-calendar__select" data-calendar-year>
           <option>2024</option>
           <option>2025</option>
@@ -49,33 +53,33 @@
     <button class="schedule-calendar__week-button"
             type="button"
             data-calendar-week-previous
-            aria-label="Ankstesnė savaitė">
+            aria-label="{% translate 'Previous week' %}">
       <img src="{% static 'icons/slider_row_left.svg' %}" alt="">
     </button>
 
     <div class="schedule-calendar__week-viewport">
       <div class="schedule-calendar__week-edge" data-calendar-week-previous-days aria-hidden="true"></div>
-      <div class="schedule-calendar__week" data-calendar-week aria-label="Savaitės dienos"></div>
+      <div class="schedule-calendar__week" data-calendar-week aria-label="{% translate 'Days of the week' %}"></div>
       <div class="schedule-calendar__week-edge" data-calendar-week-next-days aria-hidden="true"></div>
     </div>
 
     <button class="schedule-calendar__week-button"
             type="button"
             data-calendar-week-next
-            aria-label="Kita savaitė">
+            aria-label="{% translate 'Next week' %}">
       <img src="{% static 'icons/slider_row_right.svg' %}" alt="">
     </button>
   </div>
 
-  <div class="schedule-calendar__categories" aria-label="Datos kategorijos">
+  <div class="schedule-calendar__categories" aria-label="{% translate 'Date categories' %}">
     <span class="schedule-calendar__category schedule-calendar__category--ekadashi"
-          data-calendar-category="ekadashi">Ekadaši</span>
+          data-calendar-category="ekadashi">{% translate "Ekadashi" %}</span>
     <span class="schedule-calendar__category schedule-calendar__category--holiday"
-          data-calendar-category="holiday">Šventės</span>
+          data-calendar-category="holiday">{% translate "Holidays" %}</span>
     <span class="schedule-calendar__category schedule-calendar__category--festival"
-          data-calendar-category="festival">Festivaliai</span>
+          data-calendar-category="festival">{% translate "Festivals" %}</span>
     <span class="schedule-calendar__category schedule-calendar__category--saints"
-          data-calendar-category="saints">Šventųjų asmenybių atėjimo / išėjimo dienos</span>
+          data-calendar-category="saints">{% translate "Appearance and disappearance days of saints" %}</span>
   </div>
 
   <div class="schedule-calendar__schedules"
@@ -97,9 +101,9 @@
     </div>
   {% endif %}
 
-  <div class="schedule-calendar__day-navigation" aria-label="Dienų navigacija">
-    <button type="button" data-calendar-day-previous aria-label="Ankstesnė diena">←</button>
-    <button type="button" data-calendar-day-next aria-label="Kita diena">→</button>
+  <div class="schedule-calendar__day-navigation" aria-label="{% translate 'Day navigation' %}">
+    <button type="button" data-calendar-day-previous aria-label="{% translate 'Previous day' %}">←</button>
+    <button type="button" data-calendar-day-next aria-label="{% translate 'Next day' %}">→</button>
   </div>
 </section>
 

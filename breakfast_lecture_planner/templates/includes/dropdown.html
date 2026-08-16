@@ -1,18 +1,19 @@
+{% load i18n %}
 <ul class="dropdown{% if user.is_authenticated %} dropdown--authenticated{% endif %}">
   <li class="dropdown-li-title">
-    <h2 class="dropdown-title">Menu</h2>
+    <h2 class="dropdown-title">{% translate "Menu" %}</h2>
   </li>
   <li>
-    <h5> Įvykiai ir projektai:</h5>
+    <h5>{% translate "Events and projects" %}:</h5>
     <ul>
       <li>
         <div class="menu-item">
-          <a href="{% url 'planner:vaishnava_calendar' %}">Vaišnavų kalendorius</a>
+          <a href="{% url 'planner:vaishnava_calendar' %}">{% translate "Vaishnava calendar" %}</a>
         </div>
       </li>
       <li>
         <div class="menu-item">
-          <a href="{% url 'planner:renovation_work' %}">Remonto darbai</a>
+          <a href="{% url 'planner:renovation_work' %}">{% translate "Renovation work" %}</a>
         </div>
       </li>
       <!-- <li>
@@ -47,16 +48,16 @@
   </li>
   {% endif %}
   <li>
-    <h5>Apie mus:</h5>
+    <h5>{% translate "About us" %}:</h5>
     <ul>
       <li>
         <div class="menu-item">
-          <a href="{% url 'planner:principai' %}">Mūsų vertybės ir principai</a>
+          <a href="{% url 'planner:principai' %}">{% translate "Our values and principles" %}</a>
         </div>
       </li>
       <li>
         <div class="menu-item d">
-          <a href="{% url 'planner:nuorodos' %}">Nuorodos</a>
+          <a href="{% url 'planner:nuorodos' %}">{% translate "Links" %}</a>
         </div>
       </li>
       <!-- <li>

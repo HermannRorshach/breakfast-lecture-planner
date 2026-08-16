@@ -1,6 +1,10 @@
 FROM python:3.12-slim
 RUN groupadd -r pavelgroup && useradd -r -g pavelgroup pavel
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gettext \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV HOME=/tmp
@@ -12,6 +16,7 @@ RUN mkdir -p staticfiles && chown -R pavel:pavelgroup /app/www/breakfast_lecture
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
+RUN django-admin compilemessages -l en -l lt -l ru
 RUN chown -R pavel:pavelgroup /app/www/breakfast_lecture_planner/media/
 RUN chmod -R 755 /app/www/breakfast_lecture_planner/media/
 USER pavel

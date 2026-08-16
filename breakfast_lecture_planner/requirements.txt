@@ -7,9 +7,11 @@ annotated-types==0.7.0
 asgiref==3.8.1
 async-timeout==5.0.1
 attrs==24.2.0
+beautifulsoup4==4.12.3
 autopep8==2.3.1
 black==25.9.0
 certifi==2024.8.30
+celery==5.4.0
 cfgv==3.4.0
 charset-normalizer==3.4.0
 click==8.1.7
@@ -63,6 +65,7 @@ pytokens==0.1.10
 PyYAML==6.0.2
 regex==2024.9.11
 requests==2.32.3
+redis==5.2.1
 six==1.16.0
 sqlparse==0.5.1
 tomli==2.0.2

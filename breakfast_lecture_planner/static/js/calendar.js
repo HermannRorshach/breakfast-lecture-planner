@@ -16,11 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const dailyScheduleError = calendar.querySelector("[data-daily-schedule-error]");
     const scheduleCache = new Map();
 
-    const weekdayNames = ["Pir", "Ant", "Tre", "Ket", "Pen", "Šeš", "Sek"];
-    const weekdayNamesLong = [
-      "Sekmadienis", "Pirmadienis", "Antradienis", "Trečiadienis",
-      "Ketvirtadienis", "Penktadienis", "Šeštadienis",
-    ];
+    const locale = calendar.dataset.locale || "en";
+    const weekdayNames = calendar.dataset.weekdaysShort.split("|");
+    const weekdayNamesLong = calendar.dataset.weekdaysLong.split("|");
     const categoryColors = ["#F28C38", "#EB364B", "#50CC2F", "#229191"];
     const scheduleHeaderColors = ["#F2CAA9", "#F6B7B4", "#B4E2A1", "#B3DFF1"];
     const demoSchedules = [
@@ -96,18 +94,21 @@ document.addEventListener("DOMContentLoaded", () => {
       return demoSchedules[date.getDay()].map((item) => `<p>${item}</p>`).join("");
     }
 
-    async function loadSchedule(date) {
+    async function loadSchedule(date, forceRefresh = false) {
       const key = dateKey(date);
-      if (scheduleCache.has(key)) return scheduleCache.get(key);
+      if (!forceRefresh && scheduleCache.has(key)) return scheduleCache.get(key);
       try {
-        const response = await fetch(`${scheduleUrl}?date=${encodeURIComponent(key)}`);
+        const response = await fetch(`${scheduleUrl}?date=${encodeURIComponent(key)}`, {
+          cache: "no-store",
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
         if (!response.ok) throw new Error("Не удалось загрузить расписание");
         const data = await response.json();
         scheduleCache.set(key, data);
         return data;
       } catch (error) {
         console.error(error);
-        return { date: key, content: "", exists: false };
+        return { date: key, content: "", exists: false, error: error.message };
       }
     }
 
@@ -116,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       button.type = "button";
       button.className = "schedule-calendar__date";
       button.dataset.date = dateKey(date);
-      button.setAttribute("aria-label", date.toLocaleDateString("lt-LT", { dateStyle: "full" }));
+      button.setAttribute("aria-label", date.toLocaleDateString(locale, { dateStyle: "full" }));
       button.style.setProperty("--date-ring", ringPattern(date));
       const distance = Math.round((date - selectedDate) / 86400000);
       if (!isEdge && distance === 0) button.classList.add("is-selected");
@@ -197,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    function closeDailyEditor() {
+    async function closeDailyEditor() {
       if (!dailyEditorContainer) return;
       dailyEditorContainer.hidden = true;
       dailyScheduleError.hidden = true;
@@ -206,17 +207,31 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       schedules.after(dailyEditorContainer);
       editingCard = null;
+      await window.scheduleEditLock?.release("daily-schedule");
     }
 
     async function openDailyEditor(card, date) {
       if (!dailyEditorContainer) return;
+      try {
+        await window.scheduleEditLock.acquire("daily-schedule");
+      } catch (error) {
+        alert(error.message);
+        return;
+      }
       const editor = await waitForDailyEditor();
       if (!editor || !card.isConnected) {
         console.error("CKEditor для дневного расписания не инициализирован");
+        await window.scheduleEditLock.release("daily-schedule");
         return;
       }
-      const data = await loadSchedule(date);
+      const data = await loadSchedule(date, true);
+      if (data.error) {
+        await window.scheduleEditLock.release("daily-schedule");
+        alert(data.error);
+        return;
+      }
       const body = card.querySelector(".schedule-calendar__schedule-body");
+      body.innerHTML = data.exists ? data.content : "";
       editor.setData(data.exists ? data.content : body.innerHTML);
       dailyScheduleDate.value = dateKey(date);
       dailyScheduleError.hidden = true;
@@ -283,9 +298,11 @@ document.addEventListener("DOMContentLoaded", () => {
       submitButton.disabled = true;
       dailyScheduleError.hidden = true;
       try {
+        const formData = new FormData(dailyScheduleForm);
+        formData.append("edit_lock_token", window.scheduleEditLock.token);
         const response = await fetch(scheduleUrl, {
           method: "POST",
-          body: new FormData(dailyScheduleForm),
+          body: formData,
           headers: { "X-Requested-With": "XMLHttpRequest" },
         });
         const data = await response.json();
@@ -295,7 +312,8 @@ document.addEventListener("DOMContentLoaded", () => {
           editingCard.querySelector(".schedule-calendar__schedule-body").innerHTML = data.content;
           refreshExpandButton(editingCard);
         }
-        closeDailyEditor();
+        await closeDailyEditor();
+        window.notifyScheduleUpdated();
       } catch (error) {
         dailyScheduleError.textContent = error.message;
         dailyScheduleError.hidden = false;
@@ -315,6 +333,15 @@ document.addEventListener("DOMContentLoaded", () => {
     yearSelect.addEventListener("change", () => {
       selectedDate.setFullYear(Number(yearSelect.value));
       render();
+    });
+
+    const refreshScheduleData = () => {
+      scheduleCache.clear();
+      renderSchedules();
+    };
+    window.addEventListener("schedule-data-updated", refreshScheduleData);
+    window.addEventListener("storage", (event) => {
+      if (event.key === "schedule-data-updated") refreshScheduleData();
     });
 
     render();

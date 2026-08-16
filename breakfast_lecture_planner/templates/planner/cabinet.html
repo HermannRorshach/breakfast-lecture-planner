@@ -15,6 +15,8 @@
            class="list-group-item list-group-item-action">Архивные списки записавшихся на субботний обед</a>
         <a href="{% url 'planner:archive' %}"
            class="list-group-item list-group-item-action">Архив</a>
+        <a href="{% url 'planner:schedule_edit_unlock' %}"
+           class="list-group-item list-group-item-action">Снятие блокировки с редактирования</a>
         {% if user.is_superuser %}
           <a href="{% url 'users:user_list' %}"
              class="list-group-item list-group-item-action">Список администраторов</a>

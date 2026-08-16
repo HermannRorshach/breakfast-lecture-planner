@@ -1,5 +1,5 @@
 {% extends 'new_base.html' %}
-{% load static %}
+{% load static i18n %}
 {% block title %}
   {{ title }}
 {% endblock title %}
@@ -37,24 +37,19 @@
     <div class="main-content">
       <div class="text-section">
         <h1 class="title">
-          Šri Šri Nitai
-          <br>
-          Gaurasundaros Šventykla
+          {% blocktranslate %}Sri Sri Nitai<br>Gaurasundara Temple{% endblocktranslate %}
         </h1>
         <p class="dedication">
-          Šis puslapis yra skiriamas
-          <br>
-          <span class="strong">Jo Dieviškajai Kilnybei A.Č. Bhaktivedanta
-            <br>
-          Svami Prabhupadai</span>
-          <br>
-          Tarptautinės Krišnos Sąmonės Bendrijos
-          <br>
-          (ISKCON) Įkūrėjui-Ačarjai
+          {% blocktranslate trimmed %}
+            This page is dedicated to<br>
+            <span class="strong">His Divine Grace A.C. Bhaktivedanta<br>Swami Prabhupada</span><br>
+            Founder-Acharya of the International Society<br>
+            for Krishna Consciousness (ISKCON)
+          {% endblocktranslate %}
         </p>
         <div class="cta-buttons">
-          <a href="{% url 'planner:lunch_register' %}" class="button orange">Ateisiu šeštadienio pietums</a>
-          <a href="{% url 'planner:feedback' %}" class="button outline">Susisiekite su mumis</a>
+          <a href="{% url 'planner:lunch_register' %}" class="button orange">{% translate "Register for Saturday lunch" %}</a>
+          <a href="{% url 'planner:feedback' %}" class="button outline">{% translate "Contact us" %}</a>
         </div>
       </div>
       <div class="right-block">
@@ -64,7 +59,7 @@
                class="man-image">
         </div>
         <div class="countdown">
-          <p>iko laiko prisijungti:</p>
+          <p>{% translate "Time left to register" %}:</p>
           <div class="countdown-timer">
             {% for unit in countdown %}
               <div class="time-unit" style="position: relative; display: inline-block;">
@@ -91,9 +86,7 @@
     </div>
     <div class="mobile-content">
       <h1 class="title">
-        Šri Šri Nitai
-        <br>
-        Gaurasundaros Šventykla
+        {% blocktranslate %}Sri Sri Nitai<br>Gaurasundara Temple{% endblocktranslate %}
       </h1>
       <div class="image-section">
         <img src="{% static 'img/гуру-без-фона.png' %}"
@@ -101,18 +94,15 @@
              class="man-image">
       </div>
       <p class="dedication">
-        Šis puslapis yra skiriamas
-        <br>
-        <span class="strong">Jo Dieviškajai Kilnybei A.Č. Bhaktivedanta Svami
-          <br>
-        Prabhupadai</span>
-        <br>
-        Tarptautinės Krišnos Sąmonės Bendrijos
-        <br>
-        (ISKCON) Įkūrėjui-Ačarjai
+        {% blocktranslate trimmed %}
+          This page is dedicated to<br>
+          <span class="strong">His Divine Grace A.C. Bhaktivedanta<br>Swami Prabhupada</span><br>
+          Founder-Acharya of the International Society<br>
+          for Krishna Consciousness (ISKCON)
+        {% endblocktranslate %}
       </p>
       <div class="countdown">
-        <p>iko laiko prisijungti:</p>
+        <p>{% translate "Time left to register" %}:</p>
         <div class="countdown-timer">
           {% for unit in countdown %}
             <div class="time-unit" style="position: relative; display: inline-block;">
@@ -136,12 +126,14 @@
         </div>
       </div>
       <div class="cta-buttons">
-        <a href="{% url 'planner:feedback' %}" class="button outline">Susisiekite su mumis</a>
-        <a href="{% url 'planner:lunch_register' %}" class="button orange">Ateisiu šeštadienio pietums</a>
+        <a href="{% url 'planner:feedback' %}" class="button outline">{% translate "Contact us" %}</a>
+        <a href="{% url 'planner:lunch_register' %}" class="button orange">{% translate "Register for Saturday lunch" %}</a>
       </div>
     </div>
   </header>
   {% if user.is_authenticated %}
+    <script>window.scheduleEditLockUrl = "{% url 'planner:schedule_edit_lock' %}";</script>
+    <script src="{% static 'js/schedule_edit_lock.js' %}"></script>
     {% include "planner/includes/calendar.html" %}
   {% endif %}
   <div class="container">
@@ -218,14 +210,47 @@
   const closeMainPostEditorButtons = document.querySelectorAll('.close-main-post-editor');
   const postContent = document.querySelector('.post-content');
 
-  const openMainPostEditor = () => {
-      postContent.hidden = true;
-      mainPostEditor.hidden = false;
+  const waitForMainEditor = () => new Promise((resolve) => {
+      let attempts = 0;
+      const findEditor = () => {
+          const editor = window.editors?.id_content;
+          if (editor || attempts >= 40) {
+              resolve(editor || null);
+              return;
+          }
+          attempts += 1;
+          window.setTimeout(findEditor, 50);
+      };
+      findEditor();
+  });
+
+  const openMainPostEditor = async () => {
+      try {
+        await window.scheduleEditLock.acquire('main-schedule');
+        const [response, editor] = await Promise.all([
+          fetch("{% url 'planner:post-edit' object.id %}", {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            cache: 'no-store'
+          }),
+          waitForMainEditor()
+        ]);
+        if (!response.ok) throw new Error('Не удалось загрузить актуальное расписание.');
+        if (!editor) throw new Error('Редактор CKEditor не был загружен.');
+        const data = await response.json();
+        editor.setData(data.content);
+        postContent.hidden = true;
+        mainPostEditor.hidden = false;
+        editor.editing.view.focus();
+      } catch (error) {
+        await window.scheduleEditLock.release('main-schedule');
+        alert(error.message);
+      }
   };
 
-  const closeMainEditor = () => {
+  const closeMainEditor = async () => {
       mainPostEditor.hidden = true;
       postContent.hidden = false;
+      await window.scheduleEditLock.release('main-schedule');
   };
 
   editPostButtonUp?.addEventListener('click', openMainPostEditor);
@@ -237,6 +262,7 @@
   mainPostEditorForm?.addEventListener('submit', function(event) {
       event.preventDefault(); // Предотвратить перезагрузку страницы
       const formData = new FormData(this);
+      formData.append('edit_lock_token', window.scheduleEditLock.token);
 
       fetch("{% url 'planner:post-edit' object.id %}", {
           method: 'POST',
@@ -249,12 +275,17 @@
           if (response.ok) {
               return response.json(); // Предполагаем, что сервер возвращает JSON
           }
-          throw new Error('Ошибка при сохранении изменений');
+          return response.json().then(data => { throw new Error(data.error || 'Ошибка при сохранении изменений'); });
       })
       .then(data => {
           // Обновляем содержимое поста
           document.querySelector('.post-content').innerHTML = data.content;
           closeMainEditor();
+          if (data.warning) {
+            alert('Текст сохранён, но дневные расписания не обновлены:\n\n' + data.warning);
+          } else {
+            window.notifyScheduleUpdated();
+          }
       })
       .catch(error => {
           console.error(error);

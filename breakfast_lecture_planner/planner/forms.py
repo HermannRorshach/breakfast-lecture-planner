@@ -1,6 +1,7 @@
 from datetime import datetime, time
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
@@ -58,9 +59,7 @@ class LunchParticipantForm(forms.ModelForm):
     # Скрытое от пользователей поле, предназначенное для заполнения роботами
     phone = forms.CharField(
         required=False,
-        widget=forms.TextInput(
-            attrs={"placeholder": "Jūsų telefono numeris", "style": "opacity:0;"}
-        ),
+        widget=forms.TextInput(attrs={"placeholder": _("Your phone number"), "style": "opacity:0;"}),
     )
 
     # Добавляем reCAPTCHA v3
@@ -71,7 +70,7 @@ class LunchParticipantForm(forms.ModelForm):
         for field in self.fields.values():
             field.label = ""
         self.fields["portions"].initial = ""
-        self.fields["portions"].choices = [("", "Pasirinkite porcijų skaičių")] + list(
+        self.fields["portions"].choices = [("", _("Select the number of portions"))] + list(
             self.fields["portions"].choices
         )
 
@@ -102,11 +101,11 @@ class LunchParticipantForm(forms.ModelForm):
             "comment",
         ]  # Поле date исключено
         widgets = {
-            "comment": forms.Textarea(attrs={"rows": 4, "placeholder": "Komentaras"}),
+            "comment": forms.Textarea(attrs={"rows": 4, "placeholder": _("Comment")}),
             "email": forms.EmailInput(
-                attrs={"placeholder": "Jusu el. paštas. Privalomas langelis"}
+                attrs={"placeholder": _("Your email address. Required field")}
             ),
-            "name": forms.TextInput(attrs={"placeholder": "Jusu vardas"}),
+            "name": forms.TextInput(attrs={"placeholder": _("Your name")}),
             "portions": forms.Select(attrs={"style": "color: #757575;"}),
         }
 
@@ -114,9 +113,7 @@ class LunchParticipantForm(forms.ModelForm):
 class FeedbackForm(forms.ModelForm):
     phone = forms.CharField(
         required=False,
-        widget=forms.TextInput(
-            attrs={"placeholder": "Jūsų telefono numeris", "style": "opacity:0;"}
-        ),
+        widget=forms.TextInput(attrs={"placeholder": _("Your phone number"), "style": "opacity:0;"}),
     )
 
     captcha = ReCaptchaField(widget=ReCaptchaV3)
@@ -130,17 +127,17 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ["phone", "name", "email", "text"]
         widgets = {
-            "text": forms.Textarea(attrs={"rows": 4, "placeholder": "Žinutė"}),
+            "text": forms.Textarea(attrs={"rows": 4, "placeholder": _("Message")}),
             "email": forms.EmailInput(
-                attrs={"placeholder": "Jusu el. paštas. Privalomas langelis"}
+                attrs={"placeholder": _("Your email address. Required field")}
             ),
-            "name": forms.TextInput(attrs={"placeholder": "Jusu vardas"}),
+            "name": forms.TextInput(attrs={"placeholder": _("Your name")}),
         }
         labels = {
-            "phone": "Номер телефона",
-            "name": "Имя",
+            "phone": _("Phone number"),
+            "name": _("Name"),
             "email": "Email",
-            "text": "Сообщение",
+            "text": _("Message"),
         }
 
     def clean(self):
@@ -156,7 +153,7 @@ class FeedbackForm(forms.ModelForm):
     def clean_text(self):
         text = self.cleaned_data.get("text")
         if not text:
-            raise forms.ValidationError("Поле не может быть пустым.")
+            raise forms.ValidationError(_("This field cannot be empty."))
         return text
 
 

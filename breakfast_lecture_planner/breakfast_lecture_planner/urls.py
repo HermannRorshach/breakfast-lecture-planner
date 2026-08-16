@@ -23,6 +23,7 @@ handler404 = PageNotFoundView.as_view()
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
     path("", include("planner.urls")),
     path("api/", include("api.urls", namespace="api")),
     path("", include("users.urls")),

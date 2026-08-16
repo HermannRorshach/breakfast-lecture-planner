@@ -1,0 +1,347 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-15 14:18+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < "
+"11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? "
+"1 : n % 1 != 0 ? 2: 3);\n"
+#: breakfast_lecture_planner/settings.py:178
+msgid "English"
+msgstr "Anglų"
+
+#: breakfast_lecture_planner/settings.py:179
+msgid "Lithuanian"
+msgstr "Lietuvių"
+
+#: breakfast_lecture_planner/settings.py:180
+msgid "Russian"
+msgstr "Rusų"
+
+#: planner/forms.py:62 planner/forms.py:116
+msgid "Your phone number"
+msgstr "Jūsų telefono numeris"
+
+#: planner/forms.py:73
+msgid "Select the number of portions"
+msgstr "Pasirinkite porcijų skaičių"
+
+#: planner/forms.py:104
+msgid "Comment"
+msgstr "Komentaras"
+
+#: planner/forms.py:106 planner/forms.py:132
+msgid "Your email address. Required field"
+msgstr "Jūsų el. paštas. Privalomas laukelis"
+
+#: planner/forms.py:108 planner/forms.py:134
+msgid "Your name"
+msgstr "Jūsų vardas"
+
+#: planner/forms.py:130 planner/forms.py:140
+msgid "Message"
+msgstr "Žinutė"
+
+#: planner/forms.py:137
+msgid "Phone number"
+msgstr "Telefono numeris"
+
+#: planner/forms.py:138
+msgid "Name"
+msgstr "Vardas"
+
+#: planner/forms.py:156
+msgid "This field cannot be empty."
+msgstr "Šis laukelis negali būti tuščias."
+
+#: planner/views.py:124
+msgid "Home"
+msgstr "Pagrindinis"
+
+#: planner/views.py:208
+msgid "days"
+msgstr "dienos"
+
+#: planner/views.py:209
+msgid "hours"
+msgstr "valandos"
+
+#: planner/views.py:210
+msgid "min"
+msgstr "min."
+
+#: planner/views.py:211
+msgid "sec"
+msgstr "sek."
+
+#: planner/views.py:741 planner/views.py:743
+msgid "Saturday lunch registration"
+msgstr "Registracija šeštadienio pietums"
+
+#: planner/views.py:744
+msgid ""
+"Dear guests of Sri Sri Nitai Gaurasundara Temple! To make sure there is "
+"enough prasadam for everyone, please tell us in advance how many lunch "
+"portions you would like."
+msgstr ""
+"Gerbiamieji Šri Šri Nitai Gaurasundaros Šventyklos svečiai! Kad prasado "
+"užtektų visiems, prašome iš anksto pranešti, kiek pietų porcijų pageidaujate."
+
+#: planner/views.py:802
+msgid "Lunch registration"
+msgstr "Registracija pietums"
+
+#: planner/views.py:815
+msgid "You are registered!"
+msgstr "Jūs užsiregistravote!"
+
+#: planner/views.py:825
+msgid "Registration failed"
+msgstr "Registracija nepavyko"
+
+#: planner/views.py:855
+msgid "Feedback"
+msgstr "Atsiliepimai"
+
+#: planner/views.py:906
+msgid "Message sent!"
+msgstr "Žinutė išsiųsta!"
+
+#: templates/includes/dropdown.html:4 templates/includes/new_header.html:18
+#: templates/includes/new_header.html:56
+msgid "Menu"
+msgstr "Meniu"
+
+#: templates/includes/dropdown.html:7
+msgid "Events and projects"
+msgstr "Įvykiai ir projektai"
+
+#: templates/includes/dropdown.html:11
+msgid "Vaishnava calendar"
+msgstr "Vaišnavų kalendorius"
+
+#: templates/includes/dropdown.html:16
+msgid "Renovation work"
+msgstr "Remonto darbai"
+
+#: templates/includes/dropdown.html:51
+msgid "About us"
+msgstr "Apie mus"
+
+#: templates/includes/dropdown.html:55
+msgid "Our values and principles"
+msgstr "Mūsų vertybės ir principai"
+
+#: templates/includes/dropdown.html:60
+msgid "Links"
+msgstr "Nuorodos"
+
+#: templates/includes/new_header.html:12 templates/planner/combined.html:51
+#: templates/planner/combined.html:130
+msgid "Register for Saturday lunch"
+msgstr "Ateisiu šeštadienio pietums"
+
+#: templates/planner/combined.html:40 templates/planner/combined.html:89
+msgid "Sri Sri Nitai<br>Gaurasundara Temple"
+msgstr "Šri Šri Nitai<br>Gaurasundaros Šventykla"
+
+#: templates/planner/combined.html:43 templates/planner/combined.html:97
+msgid ""
+"This page is dedicated to<br> <span class=\"strong\">His Divine Grace A.C. "
+"Bhaktivedanta<br>Swami Prabhupada</span><br> Founder-Acharya of the "
+"International Society<br> for Krishna Consciousness (ISKCON)"
+msgstr ""
+"Šis puslapis yra skiriamas<br> <span class=\"strong\">Jo Dieviškajai "
+"Kilnybei A.Č. Bhaktivedantai<br>Svamiui Prabhupadai</span><br> "
+"Tarptautinės Krišnos Sąmonės Bendrijos<br> (ISKCON) Įkūrėjui-Ačarjai"
+
+#: templates/planner/combined.html:52 templates/planner/combined.html:129
+msgid "Contact us"
+msgstr "Susisiekite su mumis"
+
+#: templates/planner/combined.html:62 templates/planner/combined.html:105
+msgid "Time left to register"
+msgstr "Iki registracijos pabaigos liko"
+
+#: templates/planner/includes/calendar.html:12
+msgid "Mon|Tue|Wed|Thu|Fri|Sat|Sun"
+msgstr "Pir|Ant|Tre|Ket|Pen|Šeš|Sek"
+
+#: templates/planner/includes/calendar.html:13
+msgid "Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday"
+msgstr "Sekmadienis|Pirmadienis|Antradienis|Trečiadienis|Ketvirtadienis|Penktadienis|Šeštadienis"
+
+#: templates/planner/includes/calendar.html:16
+msgid "Kartika month"
+msgstr "Kartikos mėnuo"
+
+#: templates/planner/includes/calendar.html:18
+msgid "Select a date"
+msgstr "Pasirinkite datą"
+
+#: templates/planner/includes/calendar.html:20
+msgid "Month"
+msgstr "Mėnuo"
+
+#: templates/planner/includes/calendar.html:22
+msgid "January"
+msgstr "Sausis"
+
+#: templates/planner/includes/calendar.html:23
+msgid "February"
+msgstr "Vasaris"
+
+#: templates/planner/includes/calendar.html:24
+msgid "March"
+msgstr "Kovas"
+
+#: templates/planner/includes/calendar.html:25
+msgid "April"
+msgstr "Balandis"
+
+#: templates/planner/includes/calendar.html:26
+msgid "May"
+msgstr "Gegužė"
+
+#: templates/planner/includes/calendar.html:27
+msgid "June"
+msgstr "Birželis"
+
+#: templates/planner/includes/calendar.html:28
+msgid "July"
+msgstr "Liepa"
+
+#: templates/planner/includes/calendar.html:29
+msgid "August"
+msgstr "Rugpjūtis"
+
+#: templates/planner/includes/calendar.html:30
+msgid "September"
+msgstr "Rugsėjis"
+
+#: templates/planner/includes/calendar.html:31
+msgid "October"
+msgstr "Spalis"
+
+#: templates/planner/includes/calendar.html:32
+msgid "November"
+msgstr "Lapkritis"
+
+#: templates/planner/includes/calendar.html:33
+msgid "December"
+msgstr "Gruodis"
+
+#: templates/planner/includes/calendar.html:38
+msgid "Year"
+msgstr "Metai"
+
+#: templates/planner/includes/calendar.html:56
+msgid "Previous week"
+msgstr "Ankstesnė savaitė"
+
+#: templates/planner/includes/calendar.html:62
+msgid "Days of the week"
+msgstr "Savaitės dienos"
+
+#: templates/planner/includes/calendar.html:69
+msgid "Next week"
+msgstr "Kita savaitė"
+
+#: templates/planner/includes/calendar.html:74
+msgid "Date categories"
+msgstr "Datos kategorijos"
+
+#: templates/planner/includes/calendar.html:76
+msgid "Ekadashi"
+msgstr "Ekadaši"
+
+#: templates/planner/includes/calendar.html:78
+msgid "Holidays"
+msgstr "Šventės"
+
+#: templates/planner/includes/calendar.html:80
+msgid "Festivals"
+msgstr "Festivaliai"
+
+#: templates/planner/includes/calendar.html:82
+msgid "Appearance and disappearance days of saints"
+msgstr "Šventųjų asmenybių atėjimo / išėjimo dienos"
+
+#: templates/planner/includes/calendar.html:104
+msgid "Day navigation"
+msgstr "Dienų navigacija"
+
+#: templates/planner/includes/calendar.html:105
+msgid "Previous day"
+msgstr "Ankstesnė diena"
+
+#: templates/planner/includes/calendar.html:106
+msgid "Next day"
+msgstr "Kita diena"
+
+#: templates/planner/registration_or_feedback.html:12
+msgid "Open until Friday at 17:00"
+msgstr "Vyksta iki penktadienio 17:00"
+
+#: templates/planner/registration_or_feedback.html:19
+msgid "Submit"
+msgstr "Patvirtinti"
+
+#: templates/planner/success.html:11
+msgid "Thank you for taking the time to register."
+msgstr "Ačiū Jums už tai, kad skiriate laiko registracijai."
+
+#: templates/planner/success.html:13
+msgid "We look forward to seeing you next Saturday. Lunch starts at 13:30."
+msgstr "Laukiame Jūsų artimiausią šeštadienį. Pietų pradžia 13:30."
+
+#: templates/planner/success.html:17
+msgid "Registration for next Saturday's lunch is closed."
+msgstr "Registracija artimiausio šeštadienio pietums baigėsi."
+
+#: templates/planner/success.html:19
+msgid ""
+"If you have any questions, please contact us <a href=\"/feedback/\"><u>here</"
+"u></a>."
+msgstr ""
+"Jei turite klausimų, susisiekite su mumis <a href=\"/feedback/\"><u>čia</u></a>."
+
+#: templates/planner/success.html:22
+msgid "Thank you for your feedback!"
+msgstr "Ačiū už atsiliepimą!"
+
+#: templates/users/password_reset_email.html:3
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: templates/users/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/users/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: templates/users/password_reset_email.html:9
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: templates/users/password_reset_email.html:10
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""

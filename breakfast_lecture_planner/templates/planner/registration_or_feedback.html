@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 {% block title %}
   {{ title }}
 {% endblock title %}
@@ -9,14 +9,14 @@
     <div class="container mt-4 registration-and-feedback-forms">
       <div class="header-title">
         <h1 class="lunch-registration">{{ header_title|safe }}</h1>
-        {% if register_lunch %}<h2 class="lunch-registration">vyksta iki penktadienio 17:00</h2>{% endif %}
+        {% if register_lunch %}<h2 class="lunch-registration">{% translate "Open until Friday at 17:00" %}</h2>{% endif %}
       </div>
       <p class="lunch-registration">{{ text|safe }}</p>
       <form method="post">
         {% csrf_token %}
          {{ form.media }}
         {{ form.as_p }}
-        <button id="id_submit" type="submit">patvirtinti</button>
+        <button id="id_submit" type="submit">{% translate "Submit" %}</button>
       </form>
       {% if form.errors %}
         <ul>

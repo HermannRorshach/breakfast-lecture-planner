@@ -14,7 +14,9 @@ import os
 import sys
 from pathlib import Path
 
+from celery.schedules import crontab
 from decouple import config
+from django.utils.translation import gettext_lazy as _
 
 EMAIL = config("EMAIL")
 EMAIL_PASSWORD = config("EMAIL_PASSWORD")
@@ -81,9 +83,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "breakfast_lecture_planner.middleware.RussianAdminInterfaceMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -170,7 +174,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "ru"
+LANGUAGE_CODE = "en"
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("lt", _("Lithuanian")),
+]
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 TIME_ZONE = "Europe/Riga"
 
@@ -214,6 +225,21 @@ EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
 EMAIL_USE_TLS = True
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+CELERY_BROKER_URL = config(
+    "CELERY_BROKER_URL", default="memory://" if DEBUG else "redis://redis:6379/0"
+)
+CELERY_RESULT_BACKEND = config(
+    "CELERY_RESULT_BACKEND", default="cache+memory://" if DEBUG else "redis://redis:6379/1"
+)
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 300
+CELERY_BEAT_SCHEDULE = {
+    "archive-previous-schedule-week": {
+        "task": "planner.tasks.archive_previous_schedule_week",
+        "schedule": crontab(minute=5, hour=0, day_of_week="monday"),
+    },
+}
 
 custom_color_palette = [
     {"color": "hsl(4, 90%, 58%)", "label": "Праздник"},

@@ -106,14 +106,19 @@ body {
     gap: 10px;
 }
 
-.language-switcher a {
+.language-switcher a,
+.language-switcher button {
+    padding: 0;
+    border: 0;
+    background: transparent;
     text-decoration: none;
     color: #1C1C1C66;
     font-weight: 200;
     font-size: 18px;
 }
 
-.language-switcher a.active {
+.language-switcher a.active,
+.language-switcher button.active {
     text-decoration: none;
     color: #1C1C1C;
     font-weight: normal;
@@ -724,8 +729,8 @@ h5:not(.dropdown h5), h6:not(.dropdown h6) {
     .empty-2 {
         width: 59px;
     }
-    .features-title, .language-switcher a,
-    .language-switcher a.active {
+    .features-title, .language-switcher a, .language-switcher button,
+    .language-switcher a.active, .language-switcher button.active {
         font-size: 16px;
     }
     .title {
@@ -814,8 +819,8 @@ h5:not(.dropdown h5), h6:not(.dropdown h6) {
     .empty-2 {
         width: 49px;
     }
-    .features-title, .language-switcher a,
-    .language-switcher a.active {
+    .features-title, .language-switcher a, .language-switcher button,
+    .language-switcher a.active, .language-switcher button.active {
         font-size: 13px;
     }
     .title {

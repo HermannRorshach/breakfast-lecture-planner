@@ -1,25 +1,20 @@
 import html
-import os
 import re
 from datetime import date, datetime, time, timedelta
 from math import pi
 
-import requests
-from api.models import Task
 from calendar_utils.utils import get_next_day_with_time
-from decouple import config
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.mail import send_mail
+from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import DeleteView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
-from dotenv import load_dotenv
 from markdown import markdown
 
 from .forms import (
@@ -30,16 +25,27 @@ from .forms import (
     DailyScheduleForm,
     PostForm,
 )
-from .models import DailySchedule, Image, LunchParticipant, Post
-
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_EMAIL = config("ADMIN_EMAIL")
-TELEGRAM_CHAT_IDS = list(map(int, os.getenv("TELEGRAM_CHAT_IDS", "").split(",")))
-
+from .models import DailySchedule, Image, LunchParticipant, Post, ScheduleEditLock
+from .services.schedule_parser import ScheduleStructureError
+from .services.schedule_sync import sync_daily_schedules, sync_day_to_main_schedule
+from .tasks import queue_admin_notification
 
 def is_admin(user):
     return user.groups.filter(name="Админ").exists()
+
+
+LOCK_LIFETIME = timedelta(hours=2)
+
+
+def _active_schedule_lock():
+    ScheduleEditLock.objects.filter(expires_at__lte=timezone.now()).delete()
+    return ScheduleEditLock.objects.select_related("user").first()
+
+
+def _owns_schedule_lock(request):
+    token = request.POST.get("edit_lock_token", "")
+    lock = _active_schedule_lock()
+    return bool(lock and lock.token == token and lock.user_id == request.user.id)
 
 
 class ContactsView(View):
@@ -120,7 +126,7 @@ class CombinedView(DetailView):
         # Соединяем строки обратно в один текст
         highlighted_content = "\n".join(user_content_lines)
 
-        context["title"] = "pagrindinis"
+        context["title"] = _("Home")
         context["content"] = markdown(
             post.content if is_ckeditor_html else highlighted_content
         )
@@ -204,10 +210,10 @@ class CombinedView(DetailView):
         context["data"] = data
 
         countdown = [
-            {"value": 0, "label": "days", "degrees": 0},
-            {"value": 0, "label": "hours", "degrees": 0},
-            {"value": 0, "label": "min", "degrees": 0},
-            {"value": 0, "label": "sec", "degrees": 0},
+            {"value": 0, "label": _("days"), "degrees": 0},
+            {"value": 0, "label": _("hours"), "degrees": 0},
+            {"value": 0, "label": _("min"), "degrees": 0},
+            {"value": 0, "label": _("sec"), "degrees": 0},
         ]
 
         now = datetime.strptime("13.12.24 17:59:59", "%d.%m.%y %H:%M:%S")
@@ -307,18 +313,27 @@ class DailyScheduleView(View):
         except ValueError:
             return JsonResponse({"error": "Некорректная дата"}, status=400)
 
+        current_monday = timezone.localdate() - timedelta(days=timezone.localdate().weekday())
         schedule = DailySchedule.objects.filter(date=schedule_date).first()
-        return JsonResponse(
+        if schedule_date < current_monday and not request.user.is_authenticated:
+            schedule = None
+        response = JsonResponse(
             {
                 "date": schedule_date.isoformat(),
                 "content": schedule.content if schedule else "",
                 "exists": schedule is not None,
             }
         )
+        response["Cache-Control"] = "no-store, private"
+        return response
 
     def post(self, request):
         if not request.user.is_authenticated or not is_admin(request.user):
             return JsonResponse({"error": "Недостаточно прав"}, status=403)
+        if not _owns_schedule_lock(request):
+            return JsonResponse(
+                {"error": "Блокировка редактирования истекла или принадлежит другой вкладке."}, status=409
+            )
 
         date_value = request.POST.get("date", "")
         try:
@@ -331,9 +346,16 @@ class DailyScheduleView(View):
         if not form.is_valid():
             return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
 
-        schedule = form.save(commit=False)
-        schedule.date = schedule_date
-        schedule.save()
+        try:
+            schedule, _ = sync_day_to_main_schedule(
+                schedule_date, form.cleaned_data["content"]
+            )
+        except ScheduleStructureError as error:
+            queue_admin_notification(
+                "Ошибка синхронизации дневного расписания",
+                f"Дата: {schedule_date:%d.%m.%Y}\n\n{error}",
+            )
+            return JsonResponse({"error": str(error)}, status=400)
         return JsonResponse(
             {
                 "date": schedule.date.isoformat(),
@@ -341,6 +363,48 @@ class DailyScheduleView(View):
                 "updated_at": schedule.updated_at.isoformat(),
             }
         )
+
+
+@method_decorator(login_required, name="dispatch")
+@method_decorator(user_passes_test(is_admin), name="dispatch")
+class ScheduleEditLockView(View):
+    def post(self, request):
+        action = request.POST.get("action")
+        token = request.POST.get("token", "")
+        if not token:
+            return JsonResponse({"error": "Не передан идентификатор вкладки."}, status=400)
+        with transaction.atomic():
+            Post.objects.select_for_update().get(pk=12)
+            lock = _active_schedule_lock()
+            if action == "acquire":
+                if lock and (lock.token != token or lock.user_id != request.user.id):
+                    return JsonResponse({
+                        "error": f"Расписание уже редактирует {lock.user.get_username()}. Дождитесь сохранения или выхода из режима редактирования.",
+                        "locked_by": lock.user.get_username(),
+                    }, status=409)
+                if lock:
+                    lock.expires_at = timezone.now() + LOCK_LIFETIME
+                    lock.save(update_fields=["expires_at"])
+                else:
+                    ScheduleEditLock.objects.create(user=request.user, token=token, expires_at=timezone.now() + LOCK_LIFETIME)
+                return JsonResponse({"acquired": True})
+            if action == "release":
+                ScheduleEditLock.objects.filter(token=token, user=request.user).delete()
+                return JsonResponse({"released": True})
+        return JsonResponse({"error": "Неизвестное действие."}, status=400)
+
+
+@method_decorator(login_required, name="dispatch")
+@method_decorator(user_passes_test(is_admin), name="dispatch")
+class ScheduleEditUnlockView(View):
+    template_name = "planner/schedule_edit_unlock.html"
+
+    def get(self, request):
+        return render(request, self.template_name, {"edit_lock": _active_schedule_lock()})
+
+    def post(self, request):
+        ScheduleEditLock.objects.all().delete()
+        return render(request, self.template_name, {"edit_lock": None, "unlocked": True})
 
 
 class Main(View):
@@ -599,13 +663,40 @@ class PostUpdateView(UpdateView):
     form_class = MainPostEditorForm
     template_name = "planner/post_form.html"
 
+    def get(self, request, *args, **kwargs):
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            post = self.get_object()
+            response = JsonResponse(
+                {
+                    "id": post.pk,
+                    "content": post.content,
+                }
+            )
+            response["Cache-Control"] = "no-store, private"
+            return response
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        if self.kwargs.get("pk") == 12 and not _owns_schedule_lock(request):
+            return JsonResponse(
+                {"error": "Блокировка редактирования истекла или принадлежит другой вкладке."}, status=409
+            )
         self.object = self.get_object()
         form = self.get_form()
 
         if form.is_valid():
             self.object = form.save()
-            return JsonResponse({"content": markdown(self.object.content)})
+            warning = None
+            if self.object.pk == 12:
+                try:
+                    sync_daily_schedules(self.object)
+                except ScheduleStructureError as error:
+                    warning = str(error)
+                    queue_admin_notification(
+                        "Ошибка разбора большого расписания",
+                        f"Большое текстовое поле сохранено, но дневные расписания не обновлены.\n\n{error}",
+                    )
+            return JsonResponse({"content": markdown(self.object.content), "warning": warning})
 
         return JsonResponse({"error": "Invalid form"}, status=400)
 
@@ -737,10 +828,10 @@ class LunchRegistrationView(View):
             self.template_name,
             {
                 "form": form,
-                "title": "Registracija šeštadienio pietums",
+                "title": _("Saturday lunch registration"),
                 "register_lunch": True,
-                "header_title": "Registracija šeštadienio pietums",
-                "text": "Gerbiamieji Šri Šri Nitai Gaurasundaros Šventyklos svečiai! Tam, kad prasado užtektų visiems, prašome pranešti iš anksto, kiek porcijų pietų Jūs pageidaujate.",
+                "header_title": _("Saturday lunch registration"),
+                "text": _("Dear guests of Sri Sri Nitai Gaurasundara Temple! To make sure there is enough prasadam for everyone, please tell us in advance how many lunch portions you would like."),
             },
         )
 
@@ -756,9 +847,6 @@ class LunchRegistrationView(View):
             if not form.cleaned_data.get("error_message"):
                 participant = form.save()
 
-                User = get_user_model()
-                users = User.objects.values_list("email", flat=True)
-
                 # Формируем текст уведомления
                 subject = (
                     f"{participant.name} зарегистрировался на обед {participant.date}"
@@ -771,18 +859,7 @@ class LunchRegistrationView(View):
                 if participant.comment:
                     message += f",\nКомментарий: {participant.comment}"
 
-                # Создаем объект Task в базе данных
-                Task.objects.create(subject=subject, message=message)
-
-                # Отправляем уведомления зарегистрированным пользователям
-                send_mail(subject, message, participant.email, users)
-
-                # Отправляем уведомления в телеграм от имени бота
-                base_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-
-                for chat_id in TELEGRAM_CHAT_IDS:
-                    payload = {"chat_id": chat_id, "text": message}
-                    requests.post(base_url, data=payload)
+                queue_admin_notification(subject, message, participant.email)
 
                 return redirect("planner:lunch_success")
 
@@ -798,7 +875,7 @@ class LunchRegistrationView(View):
             self.template_name,
             {
                 "form": form,
-                "title": "Регистрация на обед",
+                "title": _("Lunch registration"),
                 "errors": form.errors,  # Можно передать ошибки в контекст для отображения на странице
             },
         )
@@ -806,13 +883,13 @@ class LunchRegistrationView(View):
 
 class LunchSuccessView(View):
     template_name = "planner/success.html"
-    context = {
-        "title": "Jūs esate užsiregistravę!",
-        "form": "обед",
-    }
 
     def get(self, request):
-        return render(request, self.template_name, context=self.context)
+        return render(
+            request,
+            self.template_name,
+            context={"title": _("You are registered!"), "form": "lunch"},
+        )
 
 
 class LunchClosedView(View):
@@ -821,8 +898,8 @@ class LunchClosedView(View):
     def get(self, request):
         message = request.GET.get("message")
         context = {
-            "title": "Registracija nepavyko",
-            "form": "Регистрация не удалась",
+            "title": _("Registration failed"),
+            "form": "registration_failed",
             "message": message,
         }
         return render(request, self.template_name, context=context)
@@ -851,7 +928,7 @@ class FeedbackView(View):
     template_name = "planner/registration_or_feedback.html"  # Универсальное название
 
     def get_context_data(self):
-        return {"title": "Atsiliepimai", "header_title": "Atsiliepimai"}
+        return {"title": _("Feedback"), "header_title": _("Feedback")}
 
     def get(self, request):
         context = self.get_context_data()
@@ -870,21 +947,7 @@ class FeedbackView(View):
 
             subject = f"Обратная связь от {feedback.name}"
             message = f"Пользователь по имени {feedback.name} с email {feedback.email}, оставил обратную связь:\n{feedback.text}"
-            # Создаем объект Task в базе данных
-            Task.objects.create(subject=subject, message=message)
-
-            User = get_user_model()
-            users = User.objects.values_list("email", flat=True)
-
-            # Отправляем уведомления зарегистрированным пользователям
-            send_mail(subject, message, feedback.email, users)
-
-            # Отправляем уведомления в телеграм от имени бота
-            base_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-
-            for chat_id in TELEGRAM_CHAT_IDS:
-                payload = {"chat_id": chat_id, "text": message}
-                requests.post(base_url, data=payload)
+            queue_admin_notification(subject, message, feedback.email)
 
             return redirect(
                 "planner:feedback_success"
@@ -897,12 +960,13 @@ class FeedbackView(View):
 
 class FeedbackSuccessView(View):
     template_name = "planner/success.html"
-    context = {
-        "title": "Žinutė išsiųsta!",
-    }
 
     def get(self, request):
-        return render(request, self.template_name, context=self.context)
+        return render(
+            request,
+            self.template_name,
+            context={"title": _("Message sent!"), "form": "feedback"},
+        )
 
 
 @method_decorator(login_required, name="dispatch")
